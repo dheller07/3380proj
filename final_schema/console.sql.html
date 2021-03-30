@@ -1,0 +1,203 @@
+<html>
+<head>
+<title>console.sql</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6897bb;}
+.ls0 { height: 1px; border-width: 0; color: #4d4d4d; background-color:#4d4d4d}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+console.sql</font>
+</center></td></tr></table>
+<pre><span class="s0">CREATE TABLE </span><span class="s1">customer</span>
+<span class="s1">(</span>
+	<span class="s1">id </span><span class="s0">int NOT NULL UNIQUE,</span>
+	<span class="s1">f_name </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">32</span><span class="s1">)</span><span class="s0">,</span>
+	<span class="s1">l_name </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">32</span><span class="s1">) </span><span class="s0">NOT NULL,</span>
+	<span class="s1">customer_role </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">32</span><span class="s1">)</span><span class="s0">,</span>
+	<span class="s1">item_limit </span><span class="s0">int,</span>
+	<span class="s1">acct_balance </span><span class="s0">float,</span>
+	<span class="s1">fine_rate </span><span class="s0">float,</span>
+	<span class="s0">PRIMARY KEY </span><span class="s1">(id)</span>
+<span class="s1">)</span><span class="s0">;</span>
+<hr class="ls0"><span class="s0">CREATE TABLE </span><span class="s1">employee</span>
+<span class="s1">(</span>
+	<span class="s1">id </span><span class="s0">int NOT NULL UNIQUE,</span>
+	<span class="s1">f_name </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">32</span><span class="s1">)</span><span class="s0">,</span>
+	<span class="s1">l_name </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">32</span><span class="s1">) </span><span class="s0">NOT NULL,</span>
+	<span class="s1">ssn </span><span class="s0">int UNIQUE,</span>
+	<span class="s1">birthdate </span><span class="s0">date,</span>
+	<span class="s1">salary </span><span class="s0">float,</span>
+	<span class="s1">job_title </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">32</span><span class="s1">)</span><span class="s0">,</span>
+	<span class="s1">phone_no </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">32</span><span class="s1">)</span><span class="s0">,</span>
+	<span class="s0">PRIMARY KEY </span><span class="s1">(id)</span>
+<span class="s1">)</span><span class="s0">;</span>
+<hr class="ls0"><span class="s0">CREATE TABLE </span><span class="s1">item (</span>
+    <span class="s1">id </span><span class="s0">int NOT NULL UNIQUE,</span>
+    <span class="s0">PRIMARY KEY </span><span class="s1">(id)</span>
+<span class="s1">)</span><span class="s0">;</span>
+<hr class="ls0"><span class="s0">CREATE TABLE </span><span class="s1">checkoutItem (</span>
+    <span class="s1">id </span><span class="s0">int NOT NULL UNIQUE,</span>
+    <span class="s1">item </span><span class="s0">int NOT NULL,</span>
+    <span class="s1">checkout_date </span><span class="s0">datetime NOT NULL,</span>
+    <span class="s1">due_date </span><span class="s0">datetime NOT NULL,</span>
+    <span class="s1">return_date </span><span class="s0">datetime,</span>
+    <span class="s1">returned </span><span class="s0">bool,</span>
+    <span class="s1">borrower_id </span><span class="s0">int NOT NULL,</span>
+    <span class="s1">employee_id </span><span class="s0">int NOT NULL,</span>
+    <span class="s0">PRIMARY KEY </span><span class="s1">(id)</span><span class="s0">,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(item) </span><span class="s0">REFERENCES </span><span class="s1">item(id)</span><span class="s0">,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(borrower_id) </span><span class="s0">REFERENCES </span><span class="s1">customer(id)</span><span class="s0">,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(employee_id) </span><span class="s0">REFERENCES </span><span class="s1">employee(id)</span>
+<span class="s1">)</span><span class="s0">;</span>
+<hr class="ls0"><span class="s0">CREATE TABLE </span><span class="s1">location</span>
+<span class="s1">(</span>
+    <span class="s1">id </span><span class="s0">int NOT NULL UNIQUE,</span>
+    <span class="s1">location_name </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">128</span><span class="s1">) </span><span class="s0">NOT NULL,</span>
+    <span class="s1">address </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">128</span><span class="s1">)</span><span class="s0">,</span>
+    <span class="s1">phone_no </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">32</span><span class="s1">)</span><span class="s0">,</span>
+    <span class="s0">PRIMARY KEY </span><span class="s1">(id)</span>
+<span class="s1">)</span><span class="s0">;</span>
+<hr class="ls0"><span class="s0">CREATE TABLE </span><span class="s1">author (</span>
+    <span class="s1">id </span><span class="s0">int NOT NULL UNIQUE,</span>
+    <span class="s1">f_name </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">32</span><span class="s1">)</span><span class="s0">,</span>
+    <span class="s1">l_name </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">32</span><span class="s1">) </span><span class="s0">NOT NULL,</span>
+    <span class="s1">origin </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">128</span><span class="s1">)</span><span class="s0">,</span>
+    <span class="s1">author_born </span><span class="s0">int,</span>
+    <span class="s1">author_died </span><span class="s0">int,</span>
+    <span class="s0">PRIMARY KEY </span><span class="s1">(id)</span>
+<span class="s1">)</span><span class="s0">;</span>
+<hr class="ls0"><span class="s0">CREATE TABLE </span><span class="s1">publisher (</span>
+    <span class="s1">id </span><span class="s0">int NOT NULL UNIQUE,</span>
+    <span class="s1">publisher_name </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">32</span><span class="s1">) </span><span class="s0">NOT NULL,</span>
+    <span class="s1">headquarters </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">32</span><span class="s1">)</span><span class="s0">,</span>
+    <span class="s0">PRIMARY KEY </span><span class="s1">(id)</span>
+<span class="s1">)</span><span class="s0">;</span>
+<hr class="ls0"><span class="s0">CREATE TABLE </span><span class="s1">narrator</span>
+<span class="s1">(</span>
+    <span class="s1">id </span><span class="s0">int NOT NULL UNIQUE,</span>
+    <span class="s1">f_name </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">32</span><span class="s1">)</span><span class="s0">,</span>
+    <span class="s1">l_name </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">32</span><span class="s1">) </span><span class="s0">NOT NULL,</span>
+    <span class="s1">origin </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">128</span><span class="s1">)</span><span class="s0">,</span>
+    <span class="s1">narrator_born </span><span class="s0">int,</span>
+    <span class="s1">narrator_died </span><span class="s0">int,</span>
+    <span class="s0">PRIMARY KEY </span><span class="s1">(id)</span>
+<span class="s1">)</span><span class="s0">;</span>
+<hr class="ls0"><span class="s0">CREATE TABLE </span><span class="s1">series (</span>
+    <span class="s1">id </span><span class="s0">int NOT NULL UNIQUE,</span>
+    <span class="s1">series_name </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">128</span><span class="s1">) </span><span class="s0">NOT NULL,</span>
+    <span class="s1">total_series </span><span class="s0">int NOT NULL,</span>
+    <span class="s1">series_number </span><span class="s0">int NOT NULL,</span>
+    <span class="s0">PRIMARY KEY </span><span class="s1">(id)</span>
+<span class="s1">)</span><span class="s0">;</span>
+<hr class="ls0"><span class="s0">CREATE TABLE </span><span class="s1">lateFine (</span>
+    <span class="s1">id </span><span class="s0">int NOT NULL UNIQUE,</span>
+    <span class="s1">checkout_item </span><span class="s0">int NOT NULL,</span>
+    <span class="s1">borrower </span><span class="s0">int NOT NULL,</span>
+    <span class="s1">days_late </span><span class="s0">int,</span>
+    <span class="s1">fine_amount </span><span class="s0">float,</span>
+    <span class="s1">paid </span><span class="s0">boolean,</span>
+    <span class="s0">PRIMARY KEY </span><span class="s1">(id)</span><span class="s0">,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(checkout_item) </span><span class="s0">REFERENCES </span><span class="s1">checkoutItem(id)</span><span class="s0">,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(borrower) </span><span class="s0">REFERENCES </span><span class="s1">customer(id)</span>
+<span class="s1">)</span><span class="s0">;</span>
+<hr class="ls0"><span class="s0">CREATE TABLE </span><span class="s1">device</span>
+ <span class="s1">(</span>
+    <span class="s1">id </span><span class="s0">int NOT NULL UNIQUE,</span>
+    <span class="s1">device_type </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">32</span><span class="s1">)</span><span class="s0">,</span>
+    <span class="s1">model </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">32</span><span class="s1">)</span><span class="s0">,</span>
+    <span class="s1">checked_out </span><span class="s0">boolean,</span>
+    <span class="s1">waitlist_capacity </span><span class="s0">int,</span>
+    <span class="s1">location </span><span class="s0">int,</span>
+    <span class="s0">PRIMARY KEY </span><span class="s1">(id)</span><span class="s0">,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(id) </span><span class="s0">REFERENCES </span><span class="s1">item (id)</span><span class="s0">,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(location) </span><span class="s0">REFERENCES </span><span class="s1">location(id)</span>
+<span class="s1">)</span><span class="s0">;</span>
+<hr class="ls0"><span class="s0">CREATE TABLE </span><span class="s1">itemRequest (</span>
+    <span class="s1">req_number </span><span class="s0">int NOT NULL UNIQUE,</span>
+    <span class="s1">item_id </span><span class="s0">int NOT NULL,</span>
+    <span class="s1">req_date </span><span class="s0">datetime NOT NULL,</span>
+    <span class="s1">requester_id </span><span class="s0">int NOT NULL,</span>
+    <span class="s0">PRIMARY KEY </span><span class="s1">(req_number)</span><span class="s0">,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(item_id) </span><span class="s0">REFERENCES </span><span class="s1">item(id)</span><span class="s0">,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(requester_id) </span><span class="s0">REFERENCES </span><span class="s1">customer(id)</span>
+<span class="s1">)</span><span class="s0">;</span>
+<hr class="ls0"><span class="s0">CREATE TABLE </span><span class="s1">book (</span>
+    <span class="s1">id </span><span class="s0">int NOT NULL UNIQUE,</span>
+    <span class="s1">isbn </span><span class="s0">int,</span>
+    <span class="s1">title </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">128</span><span class="s1">) </span><span class="s0">NOT NULL,</span>
+    <span class="s1">author_id </span><span class="s0">int NOT NULL,</span>
+    <span class="s1">publisher </span><span class="s0">int,</span>
+    <span class="s1">publication_year </span><span class="s0">int,</span>
+    <span class="s1">edition </span><span class="s0">int,</span>
+    <span class="s1">series </span><span class="s0">int,</span>
+    <span class="s1">series_position </span><span class="s0">int,</span>
+    <span class="s1">genre </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">32</span><span class="s1">) </span><span class="s0">NOT NULL,</span>
+    <span class="s1">checked_out </span><span class="s0">boolean NOT NULL,</span>
+    <span class="s1">ebook </span><span class="s0">boolean NOT NULL,</span>
+    <span class="s1">waitlist_capacity </span><span class="s0">int NOT NULL,</span>
+    <span class="s1">location </span><span class="s0">int NOT NULL,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(location) </span><span class="s0">REFERENCES </span><span class="s1">location (id)</span><span class="s0">,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(series) </span><span class="s0">REFERENCES </span><span class="s1">series (id)</span><span class="s0">,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(publisher) </span><span class="s0">REFERENCES </span><span class="s1">publisher (id)</span><span class="s0">,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(author_id) </span><span class="s0">REFERENCES </span><span class="s1">author (id)</span><span class="s0">,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(id) </span><span class="s0">REFERENCES </span><span class="s1">item (id)</span><span class="s0">,</span>
+    <span class="s0">PRIMARY KEY </span><span class="s1">(id)</span>
+<span class="s1">)</span><span class="s0">;</span>
+<hr class="ls0"><span class="s0">CREATE TABLE </span><span class="s1">dvd</span>
+<span class="s1">(</span>
+    <span class="s1">id </span><span class="s0">int NOT NULL UNIQUE,</span>
+    <span class="s1">title </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">128</span><span class="s1">) </span><span class="s0">NOT NULL,</span>
+    <span class="s1">release_date </span><span class="s0">date,</span>
+    <span class="s1">director </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">64</span><span class="s1">)</span><span class="s0">,</span>
+    <span class="s1">studio </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">32</span><span class="s1">)</span><span class="s0">,</span>
+    <span class="s1">location </span><span class="s0">int NOT NULL,</span>
+    <span class="s1">checked_out </span><span class="s0">boolean NOT NULL,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(location) </span><span class="s0">REFERENCES </span><span class="s1">location (id)</span><span class="s0">,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(id) </span><span class="s0">REFERENCES </span><span class="s1">item (id)</span><span class="s0">,</span>
+    <span class="s0">PRIMARY KEY </span><span class="s1">(id)</span>
+<span class="s1">)</span><span class="s0">;</span>
+<hr class="ls0"><span class="s0">CREATE TABLE </span><span class="s1">magazine</span>
+<span class="s1">(</span>
+    <span class="s1">id </span><span class="s0">int NOT NULL UNIQUE,</span>
+    <span class="s1">title </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">32</span><span class="s1">) </span><span class="s0">NOT NULL,</span>
+    <span class="s1">issue </span><span class="s0">int,</span>
+    <span class="s1">issue_date </span><span class="s0">date,</span>
+    <span class="s1">topic </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">32</span><span class="s1">)</span><span class="s0">,</span>
+    <span class="s1">location </span><span class="s0">int NOT NULL,</span>
+    <span class="s1">checked_out </span><span class="s0">boolean NOT NULL,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(location) </span><span class="s0">REFERENCES </span><span class="s1">location (id)</span><span class="s0">,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(id) </span><span class="s0">REFERENCES </span><span class="s1">item (id)</span><span class="s0">,</span>
+    <span class="s0">PRIMARY KEY </span><span class="s1">(id)</span>
+<span class="s1">)</span><span class="s0">;</span>
+<hr class="ls0"><span class="s0">CREATE TABLE </span><span class="s1">audiobook</span>
+<span class="s1">(</span>
+    <span class="s1">id </span><span class="s0">int NOT NULL UNIQUE,</span>
+    <span class="s1">isbn </span><span class="s0">int,</span>
+    <span class="s1">title </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">128</span><span class="s1">) </span><span class="s0">NOT NULL,</span>
+    <span class="s1">author_id </span><span class="s0">int NOT NULL,</span>
+    <span class="s1">narrator_id </span><span class="s0">int NOT NULL,</span>
+    <span class="s1">publisher </span><span class="s0">int NOT NULL,</span>
+    <span class="s1">publication_year </span><span class="s0">int,</span>
+    <span class="s1">edition </span><span class="s0">int,</span>
+    <span class="s1">series </span><span class="s0">int,</span>
+    <span class="s1">series_position </span><span class="s0">int,</span>
+    <span class="s1">genre </span><span class="s0">varchar</span><span class="s1">(</span><span class="s2">32</span><span class="s1">)</span><span class="s0">,</span>
+    <span class="s1">checked_out </span><span class="s0">boolean NOT NULL,</span>
+    <span class="s1">waitlist_capacity </span><span class="s0">int NOT NULL,</span>
+    <span class="s1">location </span><span class="s0">int NOT NULL,</span>
+    <span class="s0">PRIMARY KEY </span><span class="s1">(id)</span><span class="s0">,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(author_id) </span><span class="s0">REFERENCES </span><span class="s1">author(id)</span><span class="s0">,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(narrator_id) </span><span class="s0">REFERENCES </span><span class="s1">narrator(id)</span><span class="s0">,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(publisher) </span><span class="s0">REFERENCES </span><span class="s1">publisher(id)</span><span class="s0">,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(series) </span><span class="s0">REFERENCES </span><span class="s1">series(id)</span><span class="s0">,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(location) </span><span class="s0">REFERENCES </span><span class="s1">location(id)</span>
+<span class="s1">)</span><span class="s0">;</span></pre>
+</body>
+</html>
