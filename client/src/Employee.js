@@ -110,17 +110,17 @@ function Employee() {
           <input type = "text" name = "returnedBook" onChange = {(e) => {
             setBookReturn(e.target.value)
           }}/>
-          <button onClick={submitBookReturn}>Search</button>
+          <button onClick={submitBookReturn}>Return</button>
           <label>AudioBook ID only: </label>
           <input type = "text" name = "returnedAudioBook" onChange = {(e) => {
             setAudioBookReturn(e.target.value)
           }}/>
-          <button onClick={submitAudioBookReturn}>Search</button>
+          <button onClick={submitAudioBookReturn}>Return</button>
           <label>Magazine ID only: </label>
           <input type = "text" name = "returnedMagazine" onChange = {(e) => {
             setMagazineReturn(e.target.value)
           }}/>
-          <button onClick={submitMagazineReturn}>Search</button>
+          <button onClick={submitMagazineReturn}>Return</button>
         </div>
         <div className = "form">
           <label>UserID: </label>
