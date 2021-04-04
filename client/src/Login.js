@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Route, NavLink, Switch } from "react-router-dom"
-import Customer from './Customer';
+import { BrowserRouter as Router, Route, NavLink, Switch } from "react-router-dom";
 import Employee from './Employee';
+import Search from './Search';
 
 const Login = () => {
 
@@ -14,7 +14,7 @@ const Login = () => {
         
         <Router>
             <Switch>
-            <Route path = "/customer" component = {Customer} />
+            <Route path = "/customer" component = {Search} />
             <Route path = "/" component = {Login} />
             </Switch>
         </Router>

@@ -7,15 +7,20 @@ function Employee() {
   const[AudioBookSearch, setAudioBookSearch] = useState('')
   const[GenreSearch, setGenreSearch] = useState('')
   const[AuthorSearch, setAuthorSearch] = useState('')
-  const[magazineSearch, setMagazineSearch] = useState('')
+  const[DeviceSearch, setDeviceSearch] = useState('')
   const[bookReturn, setBookReturn] = useState('')
   const[audioBookReturn, setAudioBookReturn] = useState('')
   const[magazineReturn, setMagazineReturn] = useState('')
+  const[DVDReturn, setDVDReturn] = useState('')
+  const[deviceReturn, setDeviceReturn] = useState('')
   const[UserID, setUserID] = useState()
   const[EmployeeID, setEmployeeID] = useState()
   const[BookCheckOut, setBookCheckOut] = useState('')
   const[AudioBookCheckOut, setAudioBookCheckOut] = useState('')
   const[MagazineCheckOut, setMagazineCheckOut] = useState('')
+  const[DVDCheckOut, setDVDCheckout] = useState('')
+  const[DeviceCheckOut, setDeviceCheckout] = useState('')
+
   
 
   const submitSearch = () => {
@@ -34,8 +39,8 @@ function Employee() {
     console.log("Book by author: " + AuthorSearch);
   }
 
-  const submitMagazineSearch = () => { //search magazine in db and display
-    console.log("Magazine Searching: " + magazineSearch);
+  const submitDeviceSearch = () => { //search DVD in db and display
+    console.log("Device Searching: " + DeviceSearch);
   }
 
   const submitBookReturn = () => { //return book in db
@@ -50,6 +55,14 @@ function Employee() {
     console.log("Returning Magazine with ID: " + magazineReturn);
   }
 
+  const submitDVDReturn = () => { //return DVD in db
+    console.log("Returning DVD with ID: " + DVDReturn);
+  }
+
+  const submitDeviceReturn = () => { //return device in db
+    console.log("Returning Device with ID: " + deviceReturn);
+  }
+
   const submitBookCheckOut = () => { //checkout book in db
     console.log("UserID: " + UserID);
     console.log("EmployeeID: " + EmployeeID);
@@ -62,15 +75,27 @@ function Employee() {
     console.log("AudioBookCheckOut: " + AudioBookCheckOut);
   }
 
-  const submitMagazineCheckOut = () => {
+  const submitMagazineCheckOut = () => { //checkout magazine in db
     console.log("UserID: " + UserID);
     console.log("EmployeeID: " + EmployeeID);
     console.log("MagazineCheckOut: " + MagazineCheckOut);
   }
 
+  const submitDVDCheckout = () => { //checkout DVD in db
+    console.log("UserID: " + UserID);
+    console.log("EmployeeID: " + EmployeeID);
+    console.log("MagazineCheckOut: " + DVDCheckOut);
+  }
+
+  const submitDeviceCheckout = () => { //checkout device in db
+    console.log("UserID: " + UserID);
+    console.log("EmployeeID: " + EmployeeID);
+    console.log("MagazineCheckOut: " + DeviceCheckOut);
+  }
+
 
   return (
-    <div className><h1>Employee</h1>
+    <div className = "App"><h1>Employee</h1>
       <div className = "container">
         <div className = "form">
           <label>Search for Book: </label>
@@ -97,11 +122,11 @@ function Employee() {
           }}/>
           <button onClick={submitAuthorSearch}>Search</button>
 
-          <label>Search Magazine: </label>
-          <input type = "text" name = "magazineSearch" onChange={(e) => {
-            setMagazineSearch(e.target.value)
+          <label>Search for Device: </label>
+          <input type = "text" name = "deviceSearch" onChange={(e) => {
+            setDeviceSearch(e.target.value)
           }}/>
-          <button onClick={submitMagazineSearch}>Search</button>
+          <button onClick={submitDeviceSearch}>Search</button>
         </div>
         <div className = "form">
           <label>RETURN</label>
@@ -121,6 +146,16 @@ function Employee() {
             setMagazineReturn(e.target.value)
           }}/>
           <button onClick={submitMagazineReturn}>Return</button>
+          <label>DVD ID only: </label>
+          <input type = "text" name = "returnedDVD" onChange = {(e) => {
+            setDVDReturn(e.target.value)
+          }}/>
+          <button onClick={submitDVDReturn}>Return</button>
+          <label>Device ID only: </label>
+          <input type = "text" name = "deviceMagazine" onChange = {(e) => {
+            setDeviceReturn(e.target.value)
+          }}/>
+          <button onClick={submitDeviceReturn}>Return</button>
         </div>
         <div className = "form">
           <label>UserID: </label>
@@ -131,23 +166,35 @@ function Employee() {
           <input type = "text" name = "EmployeeID" onChange={(e) => {
             setEmployeeID(e.target.value)
           }}/>
-          <label>Check out Book: </label>
+          <label>Check out Book (ID): </label>
           <input type = "text" name = "BookCheckOut" onChange={(e) => {
             setBookCheckOut(e.target.value)
           }}/>
           <button onClick = {submitBookCheckOut}>Checkout</button>
 
-          <label>Check out AudioBook: </label>
+          <label>Check out AudioBook (ID): </label>
           <input type = "text" name = "AudioBookCheckOut"onChange={(e) => {
             setAudioBookCheckOut(e.target.value)
           }}/>
           <button onClick = {submitAudioBookCheckOut}>Checkout</button>
 
-          <label>Check out Magazine: </label>
+          <label>Check out Magazine (ID): </label>
           <input type = "text" name = "magazineCheckOut"onChange={(e) => {
             setMagazineCheckOut(e.target.value)
           }}/>
           <button onClick = {submitMagazineCheckOut}>Checkout</button>
+
+          <label>Check out DVD (ID): </label>
+          <input type = "text" name = "dvdCheckOut"onChange={(e) => {
+            setDVDCheckout(e.target.value)
+          }}/>
+          <button onClick = {submitDVDCheckout}>Checkout</button>
+
+          <label>Check out Device (ID): </label>
+          <input type = "text" name = "deviceCheckOut"onChange={(e) => {
+            setDeviceCheckout(e.target.value)
+          }}/>
+          <button onClick = {submitDeviceCheckout}>Checkout</button>
         </div>
       </div>
     </div>

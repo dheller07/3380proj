@@ -1,13 +1,13 @@
 import React, { useState} from "react";
 import './App.css';
 
-function Customer() {
+function Search() {
 
   const[BookSearch, setBookSearch] = useState('')
   const[AudioBookSearch, setAudioBookSearch] = useState('')
   const[GenreSearch, setGenreSearch] = useState('')
   const[AuthorSearch, setAuthorSearch] = useState('')
-  const[magazineSearch, setMagazineSearch] = useState('')
+  const[DeviceSearch, setDeviceSearch] = useState('')
   
 
   const submitSearch = () => {
@@ -26,13 +26,13 @@ function Customer() {
     console.log("Book by author: " + AuthorSearch);
   }
 
-  const submitMagazineSearch = () => { //search magazine in db and display
-    console.log("Magazine Searching: " + magazineSearch);
+  const submitDeviceSearch = () => { //search DVD in db and display
+    console.log("Device Searching: " + DeviceSearch);
   }
 
 
   return (
-    <div><h1>Customer</h1>
+    <div className = "App"><h1>Search Book or Device</h1>
       <div className = "container">
         <div className = "form">
           <label>Search for Book: </label>
@@ -59,15 +59,15 @@ function Customer() {
           }}/>
           <button onClick={submitAuthorSearch}>Search</button>
 
-          <label>Search Magazine: </label>
-          <input type = "text" name = "magazineSearch" onChange={(e) => {
-            setMagazineSearch(e.target.value)
+          <label>Search for Device: </label>
+          <input type = "text" name = "deviceSearch" onChange={(e) => {
+            setDeviceSearch(e.target.value)
           }}/>
-          <button onClick={submitMagazineSearch}>Search</button>
+          <button onClick={submitDeviceSearch}>Search</button>
         </div>
       </div>
     </div>
   );
 }
 
-export default Customer;
+export default Search;
