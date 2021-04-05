@@ -11,7 +11,7 @@ const Login = () => {
         console.log("CustomerID: " + theID);
         console.log("Customer Password: " + thePassword);
         
-        window.location.href = "/Search";
+        window.location.href = "/Search1";
     }    
 
     const loginEmployee = () => { //only if employee is found
@@ -36,7 +36,7 @@ const Login = () => {
             setPassword(e.target.value)
             }}/>
             <button onClick={loginUser} className = "btn btn-primary">Customer</button>
-            <button onClick={loginEmployee}>Employee</button>
+            <button onClick={loginEmployee} className= "btn btn-primary">Employee</button>
         </div>
 
     </div>
