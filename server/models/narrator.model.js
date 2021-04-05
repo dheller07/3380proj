@@ -1,22 +1,19 @@
 module.exports = (sequelize, Sequelize) => {
-    return sequelize.define("customer", {
+    return sequelize.define("narrator", {
         f_name: {
             type: Sequelize.STRING
         },
         l_name: {
             type: Sequelize.STRING
         },
-        customer_role: {
+        origin: {
             type: Sequelize.STRING
         },
-        item_limit: {
+        narrator_born: {
             type: Sequelize.INTEGER
         },
-        acct_balance: {
-            type: Sequelize.FLOAT
-        },
-        fine_rate: {
-            type: Sequelize.FLOAT
+        narrator_died: {
+            type: Sequelize.INTEGER
         }
     });
 };
