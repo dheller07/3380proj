@@ -13,7 +13,7 @@ let corsOptions = {
 app.use(cors(corsOptions));
 
 // connect database
-const db = require("./models");
+const db = require("./models/index.js");
 db.sequelize.sync();
 /*
 In development, you may need to drop existing tables and re-sync database. Just use force: true as following code:
@@ -28,16 +28,21 @@ app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
+const employees = require("./routes/employee.routes")
+const customers = require("./routes/customer.routes")
+app.use("/employees", employees);
+app.use("/customers", customers);
+
 // simple route
 app.get("/", (req, res) => {
     res.json({ message: "Welcome to cosc3380 library backend application." });
 });
 
-
+/*
 // include routes right before app.listen()
 require("./routes/employee.routes")(app);
-require("./routes/customer.routes")(app);
-
+//require("./routes/customer.routes")(app);
+*/
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
