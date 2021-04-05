@@ -20,7 +20,6 @@ exports.create = (req, res) => {
         item_limit: (req.body.customer_role === "Faculty") ? 10 : 5,
         fine_rate: (req.body.customer_role === "Faculty") ? 0.50 : 0.25
     }
-    // Calculate item limit and fine rate based on role
 
     // Save in the database
     Customer.create(customer)

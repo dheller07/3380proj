@@ -27,5 +27,6 @@ db.author = require("./author.model.js")(sequelize, Sequelize);
 db.publisher = require("./publisher.model.js")(sequelize, Sequelize);
 db.narrator = require("./narrator.model.js")(sequelize, Sequelize);
 db.series = require("./series.model.js")(sequelize, Sequelize);
+db.book = require("./items/book.model.js")(sequelize ,Sequelize);
 
 module.exports = db;

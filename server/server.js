@@ -28,10 +28,23 @@ app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// TODO add all routes
 const employees = require("./routes/employee.routes")
 const customers = require("./routes/customer.routes")
+const books = require("./routes/book.routes")
+const locations = require("./routes/location.routes")
+const authors = require("./routes/author.routes")
+const publishers = require("./routes/publisher.routes")
+const narrators = require("./routes/narrator.routes")
+const series = require("./routes/series.routes")
 app.use("/employees", employees);
 app.use("/customers", customers);
+app.use("/books", books);
+app.use('/locations', locations);
+app.use('/authors', authors);
+app.use('/publishers', publishers);
+app.use('/narrators', narrators);
+app.use('/series', series);
 
 // simple route
 app.get("/", (req, res) => {

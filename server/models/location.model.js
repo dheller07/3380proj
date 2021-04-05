@@ -1,7 +1,8 @@
 module.exports = (sequelize, Sequelize) => {
     return sequelize.define("location", {
         id: {
-            type: Sequelize.INTEGER
+            type: Sequelize.INTEGER,
+            primaryKey: true
         },
         location_name: {
             type: Sequelize.STRING
