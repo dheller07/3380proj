@@ -1,25 +1,21 @@
 import React from "react";
 import './App.css';
-import { BrowserRouter as Router, Route, NavLink, Switch } from "react-router-dom"
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 import Login from './Login';
 import Search from './Search';
+import Employee from "./Employee";
 
 function App() {
 
   return (
     <Router>
-    <div className="App"><h1>LIBRARY DB</h1>
-      <NavLink exact activeClassName="active" to= "/"></NavLink>
-      <NavLink exact activeClassName="active" to= "/search"></NavLink>
-      
-      <hr/>
-
+      <div className="App"><h1>LIBRARY DB</h1>
       <Switch>
-        <Route exact path = "/" component = {Login} />
-        <Route path = "/customer" component = {Search} />
-
+      <Route exact path = "/" component = {Login }/>
+      <Route exact path = "/Employee" component ={Employee}/>
+      <Route exact path = "/Search" component = {Search}/>
       </Switch>
-    </div>
+      </div>
     </Router>
   );
 }
