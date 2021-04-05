@@ -22,5 +22,10 @@ db.sequelize = sequelize;
 // TODO add all tables
 db.employee = require("./employee.model.js")(sequelize, Sequelize);
 db.customer = require("./customer.model.js")(sequelize, Sequelize);
+db.location = require("./location.model.js")(sequelize, Sequelize);
+db.author = require("./author.model.js")(sequelize, Sequelize);
+db.publisher = require("./publisher.model.js")(sequelize, Sequelize);
+db.narrator = require("./narrator.model.js")(sequelize, Sequelize);
+db.series = require("./series.model.js")(sequelize, Sequelize);
 
 module.exports = db;
