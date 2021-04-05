@@ -2,9 +2,6 @@ const { Op } = require("sequelize");
 const db = require("../models/");
 const Employee = db.employee;
 
-// TODO adjust template to have relevant functions
-// TODO implement functions
-
 // Create and Save a new Employee
 exports.create = (req, res) => {
     // Validate request
@@ -60,6 +57,9 @@ exports.findOne = (req, res) => {
             });
         });
 };
+
+// Find a single employee by credentials
+// TODO add username and password to db
 
 // Update an Employee by the id in the request
 exports.update = (req, res) => {

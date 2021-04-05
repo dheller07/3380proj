@@ -13,7 +13,7 @@ let corsOptions = {
 app.use(cors(corsOptions));
 
 // connect database
-const db = require("./server/models");
+const db = require("./models");
 db.sequelize.sync();
 /*
 In development, you may need to drop existing tables and re-sync database. Just use force: true as following code:
@@ -35,7 +35,7 @@ app.get("/", (req, res) => {
 
 
 // include routes right before app.listen()
-require("./server/routes/employee.routes")(app);
+require("./routes/employee.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

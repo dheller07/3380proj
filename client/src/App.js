@@ -11,7 +11,7 @@ function App() {
     <div className="App"><h1>LIBRARY DB</h1>
       <NavLink exact activeClassName="active" to= "/"></NavLink>
       <NavLink exact activeClassName="active" to= "/search"></NavLink>
-      
+
       <hr/>
 
       <Switch>

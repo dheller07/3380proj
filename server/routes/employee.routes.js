@@ -3,9 +3,6 @@ module.exports = app => {
 
     let router = require("express").Router();
 
-    // TODO edit template to have relevant routes
-    // TODO implement routes
-
     // Create a new Employee
     router.post("/", employees.create);
 

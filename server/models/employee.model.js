@@ -1,14 +1,13 @@
 module.exports = (sequelize, Sequelize) => {
     return sequelize.define("employee", {
-        // TODO implement auto incrementing id and set as pk (might be automatic?)
         f_name: {
-            type: Sequelize.String(32)
+            type: Sequelize.STRING
         },
         l_name: {
-            type: Sequelize.String(32)
+            type: Sequelize.STRING
         },
         ssn: {
-            type: Sequelize.INT
+            type: Sequelize.INTEGER
         },
         birthdate: {
             type: Sequelize.DATE
@@ -17,10 +16,10 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.FLOAT
         },
         job_title: {
-            type: Sequelize.String(32)
+            type: Sequelize.STRING
         },
         phone_no: {
-            type: Sequelize.String(32)
+            type: Sequelize.STRING
         }
     });
 };
