@@ -12,6 +12,7 @@ const Login = () => {
         console.log("CustomerID: " + theID);
         console.log("Customer Password: " + thePassword);
         
+        //not sure hot to switch to search page
         <Router>
             <Switch>
             <Route path = "/customer" component = {Search} />
