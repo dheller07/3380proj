@@ -1,38 +1,27 @@
-import React, { Component } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React from "react";
+import './App.css';
+import { BrowserRouter as Router, Route, NavLink, Switch } from "react-router-dom"
+import Login from './Login';
+import Search from './Search';
 
-class App extends Component {
-  render() {
-    return (
-      <div>
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
-          <a href="/tutorials" className="navbar-brand">
-            bezKoder
-          </a>
-          <div className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <Link to={"/tutorials"} className="nav-link">
-                Tutorials
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to={"/add"} className="nav-link">
-                Add
-              </Link>
-            </li>
-          </div>
-        </nav>
+function App() {
 
-        <div className="container mt-3">
-          <Switch>
-            <Route exact path={["/", "/tutorials"]} component={TutorialsList} />
-            <Route exact path="/add" component={AddTutorial} />
-            <Route path="/tutorials/:id" component={Tutorial} />
-          </Switch>
-        </div>
-      </div>
-    );
-  }
+  return (
+    <Router>
+    <div className="App"><h1>LIBRARY DB</h1>
+      <NavLink exact activeClassName="active" to= "/"></NavLink>
+      <NavLink exact activeClassName="active" to= "/search"></NavLink>
+      
+      <hr/>
+
+      <Switch>
+        <Route exact path = "/" component = {Login} />
+        <Route path = "/customer" component = {Search} />
+
+      </Switch>
+    </div>
+    </Router>
+  );
 }
 
 export default App;
