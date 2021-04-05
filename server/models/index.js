@@ -21,5 +21,6 @@ db.sequelize = sequelize;
 
 // TODO add all tables
 db.employee = require("./employee.model.js")(sequelize, Sequelize);
+db.customer = require("./customer.model.js")(sequelize, Sequelize);
 
 module.exports = db;
