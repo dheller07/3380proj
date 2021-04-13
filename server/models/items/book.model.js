@@ -1,11 +1,5 @@
-const Item = require("./item.model.js")
-const Author = require("../author.model.js")
-const Publisher = require("../publisher.model.js")
-const Series = require("../series.model.js")
-const Location = require("../location.model.js")
-
 module.exports = (sequelize, Sequelize) => {
-    const Book= sequelize.define("book", {
+    const Book = sequelize.define("book", {
         isbn: {
             type: Sequelize.INTEGER
         },
@@ -53,10 +47,12 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false
         },
     });
-    Book.belongsTo(Item);
-    Book.belongsTo(Author, { foreignKey : 'author_id' });
-    Book.belongsTo(Location, { foreignKey : 'location' });
-    Book.belongsTo(Series, { foreignKey : 'series' });
-    Book.belongsTo(Publisher, { foreignKey : 'publisher' });
+    Book.associate = (models) => {
+        Book.belongsTo(models.item);
+        Book.belongsTo(models.author, {foreignKey: 'author_id'});
+        Book.belongsTo(models.location, {foreignKey: 'location'});
+        Book.belongsTo(models.series, {foreignKey: 'series'});
+        Book.belongsTo(models.publisher, {foreignKey: 'publisher'});
+    }
     return Book;
 };
