@@ -31,8 +31,8 @@ db.audiobook = require("./items/audiobook.model.js")(sequelize, Sequelize);
 db.device = require("./items/device.model.js")(sequelize, Sequelize);
 db.dvd = require("./items/dvd.model.js")(sequelize, Sequelize);
 db.magazine = require("./items/magazine.model.js")(sequelize, Sequelize);
-db.checkoutItem = require("./items/checkoutItem.model.js")(sequelize, Sequelize);
-db.itemRequest = require("./items/itemRequest.model.js")(sequelize, Sequelize);
-db.lateFine = require("./items/lateFine.model.js")(sequelize, Sequelize);
+db.checkoutItem = require("./checkoutItem.model.js")(sequelize, Sequelize);
+db.itemRequest = require("./itemRequest.model.js")(sequelize, Sequelize);
+db.lateFine = require("./lateFine.model.js")(sequelize, Sequelize);
 
 module.exports = db;
