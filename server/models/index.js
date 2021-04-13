@@ -19,7 +19,6 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-// TODO add all tables
 db.employee = require("./employee.model.js")(sequelize, Sequelize);
 db.customer = require("./customer.model.js")(sequelize, Sequelize);
 db.location = require("./location.model.js")(sequelize, Sequelize);
@@ -27,6 +26,13 @@ db.author = require("./author.model.js")(sequelize, Sequelize);
 db.publisher = require("./publisher.model.js")(sequelize, Sequelize);
 db.narrator = require("./narrator.model.js")(sequelize, Sequelize);
 db.series = require("./series.model.js")(sequelize, Sequelize);
-db.book = require("./items/book.model.js")(sequelize ,Sequelize);
+db.book = require("./items/book.model.js")(sequelize, Sequelize);
+db.audiobook = require("./items/audiobook.model.js")(sequelize, Sequelize);
+db.device = require("./items/device.model.js")(sequelize, Sequelize);
+db.dvd = require("./items/dvd.model.js")(sequelize, Sequelize);
+db.magazine = require("./items/magazine.model.js")(sequelize, Sequelize);
+db.checkoutItem = require("./items/checkoutItem.model.js")(sequelize, Sequelize);
+db.itemRequest = require("./items/itemRequest.model.js")(sequelize, Sequelize);
+db.lateFine = require("./items/lateFine.model.js")(sequelize, Sequelize);
 
 module.exports = db;

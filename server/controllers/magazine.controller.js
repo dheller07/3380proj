@@ -1,135 +1,128 @@
 const { Op } = require("sequelize");
 const db = require("../models/");
-const Book = db.book;
+const Magazine = db.magazine;
 
-// Create and Save a new Book
+// Create and Save a new Magazine
 exports.create = (req, res) => {
     // Validate request
-    if(!req.body.title) {
-        res.status(400).send({massage: "Book title must be included!!"})
+    if(!req.body.device_type) {
+        res.status(400).send({massage: "Magazine title must be included!!"})
     }
 
-    // Create new book
+    // Create new magazine
     // TODO utilize functions from other controllers to get the id for foreign refs
     // TODO use default values where appropriate (ex - checked_out: false)
-    const book = {
+    const magazine = {
         title: req.body.title,
-        isbn: req.body.isbn,
-        author_id: req.body.author_id,
-        publisher: req.body.publisher,
-        publication_year: req.body.publication_year,
-        edition: req.body.edition,
-        series: req.body.series,
-        series_position: req.body.series_position,
-        genre: req.body.genre,
+        issue: req.body.issue,
+        issue_date: req.body.issue_date,
+        topic: req.body.topic,
         checked_out: false,
-        ebook: req.body.ebook,
         waitlist_capacity: req.body.waitlist_capacity,
         location: req.body.location
     }
 
     // Save in the database
-    Book.create(book)
+    Magazine.create(magazine)
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
-                message: err.message || "An error occurred while creating new book"
+                message: err.message || "An error occurred while creating new magazine"
             });
         });
 };
 
-// Retrieve all Books from the database.
+// Retrieve all Magazines from the database.
 exports.findAll = (req, res) => {
-    Book.findAll()
+    Magazine.findAll()
         .then(data => {
             res.send(data);
         })
         .catch( err =>
-            res.status(500).send({message: err.message || "An error occurred while retrieving books"
+            res.status(500).send({message: err.message || "An error occurred while retrieving magazines"
             }));
 };
 
-// Find a single Book with an id
+// Find a single Magazine with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
-    Book.findByPk(id)
+    Magazine.findByPk(id)
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
-                message: err.message || "Error retrieving book with id " + id
+                message: err.message || "Error retrieving Magazine with id " + id
             });
         });
 };
 
-// Update an Book by the id in the request
+// Update a Magazine by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;
 
-    Book.update(req.body, {
+    Magazine.update(req.body, {
         where: {id: id}
     })
         .then(num => {
             if (num === 1) {
                 res.send({
-                    message: "Book updated successfully! :)"
+                    message: "Magazine updated successfully! :)"
                 });
             } else {
                 res.send({
-                    message: "Cannot update book with id " + id + ". Check that id is correct"
+                    message: "Cannot update magazine with id " + id + ". Check that id is correct"
                 })
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: err.message || "Error updating book with id " + id
+                message: err.message || "Error updating magazine with id " + id
             })
         })
 };
 
-// Delete an Book with the specified id in the request
+// Delete a Magazine with the specified id in the request
 exports.delete = (req, res) => {
     const id = req.params.id;
 
-    Book.destroy({
+    Magazine.destroy({
         where: {id: id}
     })
         .then(num => {
             if (num === 1) {
                 res.send({
-                    message: "Book deleted successfully! :)"
+                    message: "Magazine deleted successfully! :)"
                 });
             } else {
                 res.send({
-                    message: "Cannot delete book with id " + id + ". Check that id is correct"
+                    message: "Cannot delete magazine with id " + id + ". Check that id is correct"
                 })
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: err.message || "Error deleting book with id " + id
+                message: err.message || "Error deleting magazine with id " + id
             })
         })
 };
 
-// Delete all Books from the database.
+// Delete all Magazines from the database.
 exports.deleteAll = (req, res) => {
-    Book.destroy({
+    Magazine.destroy({
         where: {},
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Books were deleted successfully!` });
+            res.send({ message: `${nums} Magazines were deleted successfully!` });
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while removing all books."
+                    err.message || "Some error occurred while removing all magazines."
             });
         });
 };
-
