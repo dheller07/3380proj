@@ -32,6 +32,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const employees = require("./routes/employee.routes")
 const customers = require("./routes/customer.routes")
 const books = require("./routes/book.routes")
+const audiobooks = require("./routes/audiobook.routes")
+const devices = require("./routes/device.routes")
+const dvds = require("./routes/dvd.routes")
+const magazines = require("./routes/magazine.routes")
 const locations = require("./routes/location.routes")
 const authors = require("./routes/author.routes")
 const publishers = require("./routes/publisher.routes")
@@ -40,6 +44,10 @@ const series = require("./routes/series.routes")
 app.use("/employees", employees);
 app.use("/customers", customers);
 app.use("/books", books);
+app.use("/audiobooks", audiobooks);
+app.use("/devices", devices);
+app.use("/dvds", dvds);
+app.use("/magazines", magazines);
 app.use('/locations', locations);
 app.use('/authors', authors);
 app.use('/publishers', publishers);
