@@ -16,10 +16,10 @@ router.get("/", books.findAll);
 // Retrieve a single Book with id
 router.get("/:id", books.findOne);
 
-// Update an Book with id
+// Update a Book with id
 router.put("/:id", books.update);
 
-// Delete an Book with id
+// Delete a Book with id
 router.delete("/:id", books.delete);
 
 // Delete all Books
