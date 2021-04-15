@@ -7,7 +7,7 @@ const ChoiceBar = ({ showBook, onBook,
     showAudioBook, onAudioBook,
     showDvd, onDvd,
     showMgz, onMgz,
-    showDevice, onDevice, showMessage, onMessage}) => {
+    showDevice, onDevice }) => {
     
     return (
         <h4>
@@ -45,13 +45,6 @@ const ChoiceBar = ({ showBook, onBook,
                     color={showDevice ? 'red' : 'green'}
                     text={showDevice ? 'Device' : 'Device'}
                     onClick={onDevice}
-                />
-            </span>
-            <span>
-                <Button
-                    color={showMessage ? 'red' : 'green'}
-                    text={showMessage ? 'Messages' : 'Messages'}
-                    onClick={onMessage}
                 />
             </span>
         </h4>

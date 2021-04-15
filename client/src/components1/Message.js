@@ -1,13 +1,10 @@
 
-
 const Message = ({onMessageResult, myIdMessage, myPasswordMessage}) => {
 
-
-    const submitMessageSearch = (event) => {
+    const submitGetMessage = (event) => {
         onMessageResult();
         event.preventDefault();
     }
-
 
     return (
 
@@ -30,7 +27,8 @@ const Message = ({onMessageResult, myIdMessage, myPasswordMessage}) => {
             </div>
 
     
-            <button className='btn btn-block' onClick = { submitMessageSearch} > Search  </button>
+            <button className='btn btn-block' onClick = { submitGetMessage} > Search for Messages </button>
+            
         </form>
     )
 

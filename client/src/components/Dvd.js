@@ -1,24 +1,10 @@
-import { useState } from 'react'
 
-const Dvd = ({ onDvd }) => {
-    const [title, searchTitle] = useState('')
-    const [id, searchId] = useState('')
-    const[director, searchDirector] = useState('')
 
-    const onSubmit = (e) => {
-        e.preventDefault();
-    
-
-        // if (!(title||isbn)) {
-        //     alert('You must enter the title or ID to search')
-        //     return
-        // }
-
-        onDvd({ title, id, director })
-    
-        searchTitle('')
-        searchId('')
-        searchDirector('')
+const Dvd = ({onDvdResult, myTitleDvd, myIdDvd, myDirectorDvd}) => {
+ 
+    const submitDvdSearch = (event) => {
+        onDvdResult();
+        event.preventDefault();
     }
 
     return (
@@ -28,17 +14,15 @@ const Dvd = ({ onDvd }) => {
                 <input
                     type='title'
                     placeholder='enter the title'
-                    value={title}
-                    //
+                    onChange = {myTitleDvd}
                 />
             </div>
             <div className='form-control'>
                 <label>ID</label>
                 <input
-                    type='id'
+                    type='number'
                     placeholder='enter the id'
-                    value={id}
-                    //
+                    onChange = {myIdDvd}
                 />
             </div>
             <div className='form-control'>
@@ -46,12 +30,11 @@ const Dvd = ({ onDvd }) => {
                 <input
                     type='director'
                     placeholder='enter the director'
-                    value={director}
-                    //
+                    onChange = {myDirectorDvd}
                 />
             </div>
     
-        <input type='submit' value='search for DVD' className='btn btn-block' />
+            <button className='btn btn-block' onClick = { submitDvdSearch} > Search  </button>
         </form>
     )
 

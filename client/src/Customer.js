@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { useState } from 'react'
+//import { BrowserRouter as Router, Route } from 'react-router-dom'
 import Header from './components/Header.js'
-import BookLink from './components/BookLink.js'
 
 import './index.css'
 
@@ -17,212 +16,112 @@ import Message from './components/Message.js'
 function Customer() {
 
   //BOOK PART -------------------------------------
-  const [showSearchBook, setShowBook] = useState(false)
-  const [book, setBook] = useState([])
-
-  useEffect(() => {
-    const getBook = async () => {
-      const bookFromServer = await fetchBook()
-      setBook(bookFromServer)
-    }
-
-    getBook()
-  }, [])
-
-  // fetch book
-  const fetchBook = async () => {
-    const res = await fetch('http://localhost:3000/tasks')
-    const data = await res.json()
-
-    return data
-  }
-
-    // search book
-  const searchBook = async (book) => {
-    const res = await fetch('http://localhost:3000/tasks', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify(book),
-    })
+  const [showSearchBook, setShowBook] = useState(true)
   
-    const data = await res.json()
+  const[showBookResult, setShowBookResult] = useState(false)
+
+  const[titleBook, setTitleBook] =useState('')
+  const[isbnBook, setIsbnBook] = useState('')
+  const[authorBook, setAuthorBook] = useState('')
+
+  const theSearchBook = () => {
+   if(showBookResult === true) {
+     return (
+        <div> Searching for Book: {titleBook} {isbnBook} {authorBook}</div>
+     );
+   }
   }
   
   //AUDIOBOOK PART -------------------------------------
   const [showSearchAudioBook, setShowAudioBook] = useState(false)
-  const [audiobook, setAudioBook] = useState([])
 
-  useEffect(() => {
-    const getAudioBook = async () => {
-      const audiobookFromServer = await fetchAudioBook()
-      setAudioBook(audiobookFromServer)
-    }
+  const[showAudioBookResult, setShowAudioBookResult] = useState(false)
 
-    getAudioBook()
-  }, [])
+  const[titleAudioBook, setTitleAudioBook] =useState('')
+  const[isbnAudioBook, setIsbnAudioBook] = useState('')
+  const[authorAudioBook, setAuthorAudioBook] = useState('')
 
-  // fetch Audiobook
-  const fetchAudioBook = async () => {
-    const res = await fetch('http://localhost:3000/tasks')
-    const data = await res.json()
-
-    return data
+  const theSearchAudioBook = () => {
+   if(showAudioBookResult === true) {
+     return (
+        <div> Searching for AudioBook: {titleAudioBook} {isbnAudioBook} {authorAudioBook}</div>
+     );
+   }
   }
-
-    // search Audiobook
-  const searchAudioBook = async (audiobook) => {
-    const res = await fetch('http://localhost:3000/tasks', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify(audiobook),
-    })
   
-    const data = await res.json()
-  }
-
   //DVD PART--------------------------------------
-
   const [showSearchDvd, setShowDvd] = useState(false)
-  const [dvd, setDvd] = useState([])
 
-  useEffect(() => {
-    const getDvd = async () => {
-      const dvdFromServer = await fetchDvd()
-      setDvd(dvdFromServer)
-    }
+  const[showDvdResult, setShowDvdResult] = useState(false)
 
-    getDvd()
-  }, [])
+  const[titleDvd, setTitleDvd] =useState('')
+  const[idDvd, setIdDvd] = useState('')
+  const[directorDvd, setDirectorDvd] = useState('')
 
-  // fetch dvd
-  const fetchDvd = async () => {
-    const res = await fetch('http://localhost:3000/tasks')
-    const data = await res.json()
-
-    return data
-  }
-
-    // search dvd
-  const searchDvd = async (dvd) => {
-    const res = await fetch('http://localhost:3000/tasks', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify(dvd),
-    })
-  
-    const data = await res.json()
+  const theSearchDvd = () => {
+   if(showDvdResult === true) {
+     return (
+        <div> Searching for DVD: {titleDvd} {idDvd} {directorDvd}</div>
+     );
+   }
   }
   
 
   //magazine PART -----------------------------------
   const [showSearchMgz, setShowMgz] = useState(false)
-  const [mgz, setMgz] = useState([])
 
-  useEffect(() => {
-    const getMgz = async () => {
-      const mgzFromServer = await fetchMgz()
-      setMgz(mgzFromServer)
-    }
+  const[showMgzResult, setShowMgzResult] = useState(false)
 
-    getMgz()
-  }, [])
+  const[titleMgz, setTitleMgz] =useState('')
+  const[idMgz, setIdMgz] = useState('')
+  
 
-  // fetch magazine
-  const fetchMgz = async () => {
-    const res = await fetch('http://localhost:3000/tasks')
-    const data = await res.json()
-
-    return data
+  const theSearchMgz = () => {
+   if(showMgzResult === true) {
+     return (
+        <div> Searching for Magazine: {titleMgz} {idMgz}</div>
+     );
+   }
   }
 
-    // search magazine
-  const searchMgz = async (mgz) => {
-    const res = await fetch('http://localhost:3000/tasks', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify(mgz),
-    })
-  
-    const data = await res.json()
-  }
-  
+
    //DEVICE PART -----------------------------------
-   const [showSearchDevice, setShowDevice] = useState(false)
-   const [device, setDevice] = useState([])
- 
-   useEffect(() => {
-     const getDevice = async () => {
-       const deviceFromServer = await fetchDevice()
-       setDevice(deviceFromServer)
-     }
- 
-     getDevice()
-   }, [])
- 
-   // fetch device
-   const fetchDevice = async () => {
-     const res = await fetch('http://localhost:3000/tasks')
-     const data = await res.json()
- 
-     return data
+  const [showSearchDevice, setShowDevice] = useState(false)
+
+  const[showDeviceResult, setShowDeviceResult] = useState(false)
+
+  const[titleDevice, setTitleDevice] =useState('')
+  const[idDevice, setIdDevice] = useState('')
+  
+
+  const theSearchDevice = () => {
+   if(showDeviceResult === true) {
+     return (
+        <div> Searching for Device: {titleDevice} {idDevice}</div>
+     );
    }
- 
-     // search device
-   const searchDevice = async (device) => {
-     const res = await fetch('http://localhost:3000/tasks', {
-       method: 'POST',
-       headers: {
-         'Content-type': 'application/json',
-       },
-       body: JSON.stringify(device),
-     })
-   
-     const data = await res.json()
-   }
+  }
 
    //MESSAGES PART -------------------------
-   const [showSearchMessage, setShowMessage] = useState(true)
-   const [message, setMessage] = useState([])
-   useEffect(() => {
-    const getMessage = async () => {
-      const messageFromServer = await fetchMessage()
-      setMessage(messageFromServer)
-    }
+  const [showSearchMessage, setShowMessage] = useState(false)
 
-    getMessage()
-  }, [])
+  const[showMessageResult, setShowMessageResult] = useState(false)
 
-  // fetch message
-  const fetchMessage = async () => {
-    const res = await fetch('http://localhost:3000/tasks')
-    const data = await res.json()
-
-    return data
-  }
-
-   // search message
-   const searchMessage = async (message) => {
-    const res = await fetch('http://localhost:3000/tasks', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify(message),
-    })
+  const[idMessage, setIdMessage] =useState('')
+  const[passwordMessage, setPasswordMessage] = useState('')
   
-    const data = await res.json()
+
+  const theSearchMessage = () => {
+   if(showMessageResult === true) {
+     return (
+        <div> Searching for Messages: {idMessage} {passwordMessage}</div>
+     );
+   }
   }
 
   return (
-    
+      <div>
+        Refresh after each Search
       <div className="container">
         <Header />
         {/* <Route path='/book' component={Book}/> */}
@@ -243,20 +142,56 @@ function Customer() {
           showMessage = {showSearchMessage}
           
         />
-        {showSearchBook && <Book onBook={searchBook} />}
-        {showSearchAudioBook && <AudioBook onAudioBook={searchAudioBook} />}
-        {showSearchDvd && <Dvd onDvd={searchDvd} />}
-        {showSearchMgz && <Mgz onMgz={searchMgz} />}
-        {showSearchDevice && <Device onDevice={searchDevice} />}
-        {showSearchMessage && <Message onMessage = {searchMessage} />}
+        {showSearchBook && <Book
+          onBookResult = {() => setShowBookResult(!showBookResult)}
+          myTitleBook = {(e) => {setTitleBook(e.target.value)}}
+          myIsbnBook = {(e) => {setIsbnBook(e.target.value)}}
+          myAuthorBook = {(e) => {setAuthorBook(e.target.value)}}
+
+        />}
+        {showSearchAudioBook && <AudioBook 
+          onAudioBookResult = {() => setShowAudioBookResult(!showAudioBookResult)}
+          myTitleAudioBook = {(e) => {setTitleAudioBook(e.target.value)}}
+          myIsbnAudioBook = {(e) => {setIsbnAudioBook(e.target.value)}}
+          myAuthorAudioBook = {(e) => {setAuthorAudioBook(e.target.value)}}
+        />}
+        {showSearchDvd && <Dvd  
+          onDvdResult = {() => setShowDvdResult(!showDvdResult)}
+          myTitleDvd = {(e) => {setTitleDvd(e.target.value)}}
+          myIdDvd = {(e) => {setIdDvd(e.target.value)}}
+          myDirectorDvd = {(e) => {setDirectorDvd(e.target.value)}}
+        />}
+        {showSearchMgz && <Mgz 
+          onMgzResult = {() => setShowMgzResult(!showMgzResult)}
+          myTitleMgz = {(e) => {setTitleMgz(e.target.value)}}
+          myIdMgz = {(e) => {setIdMgz(e.target.value)}}
+        />}
+        {showSearchDevice && <Device
+          onDeviceResult = {() => setShowDeviceResult(!showDeviceResult)}
+          myTitleDevice = {(e) => {setTitleDevice(e.target.value)}}
+          myIdDevice = {(e) => {setIdDevice(e.target.value)}}
+        />}
+        {showSearchMessage && <Message  
+          onMessageResult = {() => setShowMessageResult(!showMessageResult)}
+          myIdMessage = {(e) => {setIdMessage(e.target.value)}}
+          myPasswordMessage = {(e) => {setPasswordMessage(e.target.value)}}
+        />}
+
+        
 
 
         {/* <button className='btn'>DVD</button>
         <button className='btn'>magazine</button> */}
 
-
-
-
+      </div>
+        <div>
+          {theSearchBook()}
+          {theSearchAudioBook()}
+          {theSearchDvd()}
+          {theSearchMgz()}
+          {theSearchDevice()}
+          {theSearchMessage()}
+        </div>
       </div>
   );
 }

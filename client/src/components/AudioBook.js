@@ -1,25 +1,12 @@
-import { useState } from 'react'
 
-const AudioBook = ({ onAudioBook }) => {
-    const [title, searchTitle] = useState('')
-    const [isbn, searchIsbn] = useState('')
-    const[author, searchAuthor] = useState('')
+const AudioBook = ({onAudioBookResult, myTitleAudioBook, myIsbnAudioBook, myAuthorAudioBook}) => {
 
-    const onSubmit = (e) => {
-        e.preventDefault();
-    
-
-        // if (!(title||isbn)) {
-        //     alert('You must enter the title or ID to search')
-        //     return
-        // }
-
-        onAudioBook({ title, isbn, author })
-    
-        searchTitle('')
-        searchIsbn('')
-        searchAuthor('')
+    const submitBookSearch = (event) => {
+        //window.location.href = "/Tasks";
+        onAudioBookResult();
+        event.preventDefault();
     }
+
 
     return (
         <form className='add-form'>
@@ -28,17 +15,15 @@ const AudioBook = ({ onAudioBook }) => {
                 <input
                     type='title'
                     placeholder='enter the title'
-                    value={title}
-                    //
+                    onChange = {myTitleAudioBook}
                 />
             </div>
             <div className='form-control'>
                 <label>ISBN</label>
                 <input
-                    type='isbn'
+                    type='number'
                     placeholder='enter the isbn'
-                    value={isbn}
-                    //
+                    onChange = {myIsbnAudioBook}
                 />
             </div>
             <div className='form-control'>
@@ -46,13 +31,12 @@ const AudioBook = ({ onAudioBook }) => {
                 <input
                     type='author'
                     placeholder='enter the author'
-                    value={author}
-                    //
+                    onChange = {myAuthorAudioBook}
                 />
             </div>
 
     
-        <input type='submit' value='search for AudioBook' className='btn btn-block' />
+            <button className='btn btn-block' onClick = { submitBookSearch} > Search  </button>
         </form>
     )
 

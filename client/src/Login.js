@@ -11,14 +11,14 @@ const Login = () => {
         console.log("CustomerID: " + theID);
         console.log("Customer Password: " + thePassword);
         
-        window.location.href = "/Search1";
+        window.location.href = "/Search";
     }    
 
     const loginEmployee = () => { //only if employee is found
         console.log("CustomerID: " + theID);
         console.log("Customer Password: " + thePassword);
         
-        window.location.href = "/Employee";
+        window.location.href = "/Librarian";
     }
 
 

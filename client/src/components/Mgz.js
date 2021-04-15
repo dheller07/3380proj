@@ -1,24 +1,9 @@
-import { useState } from 'react'
 
-const Mgz = ({ onMgz }) => {
-    const [title, searchTitle] = useState('')
-    const [id, searchId] = useState('')
-    const[director, searchDirector] = useState('')
+const Mgz = ({onMgzResult, myTitleMgz, myIdMgz}) => {
 
-    const onSubmit = (e) => {
-        e.preventDefault();
-    
-
-        // if (!(title||isbn)) {
-        //     alert('You must enter the title or ID to search')
-        //     return
-        // }
-
-        onMgz({ title, id, director })
-    
-        searchTitle('')
-        searchId('')
-        searchDirector('')
+    const submitMgzSearch = (event) => {
+        onMgzResult();
+        event.preventDefault();
     }
 
     return (
@@ -28,21 +13,19 @@ const Mgz = ({ onMgz }) => {
                 <input
                     type='title'
                     placeholder='enter the title'
-                    value={title}
-                    //
+                    onChange = {myTitleMgz}
                 />
             </div>
             <div className='form-control'>
                 <label>ID</label>
                 <input
-                    type='id'
+                    type='number'
                     placeholder='enter the id'
-                    value={id}
-                    //
+                    onChange = {myIdMgz}
                 />
             </div>
     
-        <input type='submit' value='search for magazine' className='btn btn-block' />
+            <button className='btn btn-block' onClick = { submitMgzSearch} > Search  </button>
         </form>
     )
 

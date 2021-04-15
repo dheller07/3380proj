@@ -1,25 +1,13 @@
-import { useState } from 'react'
 
-const Book = ({ onBook }) => {
-    const [title, searchTitle] = useState('')
-    const [isbn, searchIsbn] = useState('')
-    const[author, searchAuthor] = useState('')
-
-    const onSubmit = (e) => {
-        e.preventDefault();
+const Book = ({onBookResult, myTitleBook, myIsbnBook, myAuthorBook}) => {
     
-
-        // if (!(title||isbn)) {
-        //     alert('You must enter the title or ID to search')
-        //     return
-        // }
-
-        onBook({ title, isbn, author })
-    
-        searchTitle('')
-        searchIsbn('')
-        searchAuthor('')
+    const submitBookSearch = (event) => {
+        //window.location.href = "/Tasks";
+        onBookResult();
+        event.preventDefault();
     }
+
+
 
     return (
         <form className='add-form'>
@@ -28,17 +16,15 @@ const Book = ({ onBook }) => {
                 <input
                     type='title'
                     placeholder='enter the title'
-                    value={title}
-                    //
+                    onChange = {myTitleBook}
                 />
             </div>
             <div className='form-control'>
                 <label>ISBN</label>
                 <input
-                    type='isbn'
+                    type='number'
                     placeholder='enter the isbn'
-                    value={isbn}
-                    //
+                    onChange = {myIsbnBook}
                 />
             </div>
             <div className='form-control'>
@@ -46,12 +32,11 @@ const Book = ({ onBook }) => {
                 <input
                     type='author'
                     placeholder='enter the author'
-                    value={author}
-                    //
+                    onChange = {myAuthorBook}
                 />
             </div>
     
-        <input type='submit' value='search for Book' className='btn btn-block' />
+        <button className='btn btn-block' onClick = { submitBookSearch} > Search  </button>
         </form>
     )
 

@@ -1,51 +1,33 @@
-import { useState } from 'react'
-//import { ReactDOM, mountNode } from 'react-dom'
 
-const Device = ({ onDevice }) => {
-    const [name, searchName] = useState('')
-    const [number, enterNumber] = useState('')
+const Device = ({onDeviceResult, myTitleDevice, myIdDevice}) => {
 
-
-
-    const onSubmit = (e) => {
-        e.preventDefault();
-    
-
-        // if (!(title||isbn)) {
-        //     alert('You must enter the title or ID to search')
-        //     return
-        // }
-
-        onDevice({ name, number })
-    
-        searchName('')
-        enterNumber('')
+    const submitDeviceSearch = (event) => {
+        onDeviceResult();
+        event.preventDefault();
     }
-
     return (
 
         <form className='add-form'>
             <div className='form-control'>
-                <label>Title</label>
+                <label>Device Name</label>
                 <input
                     type='name'
                     placeholder='enter device name'
-                    value={name}
-                    //
+                    onChange = {myTitleDevice}
+                    
                 />
             </div>
             <div className='form-control'>
-                <label>amount</label>
+                <label>ID</label>
                 <input
                     type='number'
-                    placeholder='enter the amount you want to borrow'
-                    value={number}
-                    //
+                    placeholder='enter the ID'
+                    onChange = {myIdDevice}
                 />
             </div>
 
     
-        <input type='submit' value='search for Device' className='btn btn-block' />
+            <button className='btn btn-block' onClick = { submitDeviceSearch} > Search  </button>
         </form>
     )
 
