@@ -217,7 +217,6 @@ function Employee1 () {
                 onClick={ChangetoAddItems}
                 />
         </div>
-        REFRESH AFTER EACH ACTION
         <div className = "container">
             <Header title = "Librarian" />
             
@@ -297,6 +296,7 @@ function Employee1 () {
         />}
 
         </div> 
+        REFRESH AFTER EACH ACTION
         <div>
             {theReturnBook()}
             {theCheckoutBook()}
