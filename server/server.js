@@ -29,6 +29,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // TODO add all routes
+const auth = require("./routes/auth.routes")
 const employees = require("./routes/employee.routes")
 const customers = require("./routes/customer.routes")
 const books = require("./routes/book.routes")
@@ -41,6 +42,7 @@ const authors = require("./routes/author.routes")
 const publishers = require("./routes/publisher.routes")
 const narrators = require("./routes/narrator.routes")
 const series = require("./routes/series.routes")
+app.use("/auth", auth);
 app.use("/employees", employees);
 app.use("/customers", customers);
 app.use("/books", books);
