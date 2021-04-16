@@ -2,6 +2,7 @@ const { Op } = require("sequelize");
 const db = require("../models/");
 const Employee = db.employee;
 
+/*
 // Create and Save a new Employee
 exports.create = (req, res) => {
     // Validate request
@@ -31,6 +32,7 @@ exports.create = (req, res) => {
         });
     });
 };
+*/
 
 // Retrieve all Employees from the database.
 exports.findAll = (req, res) => {
