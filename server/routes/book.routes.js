@@ -13,6 +13,9 @@ router.post("/", books.create);
 // Retrieve all Books
 router.get("/", books.findAll);
 
+// Retrieve all Books that match search parameters
+router.get("/search", books.findAll);
+
 // Retrieve a single Book with id
 router.get("/:id", books.findOne);
 
