@@ -1,7 +1,7 @@
 const { Op } = require("sequelize");
 const db = require("../models/");
 const Customer = db.customer;
-/*
+
 // Create and Save a new Customer
 exports.create = (req, res) => {
     // Validate request
@@ -32,7 +32,7 @@ exports.create = (req, res) => {
             });
         });
 };
- */
+
 
 // Retrieve all Customers from the database.
 exports.findAll = (req, res) => {
