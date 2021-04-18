@@ -1,6 +1,8 @@
 const { Op } = require("sequelize");
 const db = require("../models/");
 const Book = db.book;
+const Author = db.author;
+const Location = db.location
 
 // Create and Save a new Book
 exports.create = (req, res) => {
@@ -65,6 +67,34 @@ exports.findOne = (req, res) => {
             });
         });
 };
+
+// Find all books that fit search parameters
+// TODO add remaining parameters
+exports.findThese = (req, res) => {
+    Book.findAll({
+        where: [{
+            title: req.body.title,
+            required: false
+        }, {
+            isbn: req.body.isbn,
+            required: false
+        },],
+        include: [{
+            model: Author,
+            where: [{
+                f_name: req.body.f_name,
+                required: false
+            }, {
+                l_name: req.body.l_name,
+                required: false
+            }]
+        }, {
+            model: Location,
+            where: {location: req.body.location},
+            required: false
+        }]
+    })
+}
 
 // Update an Book by the id in the request
 exports.update = (req, res) => {
