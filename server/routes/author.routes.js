@@ -1,25 +1,23 @@
-module.exports = app => {
-    const authors = require("../controllers/author.controller.js");
+const authors = require("../controllers/author.controller.js");
 
-    let router = require("express").Router();
+let router = require("express").Router();
 
-    // Create a new Author
-    router.post("/", authors.create);
+// Create a new Author
+router.post("/", authors.create);
 
-    // Retrieve all Authors
-    router.get("/", authors.findAll);
+// Retrieve all Authors
+router.get("/", authors.findAll);
 
-    // Retrieve a single Author with id
-    router.get("/:id", authors.findOne);
+// Retrieve a single Author with id
+router.get("/:id", authors.findOne);
 
-    // Update an Author with id
-    router.put("/:id", authors.update);
+// Update an Author with id
+router.put("/:id", authors.update);
 
-    // Delete an Author with id
-    router.delete("/:id", authors.delete);
+// Delete an Author with id
+router.delete("/:id", authors.delete);
 
-    // Delete all Authors
-    router.delete("/", authors.deleteAll);
+// Delete all Authors
+router.delete("/", authors.deleteAll);
 
-    app.use('/api/authors', router);
-};
+module.exports = router;
