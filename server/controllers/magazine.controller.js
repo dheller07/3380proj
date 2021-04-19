@@ -64,7 +64,7 @@ exports.findThese = (req, res) => {
         },],
         include: [{
             model: Location,
-            where: {location: req.body.location},
+            where: {location_name: req.body.location},
             required: false
         }]
     })

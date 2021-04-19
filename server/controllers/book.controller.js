@@ -90,7 +90,7 @@ exports.findThese = (req, res) => {
             }]
         }, {
             model: Location,
-            where: {location: req.body.location},
+            where: {location_name: req.body.location},
             required: false
         }]
     })
