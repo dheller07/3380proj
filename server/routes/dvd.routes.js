@@ -13,6 +13,9 @@ router.post("/", dvds.create);
 // Retrieve all DVDs
 router.get("/", dvds.findAll);
 
+// Retrieve all DVDs that match search parameters
+router.get("/search", dvds.findThese);
+
 // Retrieve a single DVD with id
 router.get("/:id", dvds.findOne);
 

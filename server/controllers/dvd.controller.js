@@ -1,6 +1,7 @@
 const { Op } = require("sequelize");
 const db = require("../models/");
 const DVD = db.dvd;
+const Location = db.location;
 
 // Create and Save a new DVD
 exports.create = (req, res) => {
@@ -44,6 +45,36 @@ exports.findAll = (req, res) => {
             res.status(500).send({message: err.message || "An error occurred while retrieving dvds"
             }));
 };
+
+// Find all dvds that fit search parameters
+exports.findThese = (req, res) => {
+    DVD.findAll({
+        where: [{
+            title: req.body.title,
+            required: false
+        }, {
+            release_date: req.body.release_date,
+            required: false
+        }, {
+            director: req.body.director,
+            required: false
+        }, {
+            studio: req.body.studio,
+            required: false
+        },],
+        include: [{
+            model: Location,
+            where: {location: req.body.location},
+            required: false
+        }]
+    })
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({ message: err.message || "An error occurred while retrieving dvds" })
+        })
+}
 
 // Find a single DVD with an id
 exports.findOne = (req, res) => {
