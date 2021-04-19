@@ -1,6 +1,9 @@
 const { Op } = require("sequelize");
 const db = require("../models/");
 const Audiobook = db.audiobook;
+const Author = db.author;
+const Location = db.location;
+const Narrator = db.narrator;
 
 // Create and Save a new Audiobook
 exports.create = (req, res) => {
@@ -50,6 +53,49 @@ exports.findAll = (req, res) => {
             res.status(500).send({message: err.message || "An error occurred while retrieving audiobooks"
             }));
 };
+
+// Find all audiobooks that fit search parameters
+// TODO add remaining parameters
+exports.findThese = (req, res) => {
+    Audiobook.findAll({
+        where: [{
+            title: req.body.title,
+            required: false
+        }, {
+            isbn: req.body.isbn,
+            required: false
+        },],
+        include: [{
+            model: Author,
+            where: [{
+                f_name: req.body.f_name,
+                required: false
+            }, {
+                l_name: req.body.l_name,
+                required: false
+            }]
+        }, {
+            model: Location,
+            where: {location_name: req.body.location},
+            required: false
+        }, {
+            model: Narrator,
+            where: [{
+                f_name: req.body.f_name,
+                required: false
+            }, {
+                l_name: req.body.l_name,
+                required: false
+            }]
+        }]
+    })
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({ message: err.message || "An error occurred while retrieving books" })
+        })
+}
 
 // Find a single Audiobook with an id
 exports.findOne = (req, res) => {

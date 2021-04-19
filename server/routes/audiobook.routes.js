@@ -13,6 +13,9 @@ router.post("/", audiobooks.create);
 // Retrieve all Audiobooks
 router.get("/", audiobooks.findAll);
 
+// Retrieve all Audiobooks that match search parameters
+router.get("/search", audiobooks.findThese);
+
 // Retrieve a single Audiobook with id
 router.get("/:id", audiobooks.findOne);
 
