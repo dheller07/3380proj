@@ -1,12 +1,8 @@
-import { useState } from 'react'
 
-const Device = () => {
-    const [deviceType, theDeviceType] = useState('')
-    const [model, theModel] = useState('')
+const Device = ({onDeviceResult, myTypeDevice, myModelDevice}) => {
 
     const submitDeviceAdd = (event) => {
-        console.log(deviceType);
-        console.log(model);
+        onDeviceResult();
         event.preventDefault();
     }
 
@@ -17,17 +13,13 @@ const Device = () => {
                 <input
                     type='text'
                     placeholder='enter the Device Type'
-                    onChange = {(e) => {
-                        theDeviceType(e.target.value)
-                    }}
+                    onChange = {myTypeDevice}
                 />
                 <label>Model</label>
                 <input
                     type='text'
                     placeholder='enter the Model'
-                    onChange = {(e) => {
-                        theModel(e.target.value)
-                    }}
+                    onChange = {myModelDevice}
                 />
             </div>
             

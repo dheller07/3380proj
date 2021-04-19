@@ -121,7 +121,7 @@ function Customer() {
 
   return (
       <div>
-        Refresh after each Search
+        
       <div className="container">
         <Header />
         {/* <Route path='/book' component={Book}/> */}
@@ -184,6 +184,8 @@ function Customer() {
         <button className='btn'>magazine</button> */}
 
       </div>
+        REFRESH AFTER EACH SEARCH
+        
         <div>
           {theSearchBook()}
           {theSearchAudioBook()}
