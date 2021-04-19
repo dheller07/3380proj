@@ -10,6 +10,13 @@ import Dvd from './components2/Dvd.js'
 import Mgz from './components2/Mgz.js'
 import Device from './components2/Device.js'
 
+import BookService from './services/book.service'
+import AudioBookService from './services/audiobook.service'
+import DvdService from './services/dvd.service'
+import MgzService from './services/magazine.service'
+import DeviceService from './services/device.service'
+
+
 
 
 function AddItems () {
@@ -31,8 +38,30 @@ function AddItems () {
 
     const theAddBook = () => {
         if(showBookResult === true) {
-          return (
-             <div> Adding Book: {titleBook} {isbnBook} {authorBook} {publisherBook} {yearBook} {editionBook} {seriesBook} {seriesPositionBook} {genreBook}</div>
+            var data = {
+                title: titleBook,
+                isbn: isbnBook,
+                author_id: authorBook,
+                publisher: publisherBook,
+                publication_year: yearBook,
+                edition: editionBook,
+                series: seriesBook,
+                series_position: seriesPositionBook,
+                genre: genreBook,
+                checked_out: 0,
+                ebook: 0,
+                waitlist_capacity: 0,
+                location: 1
+            };
+            BookService.create(data)
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(e => {
+                    console.log(e)
+                });
+            return (
+                <div> Adding Book: {titleBook} {isbnBook} {authorBook} {publisherBook} {yearBook} {editionBook} {seriesBook} {seriesPositionBook} {genreBook}</div>
             );
         }
     }
@@ -55,7 +84,29 @@ function AddItems () {
 
     const theAddAudioBook = () => {
         if(showAudioBookResult === true) {
-          return (
+            var data = {
+                title: titleAudioBook,
+                isbn: isbnAudioBook,
+                author_id: authorAudioBook,
+                narrator_id: narratorAudioBook,
+                publisher: publisherAudioBook,
+                publication_year: yearAudioBook,
+                edition: editionAudioBook,
+                series: seriesAudioBook,
+                series_position: seriesPositionAudioBook,
+                genre: genreAudioBook,
+                checked_out: 0,
+                waitlist_capacity: 0,
+                location: 2
+            };
+            AudioBookService.create(data)
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(e => {
+                    console.log(e)
+                });
+            return (
                 <div> Adding Audio Book: {titleAudioBook} {isbnAudioBook} {authorAudioBook} {narratorAudioBook} {publisherAudioBook} {yearAudioBook} {editionAudioBook} {seriesAudioBook} {seriesPositionAudioBook} {genreAudioBook}</div>
             );
         }
@@ -74,7 +125,23 @@ function AddItems () {
 
     const theAddDvd = () => {
         if(showDvdResult === true) {
-          return (
+            var data = {
+                title: titleDvd,
+                release_date: dateDvd,
+                director: directorDvd,
+                studio: studioDvd,
+                location: 2,
+                checked_out: 0
+                
+            };
+            DvdService.create(data)
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(e => {
+                    console.log(e)
+                });
+            return (
                 <div> Adding Dvd: {titleDvd} {dateDvd} {directorDvd} {studioDvd}</div>
             );
         }
@@ -92,7 +159,23 @@ function AddItems () {
 
     const theAddMgz = () => {
         if(showMgzResult === true) {
-          return (
+            var data = {
+                title: titleMgz,
+                issue: issueMgz,
+                issue_date: dateMgz,
+                topic: topicMgz,
+                location: 3,
+                checked_out: 0
+                
+            };
+            MgzService.create(data)
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(e => {
+                    console.log(e)
+                });
+            return (
                 <div> Adding Mgz: {titleMgz} {issueMgz} {dateMgz} {topicMgz}</div>
             );
         
@@ -111,7 +194,21 @@ function AddItems () {
 
     const theAddDevice = () => {
         if(showDeviceResult === true) {
-          return (
+            var data = {
+                device_type: typeDevice,
+                model: modelDevice,
+                checked_out: 0,
+                waitlist_capacity: 0,
+                location: 4
+            };
+            DeviceService.create(data)
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(e => {
+                    console.log(e)
+                });
+            return (
                 <div> Adding Device: {typeDevice} {modelDevice} </div>
             );
         

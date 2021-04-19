@@ -14,6 +14,13 @@ import Button from './components/Button.js'
 import AddCustomer from './components1/AddCustomer.js'
 import RemoveCustomer from './components1/RemoveCustomer.js'
 
+import CustomerService from './services/customer.service'
+import BookService from './services/book.service'
+import AudioBookService from './services/audiobook.service'
+import DvdService from './services/dvd.service'
+import MgzService from './services/magazine.service'
+import DeviceService from './services/device.service'
+
 function Employee1 () {
 
  //BOOK PART -------------------------------------
@@ -28,6 +35,15 @@ function Employee1 () {
 
     const theReturnBook = () => {
         if(showBookResult1 === true) {
+            var data = {
+                checked_out: 0
+            };
+            BookService.update(idBook, data)
+                .then(response => {
+                })
+                .catch(e => {
+                    console.log(e)
+                });
             return (
                 <div>Returning book: {idBook}</div>
             );
@@ -36,6 +52,15 @@ function Employee1 () {
 
     const theCheckoutBook = () => {
         if(showBookResult2 === true) {
+            var data = {
+                checked_out: 1
+            };
+            BookService.update(idBook, data)
+                .then(response => {
+                })
+                .catch(e => {
+                    console.log(e)
+                });
             return (
                 <div>Checking out book: {idBook} {idCustomer} {idEmployee}</div>
             );
@@ -52,6 +77,15 @@ function Employee1 () {
 
     const theReturnAudioBook = () => {
         if(showAudioBookResult1 === true) {
+            var data = {
+                checked_out: 0
+            };
+            AudioBookService.update(idAudioBook, data)
+                .then(response => {
+                })
+                .catch(e => {
+                    console.log(e)
+                });
             return (
             <div>Returning Audio book: {idAudioBook}</div>
             );
@@ -59,6 +93,15 @@ function Employee1 () {
     }
 
     const theCheckoutAudioBook = () => {
+        var data = {
+            checked_out: 1
+        };
+        AudioBookService.update(idAudioBook, data)
+            .then(response => {
+            })
+            .catch(e => {
+                console.log(e)
+            });
         if(showAudioBookResult2 === true) {
             return (
             <div>Checking out Audio book: {idAudioBook} {idCustomer} {idEmployee}</div>
@@ -77,6 +120,15 @@ function Employee1 () {
 
     const theReturnDvd = () => {
         if(showDvdResult1 === true) {
+            var data = {
+                checked_out: 0
+            };
+            DvdService.update(idDvd, data)
+                .then(response => {
+                })
+                .catch(e => {
+                    console.log(e)
+                });
             return (
             <div>Returning DVD: {idDvd}</div>
             );
@@ -85,6 +137,15 @@ function Employee1 () {
 
     const theCheckoutDvd = () => {
         if(showDvdResult2 === true) {
+            var data = {
+                checked_out: 1
+            };
+            DvdService.update(idDvd, data)
+                .then(response => {
+                })
+                .catch(e => {
+                    console.log(e)
+                });
             return (
             <div>Checking out DVD: {idDvd} {idCustomer} {idEmployee}</div>
             );
@@ -101,6 +162,15 @@ function Employee1 () {
 
     const theReturnMgz = () => {
         if(showMgzResult1 === true) {
+            var data = {
+                checked_out: 0
+            };
+            MgzService.update(idMgz, data)
+                .then(response => {
+                })
+                .catch(e => {
+                    console.log(e)
+                });
             return (
             <div>Returning Magazine: {idMgz}</div>
             );
@@ -109,6 +179,15 @@ function Employee1 () {
 
     const theCheckoutMgz = () => {
         if(showMgzResult2 === true) {
+            var data = {
+                checked_out: 1
+            };
+            MgzService.update(idMgz, data)
+                .then(response => {
+                })
+                .catch(e => {
+                    console.log(e)
+                });
             return (
             <div>Checking out Magazine: {idMgz} {idCustomer} {idEmployee}</div>
             );
@@ -125,6 +204,15 @@ function Employee1 () {
 
     const theReturnDevice = () => {
         if(showDeviceResult1 === true) {
+            var data = {
+                checked_out: 0
+            };
+            DeviceService.update(idDevice, data)
+                .then(response => {
+                })
+                .catch(e => {
+                    console.log(e)
+                });
             return (
             <div>Returning Device: {idDevice}</div>
             );
@@ -133,6 +221,15 @@ function Employee1 () {
 
     const theCheckoutDevice = () => {
         if(showDeviceResult2 === true) {
+            var data = {
+                checked_out: 1
+            };
+            DeviceService.update(idDevice, data)
+                .then(response => {
+                })
+                .catch(e => {
+                    console.log(e)
+                });
             return (
             <div>Checking out Device: {idDevice} {idCustomer} {idEmployee}</div>
             );
@@ -170,6 +267,21 @@ function Employee1 () {
 
     const theAddCustomer = () => {
         if(showTheAdd === true) {
+            var data = {
+                f_name: firstAdd,
+                l_name: lastAdd,
+                customer_role: roleAdd,
+                item_limit: 5,
+                acc_balance: 0,
+                fine_rate: .2
+            };
+            CustomerService.create(data)
+                .then(response => {
+                })
+                .catch(e => {
+                    console.log(e)
+                });
+
             return (
                 <div>Adding Customer: {passwordAdd} {firstAdd} {lastAdd} {roleAdd}</div>
             );
@@ -185,6 +297,12 @@ function Employee1 () {
 
     const theRemoveCustomer = () => {
         if(showTheRemove === true) {
+            CustomerService.delete(idRemove)
+                .then(response => {
+                })
+                .catch(e => {
+                    console.log(e)
+                });
             return (
                 <div>Removing Customer: {idRemove}</div>
             );
