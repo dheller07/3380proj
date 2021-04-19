@@ -46,6 +46,13 @@ exports.create = (req, res) => {
     }).then(s => {
        // if (!s) /* TODO create series? */
     })
+    const location = Location.findOne({
+        where: {
+            location_name: req.body.location
+        }
+    }).then(l => {
+        // if (!l) /* TODO create location? */
+    })
 
     const audiobook = {
         title: req.body.title,
@@ -60,7 +67,7 @@ exports.create = (req, res) => {
         genre: req.body.genre,
         checked_out: false,
         waitlist_capacity: req.body.waitlist_capacity,
-        location: req.body.location
+        location: location.id
     }
 
     // Save in the database
