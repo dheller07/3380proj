@@ -1,17 +1,8 @@
-import { useState } from 'react'
 
-const Dvd = () => {
-    const [title, theTitle] = useState('')
-    const [releaseDate, theReleaseDate] = useState('')
-    const [director, theDirector] = useState('')
-    const [studio, theStudio] = useState('')
-    
+const Dvd = ({onDvdResult, myTitleDvd, myDateDvd, myDirectorDvd, myStudioDvd}) => {
 
     const submitDvdAdd = (event) => {
-        console.log(title);
-        console.log(releaseDate);
-        console.log(director);
-        console.log(studio);
+        onDvdResult();
         event.preventDefault();
     }
 
@@ -22,33 +13,25 @@ const Dvd = () => {
                 <input
                     type='text'
                     placeholder='enter the Title'
-                    onChange = {(e) => {
-                        theTitle(e.target.value)
-                    }}
+                    onChange = {myTitleDvd}
                 />
                 <label>Release Date</label>
                 <input
                     type='text'
                     placeholder='enter the Release Date'
-                    onChange = {(e) => {
-                        theReleaseDate(e.target.value)
-                    }}
+                    onChange = {myDateDvd}
                 />
                 <label>Director</label>
                 <input
                     type='text'
                     placeholder='enter the Director'
-                    onChange = {(e) => {
-                        theDirector(e.target.value)
-                    }}
+                    onChange = {myDirectorDvd}
                 />
                 <label>Studio</label>
                 <input
                     type='text'
                     placeholder='enter the Studio'
-                    onChange = {(e) => {
-                        theStudio(e.target.value)
-                    }}
+                    onChange = {myStudioDvd}
                 />
             </div>
             

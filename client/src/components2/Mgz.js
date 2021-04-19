@@ -1,18 +1,8 @@
-import { useState } from 'react'
 
-const Mgz = () => {
-    const [title, theTitle] = useState('')
-    const [issue, theIssue] = useState('')
-    const [issueDate, theIssueDate] = useState('')
-    const [topic, theTopic] = useState('')
-
-    
+const Mgz = ({onMgzResult, myTitleMgz, myIssueMgz, myDateMgz, myTopicMgz}) => {
 
     const submitMgzAdd = (event) => {
-        console.log(title);
-        console.log(issue);
-        console.log(issueDate);
-        console.log(topic);
+        onMgzResult();
         event.preventDefault();
     }
 
@@ -23,33 +13,25 @@ const Mgz = () => {
                 <input
                     type='text'
                     placeholder='enter the Title'
-                    onChange = {(e) => {
-                        theTitle(e.target.value)
-                    }}
+                    onChange = {myTitleMgz}
                 />
                 <label>Issue</label>
                 <input
-                    type='ID'
+                    type='number'
                     placeholder='enter the Issue'
-                    onChange = {(e) => {
-                        theIssue(e.target.value)
-                    }}
+                    onChange = {myIssueMgz}
                 />
                 <label>Issue Date</label>
                 <input
                     type='text'
                     placeholder='enter the Issue Date'
-                    onChange = {(e) => {
-                        theIssueDate(e.target.value)
-                    }}
+                    onChange = {myDateMgz}
                 />
                 <label>Topic</label>
                 <input
                     type='text'
                     placeholder='enter the Topic'
-                    onChange = {(e) => {
-                        theTopic(e.target.value)
-                    }}
+                    onChange = {myTopicMgz}
                 />
             </div>
             

@@ -1,28 +1,8 @@
-import { useState } from 'react'
 
-const Book = () => {
-
-    const [isbn, theISBN] = useState('')
-    const [title, theTitle] = useState('')
-    const [authorID, theAuthorID] = useState('')
-    const [publisherID, thePublisherID] = useState('')
-    const [publicationYear, thePublicationYear] = useState('')
-    const [edition, theEdition] = useState('')
-    const [series, theSeries] = useState('')
-    const [seriesPosition, theSeriesPosition] = useState('')
-    const [genre, theGenre] = useState('')
-    
+const Book = ({onBookResult, myTitleBook, myIsbnBook, myAuthorBook, myPublisherBook, myYearBook, myEditionBook, mySeriesBook, mySeriesPositionBook, myGenreBook}) => {
 
     const submitBookAdd = (event) => {
-        console.log(isbn);
-        console.log(title);
-        console.log(authorID);
-        console.log(publisherID);
-        console.log(publicationYear);
-        console.log(edition);
-        console.log(series);
-        console.log(seriesPosition);
-        console.log(genre);
+        onBookResult();
         event.preventDefault();
     }
 
@@ -31,75 +11,57 @@ const Book = () => {
             <div className='form-control'>
                 <label>ISBN</label>
                 <input
-                    type='ID'
+                    type='number'
                     placeholder='enter the ISBN'
-                    onChange = {(e) => {
-                        theISBN(e.target.value)
-                    }}
+                    onChange = {myIsbnBook}
                 />
                 <label>Title</label>
                 <input
                     type='text'
                     placeholder='enter the Title'
-                    onChange = {(e) => {
-                        theTitle(e.target.value)
-                    }}
+                    onChange = {myTitleBook}
                 />
                 <label>AuthorID</label>
                 <input
-                    type='ID'
+                    type='number'
                     placeholder='enter the AuthorID'
-                    onChange = {(e) => {
-                        theAuthorID(e.target.value)
-                    }}
+                    onChange = {myAuthorBook}
                 />
                 <label>PublisherID</label>
                 <input
-                    type='ID'
+                    type='number'
                     placeholder='enter the PublisherID'
-                    onChange = {(e) => {
-                        thePublisherID(e.target.value)
-                    }}
+                    onChange = {myPublisherBook}
                 />
                 <label>Publication Year</label>
                 <input
-                    type='ID'
+                    type='number'
                     placeholder='enter the Publication Year'
-                    onChange = {(e) => {
-                        thePublicationYear(e.target.value)
-                    }}
+                    onChange = {myYearBook}
                 />
                 <label>Edition</label>
                 <input
-                    type='ID'
+                    type='number'
                     placeholder='enter the Edition'
-                    onChange = {(e) => {
-                        theEdition(e.target.value)
-                    }}
+                    onChange = {myEditionBook}
                 />
                 <label>Series</label>
                 <input
-                    type='ID'
+                    type='number'
                     placeholder='enter the Series'
-                    onChange = {(e) => {
-                        theSeries(e.target.value)
-                    }}
+                    onChange = {mySeriesBook}
                 />
                 <label>Series Position</label>
                 <input
-                    type='ID'
+                    type='number'
                     placeholder='enter the Series Position'
-                    onChange = {(e) => {
-                        theSeriesPosition(e.target.value)
-                    }}
+                    onChange = {mySeriesPositionBook}
                 />
                 <label>Genre</label>
                 <input
                     type='text'
                     placeholder='enter the Genre'
-                    onChange = {(e) => {
-                        theGenre(e.target.value)
-                    }}
+                    onChange = {myGenreBook}
                 />
             </div>
             
