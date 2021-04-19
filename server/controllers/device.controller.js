@@ -11,14 +11,21 @@ exports.create = (req, res) => {
     }
 
     // Create new device
-    // TODO utilize functions from other controllers to get the id for foreign refs
+    const location = Location.findOne({
+        where: {
+            location_name: req.body.location
+        }
+    }).then(l => {
+        // if (!l) /* TODO create location? */
+    })
+
     // TODO use default values where appropriate (ex - checked_out: false)
     const device = {
         device_type: req.body.device_type,
         model: req.body.model,
         checked_out: false,
         waitlist_capacity: req.body.waitlist_capacity,
-        location: req.body.location
+        location: location.id
     }
 
     // Save in the database
