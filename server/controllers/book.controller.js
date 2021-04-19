@@ -8,7 +8,7 @@ const Location = db.location;
 exports.create = (req, res) => {
     // Validate request
     if(!req.body.title) {
-        res.status(400).send({massage: "Book title must be included!!"})
+        res.status(400).send({message: "Book title must be included!!"})
     }
 
     // Create new book

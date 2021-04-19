@@ -6,7 +6,7 @@ const Publisher = db.publisher;
 exports.create = (req, res) => {
     // Validate request
     if(!req.body.publisher_name) {
-        res.status(400).send({massage: "Publisher name must be included!!"})
+        res.status(400).send({message: "Publisher name must be included!!"})
     }
 
     // Create new publisher record

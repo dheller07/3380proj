@@ -6,13 +6,13 @@ const Series = db.series;
 exports.create = (req, res) => {
     // Validate request
     if(!req.body.series_name) {
-        res.status(400).send({massage: "Series name must be included!!"})
+        res.status(400).send({message: "Series name must be included!!"})
     }
     if(!req.body.total_series) {
-        res.status(400).send({massage: "Number of series entries must be included!!"})
+        res.status(400).send({message: "Number of series entries must be included!!"})
     }
     if(!req.body.series_number) {
-        res.status(400).send({massage: "Series number must be included!!"})
+        res.status(400).send({message: "Series number must be included!!"})
     }
 
     // Create new series record

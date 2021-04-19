@@ -7,7 +7,7 @@ const Employee = db.employee;
 exports.create = (req, res) => {
     // Validate request
     if(!req.body.l_name) {
-        res.status(400).send({massage: "Employee last name must be included!!"})
+        res.status(400).send({message: "Employee last name must be included!!"})
     }
 
     // Create new employee record

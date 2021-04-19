@@ -6,7 +6,7 @@ const Customer = db.customer;
 exports.create = (req, res) => {
     // Validate request
     if(!req.body.l_name) {
-        res.status(400).send({massage: "Customer last name must be included!!"})
+        res.status(400).send({message: "Customer last name must be included!!"})
     }
 
     // Create new customer record

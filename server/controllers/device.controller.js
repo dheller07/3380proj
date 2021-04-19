@@ -7,7 +7,7 @@ const Location = db.location;
 exports.create = (req, res) => {
     // Validate request
     if(!req.body.device_type) {
-        res.status(400).send({massage: "Device type must be included!!"})
+        res.status(400).send({message: "Device type must be included!!"})
     }
 
     // Create new device

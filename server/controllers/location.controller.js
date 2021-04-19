@@ -6,7 +6,7 @@ const Location = db.location;
 exports.create = (req, res) => {
     // Validate request
     if(!req.body.location_name) {
-        res.status(400).send({massage: "Location name must be included!!"})
+        res.status(400).send({message: "Location name must be included!!"})
     }
 
     // Create new location record

@@ -7,7 +7,7 @@ const Location = db.location;
 exports.create = (req, res) => {
     // Validate request
     if(!req.body.device_type) {
-        res.status(400).send({massage: "DVD title must be included!!"})
+        res.status(400).send({message: "DVD title must be included!!"})
     }
 
     // Create new dvd

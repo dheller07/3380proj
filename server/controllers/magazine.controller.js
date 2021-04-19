@@ -7,7 +7,7 @@ const Location = db.location
 exports.create = (req, res) => {
     // Validate request
     if(!req.body.device_type) {
-        res.status(400).send({massage: "Magazine title must be included!!"})
+        res.status(400).send({message: "Magazine title must be included!!"})
     }
 
     // Create new magazine

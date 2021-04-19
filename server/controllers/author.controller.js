@@ -6,7 +6,7 @@ const Author = db.author;
 exports.create = (req, res) => {
     // Validate request
     if(!req.body.l_name) {
-        res.status(400).send({massage: "Author last name must be included!!"})
+        res.status(400).send({message: "Author last name must be included!!"})
     }
 
     // Create new author record
