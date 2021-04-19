@@ -1,28 +1,28 @@
-module.exports = app => {
-    const employees = require("../controllers/employee.controller.js");
+const employees = require("../controllers/employee.controller.js");
 
-    let router = require("express").Router();
+let router = require("express").Router();
 
-    // TODO edit template to have relevant routes
-    // TODO implement routes
+// Check connection
+router.get("/test", (req, res) => {
+    res.send({message: "Connection to employees successful!"});
+});
 
-    // Create a new Employee
-    router.post("/", employees.create);
+// Create a new Employee
+router.post("/", employees.create);
 
-    // Retrieve all Employees
-    router.get("/", employees.findAll);
+// Retrieve all Employees
+router.get("/", employees.findAll);
 
-    // Retrieve a single Employee with id
-    router.get("/:id", employees.findOne);
+// Retrieve a single Employee with id
+router.get("/:id", employees.findOne);
 
-    // Update an Employee with id
-    router.put("/:id", employees.update);
+// Update an Employee with id
+router.put("/:id", employees.update);
 
-    // Delete an Employee with id
-    router.delete("/:id", employees.delete);
+// Delete an Employee with id
+router.delete("/:id", employees.delete);
 
-    // Delete all Employees
-    router.delete("/", employees.deleteAll);
+// Delete all Employees
+router.delete("/", employees.deleteAll);
 
-    app.use('/api/employees', router);
-};
+module.exports = router;
