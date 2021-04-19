@@ -1,6 +1,7 @@
 const { Op } = require("sequelize");
 const db = require("../models/");
 const Magazine = db.magazine;
+const Location = db.location
 
 // Create and Save a new Magazine
 exports.create = (req, res) => {
@@ -44,6 +45,36 @@ exports.findAll = (req, res) => {
             res.status(500).send({message: err.message || "An error occurred while retrieving magazines"
             }));
 };
+
+// Find all magazines that fit search parameters
+exports.findThese = (req, res) => {
+    Magazine.findAll({
+        where: [{
+            title: req.body.title,
+            required: false
+        }, {
+            issue: req.body.issue,
+            required: false
+        }, {
+            issue_date: req.body.issue_date,
+            required: false
+        }, {
+            topic: req.body.topic,
+            required: false
+        },],
+        include: [{
+            model: Location,
+            where: {location: req.body.location},
+            required: false
+        }]
+    })
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({ message: err.message || "An error occurred while retrieving dvds" })
+        })
+}
 
 // Find a single Magazine with an id
 exports.findOne = (req, res) => {

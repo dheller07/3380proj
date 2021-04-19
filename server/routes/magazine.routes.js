@@ -13,6 +13,9 @@ router.post("/", magazines.create);
 // Retrieve all Magazines
 router.get("/", magazines.findAll);
 
+// Retrieve all Magazines that match search parameters
+router.get("/search", magazines.findThese);
+
 // Retrieve a single Magazine with id
 router.get("/:id", magazines.findOne);
 
