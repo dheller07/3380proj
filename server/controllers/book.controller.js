@@ -2,7 +2,7 @@ const { Op } = require("sequelize");
 const db = require("../models/");
 const Book = db.book;
 const Author = db.author;
-const Location = db.location
+const Location = db.location;
 
 // Create and Save a new Book
 exports.create = (req, res) => {
@@ -94,6 +94,12 @@ exports.findThese = (req, res) => {
             required: false
         }]
     })
+        .then(data => {
+            res.send(data);
+    })
+        .catch(err => {
+            res.status(500).send({ message: err.message || "An error occurred while retrieving books" })
+        })
 }
 
 // Update an Book by the id in the request
