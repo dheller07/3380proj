@@ -34,5 +34,7 @@ db.magazine = require("./items/magazine.model.js")(sequelize, Sequelize);
 db.checkoutItem = require("./checkoutItem.model.js")(sequelize, Sequelize);
 db.itemRequest = require("./itemRequest.model.js")(sequelize, Sequelize);
 db.lateFine = require("./lateFine.model.js")(sequelize, Sequelize);
+db.itemRequest = require("./itemRequest.model.js")(sequelize, Sequelize);
+db.item = require("./items/item.model.js")(sequelize, Sequelize);
 
 module.exports = db;

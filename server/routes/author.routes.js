@@ -2,6 +2,11 @@ const authors = require("../controllers/author.controller.js");
 
 let router = require("express").Router();
 
+// Check connection
+router.get("/test", (req, res) => {
+    res.send({message: "Connection to authors successful!"});
+});
+
 // Create a new Author
 router.post("/", authors.create);
 
