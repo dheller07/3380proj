@@ -45,7 +45,6 @@ exports.findAll = (req, res) => {
 };
 
 // Find all devices that fit search parameters
-// TODO add remaining parameters
 exports.findThese = (req, res) => {
     Device.findAll({
         where: [{
