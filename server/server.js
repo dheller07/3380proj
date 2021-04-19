@@ -42,6 +42,7 @@ const authors = require("./routes/author.routes")
 const publishers = require("./routes/publisher.routes")
 const narrators = require("./routes/narrator.routes")
 const series = require("./routes/series.routes")
+const itemRequests = require("./routes/itemRequest.routes")
 app.use("/auth", auth);
 app.use("/employees", employees);
 app.use("/customers", customers);
@@ -55,6 +56,7 @@ app.use('/authors', authors);
 app.use('/publishers', publishers);
 app.use('/narrators', narrators);
 app.use('/series', series);
+app.use('/itemReqs', itemRequests);
 
 // simple route
 app.get("/", (req, res) => {

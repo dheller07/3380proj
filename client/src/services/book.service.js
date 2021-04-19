@@ -5,6 +5,10 @@ class BookService {
         return http.get("/books")
     }
 
+    getSearchResults(data) {
+        return http.get("/books/search", data);
+    }
+
     get(id) {
         return http.get(`/books/${id}`)
     }
