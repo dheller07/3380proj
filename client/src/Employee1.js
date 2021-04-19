@@ -9,12 +9,16 @@ import AudioBook from './components1/AudioBook.js'
 import Dvd from './components1/Dvd.js'
 import Mgz from './components1/Mgz.js'
 import Device from './components1/Device.js'
-import Message from './components1/Message.js'
+import Message from './components2/Message.js'
 import Button from './components/Button.js'
 import AddCustomer from './components1/AddCustomer.js'
 import RemoveCustomer from './components1/RemoveCustomer.js'
+import AddLibrarian from './components1/AddLibrarian.js'
+import RemoveLibrarian from './components1/RemoveLibrarian.js'
+
 
 import CustomerService from './services/customer.service'
+import LibrarianService from './services/librarian.service'
 import BookService from './services/book.service'
 import AudioBookService from './services/audiobook.service'
 import DvdService from './services/dvd.service'
@@ -309,6 +313,69 @@ function Employee1 () {
         }
     }
 
+
+
+
+    //ADD LIBRARIAN PART ------------
+    const [showAddLibrarian, setShowAddLibrarian] = useState(false)
+
+    const[showTheLibAdd, setShowTheLibAdd] = useState(false)
+
+    const[libfirstAdd, setLibFirstAdd] = useState('')
+    const[liblastAdd, setLibLastAdd] = useState('')
+    const [ssnAdd, setSSNAdd] = useState('')
+    const [birthAdd, setBirthAdd] = useState('')
+    const [salaryAdd, setSalaryAdd] = useState('')
+    const[phoneAdd, setPhoneAdd] = useState('')
+
+    const theAddLibrarian = () => {
+        if(showTheLibAdd === true) {
+            var data = {
+                lf_name: libfirstAdd,
+                ll_name: liblastAdd,
+                librarian_ssn: ssnAdd,
+                librarian_birth: birthAdd,
+                librarian_salary: salaryAdd,
+                librarian_phone: phoneAdd,              
+            };
+            LibrarianService.create(data)
+                .then(response => {
+                })
+                .catch(e => {
+                    console.log(e)
+                });
+
+            return (
+                <div>Adding Librarian: {libfirstAdd} {liblastAdd} {ssnAdd} {birthAdd} {salaryAdd} {phoneAdd}</div>
+            );
+        }
+    }
+
+  //REMOVE LIBRARIAN----------
+    const [showRemoveLibrarian, setShowRemoveLibrarian] = useState(false)
+
+    const[showTheLibRemove, setShowTheLibRemove] = useState(false)
+
+    const[ssnRemove, setSSNRemove] = useState('')
+
+    const theRemoveLibrarian = () => {
+        if(showTheLibRemove === true) {
+            LibrarianService.delete(ssnRemove)
+                .then(response => {
+                })
+                .catch(e => {
+                    console.log(e)
+                });
+            return (
+                <div>Removing Librarian: {ssnRemove}</div>
+            );
+        }
+    }
+
+
+
+
+
   //Change to Search Page---------
     const ChangetoSearch = () => {
         window.location.href = "/Search"; 
@@ -351,24 +418,29 @@ function Employee1 () {
             
             
             <ChoiceBar
-                onBook={() => setShowBook(!showSearchBook)}
-                showBook={showSearchBook}
-                onAudioBook={() => setShowAudioBook(!showSearchAudioBook)}
-                showAudioBook={showSearchAudioBook}
-                onDvd={() => setShowDvd(!showSearchDvd)}
-                showDvd={showSearchDvd}
-                onMgz={() => setShowMgz(!showSearchMgz)}
-                showMgz={showSearchMgz}
-                onDevice={() => setShowDevice(!showSearchDevice)}
-                showDevice={showSearchDevice}
-                onMessage={() => setShowMessage(!showSearchMessage)}
-                showMessage = {showSearchMessage}
-                onAddCustomer={() => setShowAddCustomer(!showAddCustomer)}
-                showCustomerAdd = {showAddCustomer} 
-                onRemoveCustomer = {() => setShowRemoveCustomer(!showRemoveCustomer)}
-                showCustomerRemove = {showRemoveCustomer}
+                    onBook={() => setShowBook(!showSearchBook)}
+                    showBook={showSearchBook}
+                    onAudioBook={() => setShowAudioBook(!showSearchAudioBook)}
+                    showAudioBook={showSearchAudioBook}
+                    onDvd={() => setShowDvd(!showSearchDvd)}
+                    showDvd={showSearchDvd}
+                    onMgz={() => setShowMgz(!showSearchMgz)}
+                    showMgz={showSearchMgz}
+                    onDevice={() => setShowDevice(!showSearchDevice)}
+                    showDevice={showSearchDevice}
+                    onMessage={() => setShowMessage(!showSearchMessage)}
+                    showMessage={showSearchMessage}
+                    onAddCustomer={() => setShowAddCustomer(!showAddCustomer)}
+                    showCustomerAdd={showAddCustomer}
+                    onRemoveCustomer={() => setShowRemoveCustomer(!showRemoveCustomer)}
+                    showCustomerRemove={showRemoveCustomer}
+                    onAddLibrarian={() => setShowAddLibrarian(!showAddLibrarian)}
+                    showLibrarianrAdd={showAddLibrarian}
+                    onRemoveLibrarian={() => setShowRemoveLibrarian(!showRemoveLibrarian)}
+                    showLibrarianRemove={showRemoveLibrarian}
+                   
                 
-                
+                    
             />
             
 
@@ -423,6 +495,21 @@ function Employee1 () {
             onShowTheRemove = {() =>setShowTheRemove(!showTheRemove)}
             myIdRemove = {(e) => {setIdRemove(e.target.value)}}
         />}
+        {showAddLibrarian && <AddLibrarian  
+            onShowTheLibAdd = {() =>setShowTheLibAdd(!showTheLibAdd)}
+            myLibFirstAdd = {(e) => {setLibFirstAdd(e.target.value)}}
+            myLibLastAdd = {(e) => {setLibLastAdd(e.target.value)}}
+            mySSNAdd={(e) => { setSSNAdd(e.target.value) }}
+            myBirthAdd={(e) => { setBirthAdd(e.target.value) }}
+            mysalaryAdd={(e) => { setSalaryAdd(e.target.value) }}
+            myphoneAdd = {(e) => {setPhoneAdd(e.target.value)}}
+        />}
+        {showRemoveLibrarian && <RemoveLibrarian  
+            onShowTheLibRemove = {() =>setShowTheLibRemove(!showTheLibRemove)}
+            mySSNRemove = {(e) => {setSSNRemove(e.target.value)}}
+        />}
+      
+        
 
         </div> 
         REFRESH AFTER EACH ACTION
@@ -440,6 +527,9 @@ function Employee1 () {
             {theSearchMessage()}
             {theAddCustomer()}
             {theRemoveCustomer()}
+            {theAddLibrarian()}
+            {theRemoveLibrarian()}
+  
 
         </div>
         </div>
