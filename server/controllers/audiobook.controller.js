@@ -21,24 +21,30 @@ exports.create = (req, res) => {
             f_name: req.body.f_name,
             l_name: req.body.l_name
         }
+    }).then(a => {
+        // if (!a) /* TODO create author? */
     })
     const narrator = Narrator.findOne({
         where: {
             f_name: req.body.f_name,
             l_name: req.body.l_name
         }
+    }).then(n => {
+        // if (!n) /* TODO create narrator? */
     })
     const publisher = Publisher.findOne({
         where: {
             publisher_name: req.body.publisher
         }
+    }).then(p => {
+        // if (!p) /* TODO create publisher? */
     })
     const series = Series.findOne({
         where: {
             series_name: req.body.series
         }
     }).then(s => {
-        if (!s) return null
+       // if (!s) /* TODO create series? */
     })
 
     const audiobook = {
