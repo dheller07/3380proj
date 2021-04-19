@@ -9,12 +9,20 @@ import AudioBook from './components2/AudioBook.js'
 import Dvd from './components2/Dvd.js'
 import Mgz from './components2/Mgz.js'
 import Device from './components2/Device.js'
+import Author from './components2/Author.js'
+import Narrator from './components2/Narrator.js'
+import Location from './components1/Location.js'
+
 
 import BookService from './services/book.service'
 import AudioBookService from './services/audiobook.service'
 import DvdService from './services/dvd.service'
 import MgzService from './services/magazine.service'
 import DeviceService from './services/device.service'
+import AuthorService from './services/author.service'
+import NarratorService from './services/narrators.service'
+import LocationService from './services/location.service'
+
 
 
 
@@ -215,6 +223,103 @@ function AddItems () {
         }
     }
 
+        //AUTHOR PART -----------------------------------
+        const [showAuthor, setShowAuthor] = useState(false)
+
+        const[showAuthorResult, setShowAuthorResult] = useState(false)
+    
+        const [authorFirst, setAuthorFirst] = useState('')
+        const [authorLast, setAuthorLast] = useState('')
+        const [authorOrigin, setAuthorOrigin] = useState('')
+        const [authorBorn, setAuthorBorn] = useState('')
+        const [authorDied, setAuthorDied] = useState('')
+    
+        const theAuthor = () => {
+            if(showAuthor === true) {
+                var data = {
+                    af_name: authorFirst,
+                    al_name: authorLast,
+                    a_origin: authorOrigin,
+                    a_born: authorBorn,
+                    a_died: authorDied,
+                };
+                AuthorService.create(data)
+                    .then(response => {
+                    })
+                    .catch(e => {
+                        console.log(e)
+                    });  
+                return (
+                    <div>Adding Author: {authorFirst} {authorLast} {authorOrigin} {authorBorn} {authorDied}</div>
+                );
+            }
+        }
+    
+        //NARRATOR PART -----------------------------------
+        const [showNarrator, setShowNarrator] = useState(false)
+    
+        const[showNarratorResult, setShowNarratorResult] = useState(false)
+    
+        const [narratorFirst, setNarratorFirst] = useState('')
+        const [narratorLast, setNarratorLast] = useState('')
+        const [narratorOrigin, setNarratorOrigin] = useState('')
+        const [narratorBorn, setNarratorBorn] = useState('')
+        const [narratorDied, setNarratorDied] = useState('')
+    
+        const theNarrator = () => {
+            if(showNarrator === true) {
+                var data = {
+                    nf_name: narratorFirst,
+                    nl_name: narratorLast,
+                    n_origin: narratorOrigin,
+                    n_born: narratorBorn,
+                    n_died: narratorDied,
+                };
+                NarratorService.create(data)
+                    .then(response => {
+                    })
+                    .catch(e => {
+                        console.log(e)
+                    });
+    
+                return (
+                    <div>Adding Narrator: {narratorFirst} {narratorLast} {narratorOrigin} {narratorBorn} {narratorDied}</div>
+                );
+            }
+        }
+    
+        //LOCATION PART -----------------------------------
+        const [showLocation, setShowLocation] = useState(false)
+    
+        const[showLocationResult, setShowLocationResult] = useState(false)
+    
+        const [LocationName, setLocationName] = useState('')
+        const [LocationAddress, setLocationAddress] = useState('')
+        const [LocationPhone, setLocationPhone] = useState('')
+    
+    
+        const theLocation = () => {
+            if(showLocation === true) {
+                var data = {
+                    location_name: LocationName,
+                    location_address: LocationAddress,
+                    location_phone: LocationPhone,
+    
+                };
+                LocationService.create(data)
+                    .then(response => {
+                    })
+                    .catch(e => {
+                        console.log(e)
+                    });
+    
+                return (
+                    <div>Adding Location: {LocationName} {LocationAddress} {LocationPhone}</div>
+                );
+            }
+        }
+    
+
   //Change to Search Page---------
 
     return (
@@ -232,7 +337,13 @@ function AddItems () {
                 onMgz={() => setShowMgz(!showSearchMgz)}
                 showMgz={showSearchMgz}
                 onDevice={() => setShowDevice(!showSearchDevice)}
-                showDevice={showSearchDevice}                
+                showDevice={showSearchDevice}   
+                onAuthor={() => setShowAuthor(!showAuthor)}
+                showAuthor={showAuthor}
+                onNarrator={() => setShowNarrator(!showNarrator)}
+                showNarrator={showNarrator}
+                onLocation={() => setShowLocation(!showLocation)}
+                showLocation={showLocation}             
             />
             
 
@@ -280,6 +391,29 @@ function AddItems () {
             myTypeDevice = {(e) => setTypeDevice(e.target.value)}
             myModelDevice = {(e) => setModelDevice(e.target.value)}
         />}
+        {showAuthor && <Author 
+            onAuthorResult = {() => setShowAuthorResult(!showAuthorResult)}
+            myAuthorFirst = {(e) => {setAuthorFirst(e.target.value)}}
+            myAuthorLast = {(e) => {setAuthorLast(e.target.value)}}
+            myAuthorOrigin = {(e) => {setAuthorOrigin(e.target.value)}}
+            myAuthorBorn = {(e) => {setAuthorBorn(e.target.value)}}
+            myAuthorDied = {(e) => {setAuthorDied(e.target.value)}}
+        />}
+        {showNarrator && <Narrator
+            onNarratorResult = {() => setShowNarratorResult(!showNarratorResult)}
+            myNarratorFirst = {(e) => {setNarratorFirst(e.target.value)}}
+            myNarratorLast = {(e) => {setNarratorLast(e.target.value)}}
+            myNarratorOrigin = {(e) => {setNarratorOrigin(e.target.value)}}
+            myNarratorBorn = {(e) => {setNarratorBorn(e.target.value)}}
+            myNarratorDied = {(e) => {setNarratorDied(e.target.value)}}
+        />}
+        {showLocation && <Location
+            onLocationResult = {() => setShowLocationResult(!showLocationResult)}
+            myLocationName = {(e) => {setLocationName(e.target.value)}}
+            myLocationAddress = {(e) => {setLocationAddress(e.target.value)}}
+            myLocationPhone = {(e) => {setLocationPhone(e.target.value)}}
+
+        />}
 
         </div>
         REFRESH AFTER EACH ACTION
@@ -289,6 +423,9 @@ function AddItems () {
                 {theAddDvd()}
                 {theAddMgz()}
                 {theAddDevice()}
+                {theAuthor()}
+                {theNarrator()}
+                {theLocation()}
             </div>
 
         </div>

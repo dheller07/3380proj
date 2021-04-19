@@ -7,7 +7,11 @@ const ChoiceBar = ({ showBook, onBook,
     showAudioBook, onAudioBook,
     showDvd, onDvd,
     showMgz, onMgz,
-    showDevice, onDevice, showMessage, onMessage, showCustomerAdd, onAddCustomer, showCustomerRemove, onRemoveCustomer}) => {
+    showDevice, onDevice, showMessage, onMessage,
+    showCustomerAdd, onAddCustomer, showCustomerRemove, onRemoveCustomer,
+    showLibrarianAdd, onAddLibrarian, showLibrarianRemove, onRemoveLibrarian,
+    showAuthor, onAuthor, showNarrator, onNarrator,
+    showLocation, onLocation}) => {
     
     return (
         <h4>
@@ -66,6 +70,41 @@ const ChoiceBar = ({ showBook, onBook,
                     color={showCustomerRemove ? 'red' : 'green'}
                     text={showCustomerRemove ? 'Remove Customer' : 'Remove Customer'}
                     onClick={onRemoveCustomer}
+                />
+            </span>
+            <span>
+                <Button
+                    color={showLibrarianAdd ? 'red' : 'green'}
+                    text={showLibrarianAdd ? 'Add Librarian' : 'Add Librarian'}
+                    onClick={onAddLibrarian}
+                />
+            </span>
+            <span>
+                <Button
+                    color={showLibrarianRemove ? 'red' : 'green'}
+                    text={showLibrarianRemove ? 'Remove Librarian' : 'Remove Librarian'}
+                    onClick={onRemoveLibrarian}
+                />
+            </span>
+            <span>
+                <Button
+                    color={showAuthor ? 'red' : 'green'}
+                    text={showAuthor ? 'Add Author' : 'Add Author'}
+                    onClick={onAuthor}
+                />
+            </span>
+            <span>
+                <Button
+                    color={showNarrator ? 'red' : 'green'}
+                    text={showNarrator ? 'Add Narrator' : 'Add Narrator '}
+                    onClick={onNarrator}
+                />
+            </span>
+            <span>
+                <Button
+                    color={showLocation ? 'red' : 'green'}
+                    text={showLocation ? 'Add Location' : 'Add Locations '}
+                    onClick={onLocation}
                 />
             </span>
         </h4>
