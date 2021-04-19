@@ -13,7 +13,7 @@ router.post("/", devices.create);
 // Retrieve all Devices
 router.get("/", devices.findAll);
 
-// Retrieve all Books that match search parameters
+// Retrieve all Devices that match search parameters
 router.get("/search", devices.findThese);
 
 // Retrieve a single Device with id
