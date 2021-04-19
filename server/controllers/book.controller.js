@@ -3,6 +3,8 @@ const db = require("../models/");
 const Book = db.book;
 const Author = db.author;
 const Location = db.location;
+const Publisher = db.publisher;
+const Series = db.series;
 
 // Create and Save a new Book
 exports.create = (req, res) => {
@@ -12,22 +14,51 @@ exports.create = (req, res) => {
     }
 
     // Create new book
-    // TODO utilize functions from other controllers to get the id for foreign refs
+    const author = Author.findOne({
+        where: {
+            f_name: req.body.f_name,
+            l_name: req.body.l_name
+        }
+    }).then(a => {
+        // if (!a) /* TODO create author? */
+    })
+    const publisher = Publisher.findOne({
+        where: {
+            publisher_name: req.body.publisher
+        }
+    }).then(p => {
+        // if (!p) /* TODO create publisher? */
+    })
+    const series = Series.findOne({
+        where: {
+            series_name: req.body.series
+        }
+    }).then(s => {
+        // if (!s) /* TODO create series? */
+    })
+    const location = Location.findOne({
+        where: {
+            location_name: req.body.location
+        }
+    }).then(l => {
+        // if (!l) /* TODO create location? */
+    })
+
     // TODO use default values where appropriate (ex - checked_out: false)
     const book = {
         title: req.body.title,
         isbn: req.body.isbn,
-        author_id: req.body.author_id,
-        publisher: req.body.publisher,
+        author_id: author.id,
+        publisher: publisher.id,
         publication_year: req.body.publication_year,
         edition: req.body.edition,
-        series: req.body.series,
-        series_position: req.body.series_position,
+        series: series.id,
+        series_position: series.series_number,
         genre: req.body.genre,
         checked_out: false,
         ebook: req.body.ebook,
         waitlist_capacity: req.body.waitlist_capacity,
-        location: req.body.location
+        location: location.id
     }
 
     // Save in the database
