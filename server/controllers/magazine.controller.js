@@ -72,7 +72,7 @@ exports.findThese = (req, res) => {
             res.send(data);
         })
         .catch(err => {
-            res.status(500).send({ message: err.message || "An error occurred while retrieving dvds" })
+            res.status(500).send({ message: err.message || "An error occurred while retrieving magazines" })
         })
 }
 

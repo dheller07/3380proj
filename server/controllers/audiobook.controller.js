@@ -93,7 +93,7 @@ exports.findThese = (req, res) => {
             res.send(data);
         })
         .catch(err => {
-            res.status(500).send({ message: err.message || "An error occurred while retrieving books" })
+            res.status(500).send({ message: err.message || "An error occurred while retrieving audiobooks" })
         })
 }
 
