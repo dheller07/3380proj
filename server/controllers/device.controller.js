@@ -1,6 +1,7 @@
 const { Op } = require("sequelize");
 const db = require("../models/");
 const Device = db.device;
+const Location = db.location;
 
 // Create and Save a new Device
 exports.create = (req, res) => {
@@ -42,6 +43,31 @@ exports.findAll = (req, res) => {
             res.status(500).send({message: err.message || "An error occurred while retrieving devices"
             }));
 };
+
+// Find all devices that fit search parameters
+// TODO add remaining parameters
+exports.findThese = (req, res) => {
+    Device.findAll({
+        where: [{
+            device_type: req.body.device_type,
+            required: false
+        }, {
+            model: req.body.model,
+            required: false
+        },],
+        include: [{
+            model: Location,
+            where: {location: req.body.location},
+            required: false
+        }]
+    })
+        .then(data => {
+        res.send(data);
+    })
+        .catch(err => {
+        res.status(500).send({ message: err.message || "An error occurred while retrieving devices" })
+    })
+}
 
 // Find a single Device with an id
 exports.findOne = (req, res) => {
