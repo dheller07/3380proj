@@ -4,27 +4,53 @@ const Audiobook = db.audiobook;
 const Author = db.author;
 const Location = db.location;
 const Narrator = db.narrator;
+const Publisher = db.publisher;
+const Series = db.series;
 
 // Create and Save a new Audiobook
 exports.create = (req, res) => {
     // Validate request
     if(!req.body.title) {
-        res.status(400).send({massage: "Audiobook title must be included!!"})
+        res.status(400).send({message: "Audiobook title must be included!!"})
     }
 
     // Create new audiobook
-    // TODO utilize functions from other controllers to get the id for foreign refs
     // TODO use default values where appropriate (ex - checked_out: false)
+    const author = Author.findOne({
+        where: {
+            f_name: req.body.f_name,
+            l_name: req.body.l_name
+        }
+    })
+    const narrator = Narrator.findOne({
+        where: {
+            f_name: req.body.f_name,
+            l_name: req.body.l_name
+        }
+    })
+    const publisher = Publisher.findOne({
+        where: {
+            publisher_name: req.body.publisher
+        }
+    })
+    const series = Series.findOne({
+        where: {
+            series_name: req.body.series
+        }
+    }).then(s => {
+        if (!s) return null
+    })
+
     const audiobook = {
         title: req.body.title,
         isbn: req.body.isbn,
-        author_id: req.body.author_id,
-        narrator_id: req.body.narrator_id,
-        publisher: req.body.publisher,
+        author_id: author.id,
+        narrator_id: narrator.id,
+        publisher: publisher.id,
         publication_year: req.body.publication_year,
         edition: req.body.edition,
-        series: req.body.series,
-        series_position: req.body.series_position,
+        series: series.id,
+        series_position: series.series_number,
         genre: req.body.genre,
         checked_out: false,
         waitlist_capacity: req.body.waitlist_capacity,
