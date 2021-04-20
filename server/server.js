@@ -188,3 +188,27 @@ app.get('api/magazine/search', (req, res) => {
     INNER JOIN ${item} ON ${magazine}.id = ${item}.id
     WHERE ${magazine}.title = ${req.body.title} AND ${item}.active = true`)
 })
+
+/*
+                        ========================================
+                                    USER QUERIES
+                        ========================================
+ */
+// EMPLOYEE statements
+// Create an employee
+
+// Display all employees
+
+// Display one employee filtered by query
+
+// Change employee active status
+
+
+// CUSTOMER statements
+// Create a customer
+
+// Display all customers
+
+// Display one customer filtered by query
+
+// Change customer active status
