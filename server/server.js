@@ -34,6 +34,9 @@ app.listen(port, () => {
     console.log(`App server now listening to port ${port}`);
 });
 
+// TODO add more filter capabilities to searches
+// TODO create checks to ensure if a foreign key ref doesn't exist - they user is informed
+
 /*
                         ========================================
                                     ITEM QUERIES
@@ -105,7 +108,6 @@ app.get('/api/audiobook', (req,res) => {
     })
 })
 // Display audiobooks filtered by query
-// TODO add more filter capabilities
 app.get('api/audiobook/search', (req, res) => {
     pool.query(`SELECT ${audiobook}.isbn, ${audiobook}.title, 
     ${author}.f_name, ${author}.l_name,
@@ -151,4 +153,38 @@ app.get('api/dvd/search', (req, res) => {
     FROM ${dvd} 
     INNER JOIN ${item} ON ${dvd}.id = ${item}.id
     WHERE ${dvd}.title = ${req.body.title} AND ${item}.active = true`)
+})
+
+// MAGAZINE statements
+// Create a magazine
+app.post('/api/maazine', (req, res) => {
+    pool.query(`INSERT INTO ${magazine} 
+(id, title, issue, issue_date, topic, waitlist_capacity, location) 
+VALUES (SELECT id FROM item WHERE id = ${req.body.id},
+${req.body.title}, ${req.body.issue}, ${req.body.issue_date}, ${req.body.topic}, ${req.body.waitlist_capacity},
+SELECT id FROM location WHERE location_name = ${req.body.location_name})`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "magazine insert failed"})
+        }
+        else {
+            res.send(rows)
+        }
+    })
+})
+// Display all magazines
+app.get('/api/magazine', (req,res) => {
+    pool.query(`SELECT * FROM ${magazine}`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "could not retrieve magazines"});
+        } else {
+            res.send(rows);
+        }
+    })
+})
+// Display magazines filtered by query
+app.get('api/magazine/search', (req, res) => {
+    pool.query(`SELECT ${magazine}.title, ${magazine}.issue, ${magazine}.issue_date, ${magazine}.topic, ${magazine}.checked_out, ${magazine}.location
+    FROM ${magazine} 
+    INNER JOIN ${item} ON ${magazine}.id = ${item}.id
+    WHERE ${magazine}.title = ${req.body.title} AND ${item}.active = true`)
 })
