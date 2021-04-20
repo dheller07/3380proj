@@ -1,9 +1,9 @@
-// TODO use a user/pwd with less permissions here
+// TODO use a user/pwd with less permissions here?
 
 module.exports = {
     HOST: "localhost",
-    USER: "cdoo",
-    PASSWORD: "book93-EARS",
+    USER: "root",
+    PASSWORD: "starZ1845fun?",
     DB: "library",
     dialect: "mysql",
     pool: {
