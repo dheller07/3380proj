@@ -1,82 +1,45 @@
-// https://bezkoder.com/react-node-express-mysql/#Nodejs_Express_Back-end
-
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
+const express = require('express');
+const mysql = require('mysql');
+const dbConfig = require("./config/db.config.js");
 
 const app = express();
+const port = 8000;
 
-let corsOptions = {
-    origin: "http://localhost:8081"
-};
+// DATABASE TABLES
+const audiobook = 'audiobook';
+const author = 'author';
+const book = 'book';
+const checkoutItem = 'checkoutItem';
+const customer = 'customer';
+const device = 'device';
+const dvd = 'dvd';
+const employee = 'employee';
+const item = 'item';
+const itemRequest = 'itemRequest';
+const lateFine = 'lateFine';
+const location = 'location';
+const magazine = 'magazine';
+const narrator = 'narrator';
+const publisher = 'publisher';
+const series = 'series';
 
-app.use(cors());
-
-// connect database
-const db = require("./models/index.js");
-db.sequelize.sync();
-/*
-In development, you may need to drop existing tables and re-sync database. Just use force: true as following code:
-db.sequelize.sync({ force: true }).then(() => {
-  console.log("Drop and re-sync db.");
-});
-*/
-
-// parse requests of content-type - application/json
-app.use(bodyParser.json());
-
-// parse requests of content-type - application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// TODO add all routes
-const auth = require("./routes/auth.routes")
-const employees = require("./routes/employee.routes")
-const customers = require("./routes/customer.routes")
-const books = require("./routes/book.routes")
-const audiobooks = require("./routes/audiobook.routes")
-const devices = require("./routes/device.routes")
-const dvds = require("./routes/dvd.routes")
-const magazines = require("./routes/magazine.routes")
-const locations = require("./routes/location.routes")
-const authors = require("./routes/author.routes")
-const publishers = require("./routes/publisher.routes")
-const narrators = require("./routes/narrator.routes")
-const series = require("./routes/series.routes")
-const itemRequests = require("./routes/itemRequest.routes")
-const checkoutItem = require("./routes/checkoutItem.routes")
-app.use("/auth", auth);
-app.use("/employees", employees);
-app.use("/customers", customers);
-app.use("/books", books);
-app.use("/audiobooks", audiobooks);
-app.use("/devices", devices);
-app.use("/dvds", dvds);
-app.use("/magazines", magazines);
-app.use('/locations', locations);
-app.use('/authors', authors);
-app.use('/publishers', publishers);
-app.use('/narrators', narrators);
-app.use('/series', series);
-app.use('/itemReqs', itemRequests);
-app.use('/checkoutItem', checkoutItem);
-
-// simple route
-app.get("/", (req, res) => {
-    res.json({ message: "Welcome to cosc3380 library backend application." });
+const pool = mysql.createPool({
+    host: dbConfig.HOST,
+    user: dbConfig.USER,
+    password: dbConfig.PASSWORD,
+    database: dbConfig.DB,
 });
 
-/*
-// include routes right before app.listen()
-require("./routes/employee.routes")(app);
-require("./routes/customer.routes")(app);
-require("./routes/location.routes")(app);
-require("./routes/author.routes")(app);
-require("./routes/publisher.routes")(app);
-require("./routes/narrator.routes")(app);
-require("./routes/series.routes")(app);
-*/
-// set port, listen for requests
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}.`);
+app.listen(port, () => {
+    console.log(`App server now listening to port ${port}`);
+});
+
+app.get('/api/audiobook', (req, res) => {
+    pool.query(`select * from ${audiobook}`, (err, rows) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.send(rows);
+        }
+    });
 });
