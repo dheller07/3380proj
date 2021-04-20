@@ -118,11 +118,12 @@ app.get('api/audiobook/search', (req, res) => {
     ${author}.f_name, ${author}.l_name,
     ${narrator}.f_name, ${narrator}.l_name, 
     ${audiobook}.edition, ${series}.series_name,
-    ${audiobook}.genre, ${audiobook}.checked_out, ${audiobook}.location
+    ${audiobook}.genre, ${audiobook}.checked_out, ${location}.location_name
     FROM ${audiobook} 
     INNER JOIN ${author} ON ${audiobook}.author_id = ${author}.id
     INNER JOIN ${narrator} ON ${audiobook}.narrator = ${narrator}.id
     INNER JOIN ${series} ON ${audiobook}.series= ${series}.id
+    INNER JOIN ${location} ON ${audiobook}.location = ${location}.id
     INNER JOIN ${item} ON ${audiobook}.id = ${item}.id
     WHERE ${audiobook}.title = ${req.body.title} AND ${author}.l_name = ${req.body.l_name_auth} AND ${item}.active = true`)
 })
@@ -167,11 +168,12 @@ app.get('api/book/search', (req, res) => {
     ${author}.f_name, ${author}.l_name,
     ${publisher}.publisher_name, 
     ${book}.edition, ${series}.series_name,
-    ${book}.genre, ${book}.checked_out, ${book}.location
+    ${book}.genre, ${book}.checked_out, ${location}.location_name
     FROM ${book} 
     INNER JOIN ${author} ON ${book}.author_id = ${author}.id
     INNER JOIN ${publisher} ON ${book}.publisher = ${publisher}.id
     INNER JOIN ${series} ON ${book}.series = ${series}.id
+    INNER JOIN ${location} ON ${book}.location = ${location}.id
     INNER JOIN ${item} ON ${book}.id = ${item}.id
     WHERE ${book}.title = ${req.body.title} AND ${author}.l_name = ${req.body.l_name_auth} AND ${item}.active = true`)
 })
@@ -207,8 +209,9 @@ app.get('/api/device', (req,res) => {
 // Display device filtered by query
 app.get('api/device/search', (req, res) => {
     pool.query(`SELECT ${device}.device_type, ${device}.model, 
-    ${device}.checked_out, ${device}.location
+    ${device}.checked_out, ${location}.location_name
     FROM ${device} 
+    INNER JOIN ${location} ON ${device}.location = ${location}.id
     INNER JOIN ${item} ON ${device}.id = ${item}.id
     WHERE ${device}.device_type = ${req.body.device_type} AND ${device}.model  = ${req.body.model}$ AND ${item}.active = true`)
 })
@@ -243,8 +246,9 @@ app.get('/api/dvd', (req,res) => {
 })
 // Display dvds filtered by query
 app.get('api/dvd/search', (req, res) => {
-    pool.query(`SELECT ${dvd}.title, ${dvd}.release_date, ${dvd}.director, ${dvd}.studio, ${dvd}.checked_out, ${dvd}.location
+    pool.query(`SELECT ${dvd}.title, ${dvd}.release_date, ${dvd}.director, ${dvd}.studio, ${dvd}.checked_out, ${location}.location_name
     FROM ${dvd} 
+    INNER JOIN ${location} ON ${dvd}.location = ${location}.id
     INNER JOIN ${item} ON ${dvd}.id = ${item}.id
     WHERE ${dvd}.title = ${req.body.title} AND ${item}.active = true`)
 })
