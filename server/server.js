@@ -132,11 +132,11 @@ app.post('/api/book', (req, res) => {
 (id, title, isbn, author_id, publisher, publication_year, edition, series, series_position, genre, ebook, waitlist_capacity, location) 
 VALUES (SELECT id FROM item WHERE id = ${req.body.id},
 ${req.body.title}, ${req.body.isbn}, 
-SELECT id FROM author WHERE f_name = ${req.body.f_name_auth} AND l_name = ${req.body.l_name_auth},
-SELECT id FROM publisher WHERE publisher_name = ${req.body.publisher_name},
-${req.body.publication_year}, ${req.body.edition},
-SELECT id FROM series WHERE series_name = ${req.body.series_name}, ${req.body.series_position}, ${req.body.genre}, ${req.body.waitlist_capacity},
-SELECT id FROM location WHERE location_name = ${req.body.location_name})`, (err, rows) => {
+(SELECT id FROM author WHERE f_name = ${req.body.f_name_auth} AND l_name = ${req.body.l_name_auth}),
+(SELECT id FROM publisher WHERE publisher_name = ${req.body.publisher_name},
+${req.body.publication_year}, ${req.body.edition}),
+(SELECT id FROM series WHERE series_name = ${req.body.series_name}, ${req.body.series_position}, ${req.body.genre}, ${req.body.waitlist_capacity}),
+(SELECT id FROM location WHERE location_name = ${req.body.location_name}))`, (err, rows) => {
         if (err) {
             res.status(500).send({message: "Book insert failed"})
         }
@@ -181,7 +181,7 @@ app.post('/api/device', (req, res) => {
 (id, device_type, model, waitlist_capacity, location) 
 VALUES (SELECT id FROM item WHERE id = ${req.body.id},
 ${req.body.device_type}, ${req.body.model},${req.body.waitlist_capacity},
-SELECT id FROM location WHERE location_name = ${req.body.location_name})`, (err, rows) => {
+(SELECT id FROM location WHERE location_name = ${req.body.location_name}))`, (err, rows) => {
         if (err) {
             res.status(500).send({message: "device insert failed"})
         }
@@ -200,7 +200,7 @@ app.get('/api/device', (req,res) => {
         }
     })
 })
-// Display audiobooks filtered by query
+// Display device filtered by query
 // TODO add more filter capabilities
 app.get('api/device/search', (req, res) => {
     pool.query(`SELECT ${device}.device_type, ${device}.model, 
@@ -342,7 +342,7 @@ ${req.body.acct_balance},${req.body.fine_rate})`,
 })
 // Display all customers
 app.get('/api/customer', (req,res) => {
-    pool.query(`SELECT * FROM ${customer}`, (err, rows) => {
+    pool.query(`(SELECT * FROM ${customer})`, (err, rows) => {
         if (err) {
             res.status(500).send({message: "could not retrieve customer"});
         } else {
@@ -352,10 +352,10 @@ app.get('/api/customer', (req,res) => {
 })
 // Display one customer filtered by query
 app.get('api/customer/search', (req, res) => {
-    pool.query(`SELECT ${customer}.f_name, ${customer}.l_name, 
+    pool.query(`(SELECT ${customer}.f_name, ${customer}.l_name, 
     ${customer}.customer_role, ${customer}.item_limit,
     ${customer}.acct_balance, ${customer}.fine_rate, 
-    ${customer}.id
+    ${customer}.id)
     FROM ${customer} 
     WHERE (${customer}.id = ${req.body.id}) or (${customer}.f_name = ${req.body.f_name}AND${customer}.l_name = ${req.body.l_name}) AND ${employee}.active = true`)
 })
