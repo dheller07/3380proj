@@ -118,3 +118,37 @@ app.get('api/audiobook/search', (req, res) => {
     INNER JOIN ${item} ON ${audiobook}.id = ${item}.id
     WHERE ${audiobook}.title = ${req.body.title} AND ${author}.l_name = ${req.body.l_name_auth} AND ${item}.active = true`)
 })
+
+// DVD statements
+// Create a dvd
+app.post('/api/dvd', (req, res) => {
+    pool.query(`INSERT INTO ${dvd} 
+(id, title, release_date, director, studio, waitlist_capacity, location) 
+VALUES (SELECT id FROM item WHERE id = ${req.body.id},
+${req.body.title}, ${req.body.director}, ${req.body.studio}, ${req.body.waitlist_capacity},
+SELECT id FROM location WHERE location_name = ${req.body.location_name})`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "dvd insert failed"})
+        }
+        else {
+            res.send(rows)
+        }
+    })
+})
+// Display all dvds
+app.get('/api/dvd', (req,res) => {
+    pool.query(`SELECT * FROM ${dvd}`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "could not retrieve dvds"});
+        } else {
+            res.send(rows);
+        }
+    })
+})
+// Display dvds filtered by query
+app.get('api/dvd/search', (req, res) => {
+    pool.query(`SELECT ${dvd}.title, ${dvd}.release_date, ${dvd}.director, ${dvd}.studio, ${dvd}.checked_out, ${dvd}.location
+    FROM ${dvd} 
+    INNER JOIN ${item} ON ${dvd}.id = ${item}.id
+    WHERE ${dvd}.title = ${req.body.title} AND ${item}.active = true`)
+})
