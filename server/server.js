@@ -202,6 +202,7 @@ app.get('api/device/search', (req, res) => {
     INNER JOIN ${item} ON ${device}.id = ${item}.id
     WHERE ${device}.device_type = ${req.body.device_type} AND ${device}.model  = ${req.body.model}$ AND ${item}.active = true`)
 })
+
 // DVD statements
 // Create a dvd
 app.post('/api/dvd', (req, res) => {
@@ -238,7 +239,7 @@ app.get('api/dvd/search', (req, res) => {
 
 // MAGAZINE statements
 // Create a magazine
-app.post('/api/maazine', (req, res) => {
+app.post('/api/magazine', (req, res) => {
     pool.query(`INSERT INTO ${magazine} 
 (id, title, issue, issue_date, topic, waitlist_capacity, location) 
 VALUES (SELECT id FROM item WHERE id = ${req.body.id},
