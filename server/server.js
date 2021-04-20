@@ -123,6 +123,85 @@ app.get('api/audiobook/search', (req, res) => {
     WHERE ${audiobook}.title = ${req.body.title} AND ${author}.l_name = ${req.body.l_name_auth} AND ${item}.active = true`)
 })
 
+// BOOK statements
+// Create a book
+app.post('/api/book', (req, res) => {
+    pool.query(`INSERT INTO ${book} 
+(id, title, isbn, author_id, publisher, publication_year, edition, series, series_position, genre, ebook, waitlist_capacity, location) 
+VALUES (SELECT id FROM item WHERE id = ${req.body.id},
+${req.body.title}, ${req.body.isbn}, 
+SELECT id FROM author WHERE f_name = ${req.body.f_name_auth} AND l_name = ${req.body.l_name_auth},
+SELECT id FROM publisher WHERE publisher_name = ${req.body.publisher_name},
+${req.body.publication_year}, ${req.body.edition},
+SELECT id FROM series WHERE series_name = ${req.body.series_name}, ${req.body.series_position}, ${req.body.genre}, ${req.body.waitlist_capacity},
+SELECT id FROM location WHERE location_name = ${req.body.location_name})`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "Book insert failed"})
+        }
+        else {
+            res.send(rows)
+        }
+    })
+})
+
+// Display all books
+app.get('/api/book', (req,res) => {
+    pool.query(`SELECT * FROM ${book}`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "could not retrieve books"});
+        } else {
+            res.send(rows);
+        }
+    })
+})
+// Display books filtered by query
+app.get('api/book/search', (req, res) => {
+    pool.query(`SELECT ${book}.isbn, ${book}.title, 
+    ${author}.f_name, ${author}.l_name,
+    ${publisher}.f_name, ${publisher}.l_name, 
+    ${book}.edition, ${book}.genre,
+    ${book}.genre, ${book}.checked_out, ${book}.location
+    FROM ${book} 
+    INNER JOIN ${author} ON ${book}.author_id = ${author}.id
+    INNER JOIN ${publisher} ON ${book}.publisher = ${publisher}.id
+    INNER JOIN ${item} ON ${book}.id = ${item}.id
+    WHERE ${book}.title = ${req.body.title} AND ${author}.l_name = ${req.body.l_name_auth} AND ${item}.active = true`)
+})
+
+// DEVICE statements
+// Create a device
+app.post('/api/device', (req, res) => {
+    pool.query(`INSERT INTO ${device} 
+(id, device_type, model, waitlist_capacity, location) 
+VALUES (SELECT id FROM item WHERE id = ${req.body.id},
+${req.body.device_type}, ${req.body.model},${req.body.waitlist_capacity},
+SELECT id FROM location WHERE location_name = ${req.body.location_name})`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "device insert failed"})
+        }
+        else {
+            res.send(rows)
+        }
+    })
+})
+// Display all devices
+app.get('/api/device', (req,res) => {
+    pool.query(`SELECT * FROM ${device}`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "could not retrieve devices"});
+        } else {
+            res.send(rows);
+        }
+    })
+})
+// Display device filtered by query
+app.get('api/device/search', (req, res) => {
+    pool.query(`SELECT ${device}.device_type, ${device}.model, 
+    ${device}.checked_out, ${device}.location
+    FROM ${device} 
+    INNER JOIN ${item} ON ${device}.id = ${item}.id
+    WHERE ${device}.device_type = ${req.body.device_type} AND ${device}.model  = ${req.body.model}$ AND ${item}.active = true`)
+})
 // DVD statements
 // Create a dvd
 app.post('/api/dvd', (req, res) => {
