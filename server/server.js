@@ -327,9 +327,28 @@ app.get('/api/author', (req,res) => {
 })
 // NARRATOR statements
 // Create a narrator
-
+app.post('/api/narrator', (req, res) => {
+    pool.query(`INSERT INTO ${narrator} 
+(f_name, l_name, origin, narrator_born, narrator_died) 
+VALUES (${req.body.f_name}, ${req.body.l_name}, ${req.body.origin}, ${req.body.narrator_born}, ${req.body.narrator_died}`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "narrator insert failed"})
+        }
+        else {
+            res.send(rows)
+        }
+    })
+})
 // Display all narrators
-
+app.get('/api/narrator', (req,res) => {
+    pool.query(`SELECT * FROM ${narrator}`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "could not retrieve narrators"});
+        } else {
+            res.send(rows);
+        }
+    })
+})
 /*
                         ========================================
                                 NON-ITEM OBJECT QUERIES
