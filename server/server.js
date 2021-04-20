@@ -356,8 +356,28 @@ app.get('/api/narrator', (req,res) => {
  */
 // PUBLISHER statements
 // Create a publisher
-
+app.post('/api/publisher', (req, res) => {
+    pool.query(`INSERT INTO ${publisher} 
+(publisher_name, headquarters) 
+VALUES (${req.body.publisher_name}, ${req.body.headquarters}`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "publisher insert failed"})
+        }
+        else {
+            res.send(rows)
+        }
+    })
+})
 // Display all publishers
+app.get('/api/publisher', (req,res) => {
+    pool.query(`SELECT * FROM ${publisher}`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "could not retrieve publishers"});
+        } else {
+            res.send(rows);
+        }
+    })
+})
 
 // SERIES statements
 // Create a series
