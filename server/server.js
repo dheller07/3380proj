@@ -117,11 +117,12 @@ app.get('api/audiobook/search', (req, res) => {
     pool.query(`SELECT ${audiobook}.isbn, ${audiobook}.title, 
     ${author}.f_name, ${author}.l_name,
     ${narrator}.f_name, ${narrator}.l_name, 
-    ${audiobook}.edition, ${audiobook}.genre,
+    ${audiobook}.edition, ${series}.series_name,
     ${audiobook}.genre, ${audiobook}.checked_out, ${audiobook}.location
     FROM ${audiobook} 
     INNER JOIN ${author} ON ${audiobook}.author_id = ${author}.id
     INNER JOIN ${narrator} ON ${audiobook}.narrator = ${narrator}.id
+    INNER JOIN ${series} ON ${audiobook}.series= ${series}.id
     INNER JOIN ${item} ON ${audiobook}.id = ${item}.id
     WHERE ${audiobook}.title = ${req.body.title} AND ${author}.l_name = ${req.body.l_name_auth} AND ${item}.active = true`)
 })
@@ -164,12 +165,13 @@ app.get('/api/book', (req,res) => {
 app.get('api/book/search', (req, res) => {
     pool.query(`SELECT ${book}.isbn, ${book}.title, 
     ${author}.f_name, ${author}.l_name,
-    ${publisher}.f_name, ${publisher}.l_name, 
-    ${book}.edition, ${book}.genre,
+    ${publisher}.publisher_name, 
+    ${book}.edition, ${series}.series_name,
     ${book}.genre, ${book}.checked_out, ${book}.location
     FROM ${book} 
     INNER JOIN ${author} ON ${book}.author_id = ${author}.id
     INNER JOIN ${publisher} ON ${book}.publisher = ${publisher}.id
+    INNER JOIN ${series} ON ${book}.series = ${series}.id
     INNER JOIN ${item} ON ${book}.id = ${item}.id
     WHERE ${book}.title = ${req.body.title} AND ${author}.l_name = ${req.body.l_name_auth} AND ${item}.active = true`)
 })
