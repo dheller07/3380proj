@@ -381,13 +381,54 @@ app.get('/api/publisher', (req,res) => {
 
 // SERIES statements
 // Create a series
-
+// TODO what is series_number? maybe not a necessary attribute?
+app.post('/api/series', (req, res) => {
+    pool.query(`INSERT INTO ${series} 
+(series_name, total_series, series_number) 
+VALUES (${req.body.series_name}, ${req.body.total_series}, ${req.body.series_number}`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "series insert failed"})
+        }
+        else {
+            res.send(rows)
+        }
+    })
+})
 // Display all series
+app.get('/api/series', (req,res) => {
+    pool.query(`SELECT * FROM ${series}`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "could not retrieve series"});
+        } else {
+            res.send(rows);
+        }
+    })
+})
 
 // LOCATION statements
 // Create a location
-
+app.post('/api/location', (req, res) => {
+    pool.query(`INSERT INTO ${location} 
+(location_name, address, phone_no) 
+VALUES (${req.body.location_name}, ${req.body.address}, ${req.body.phone_no}`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "location insert failed"})
+        }
+        else {
+            res.send(rows)
+        }
+    })
+})
 // Display all locations
+app.get('/api/location', (req,res) => {
+    pool.query(`SELECT * FROM ${location}`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "could not retrieve locations"});
+        } else {
+            res.send(rows);
+        }
+    })
+})
 
 /*
                         ========================================
