@@ -511,12 +511,43 @@ app.get('/api/location', (req,res) => {
  */
 // REQUEST ITEM statements
 // Create an item request
-
+app.post('/api/itemRequest', (req, res) => {
+    pool.query(`INSERT INTO ${itemRequest} 
+(req_number, item_id, req_date, requester_id) 
+VALUES (
+(SELECT id FROM item WHERE id = ${req.body.item_id}),
+${req.body.req_number}, ${req.body.req_date}, 
+(SELECT id FROM customer WHERE id = ${req.body.requester_id} ),
+)`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "item request failed"})
+        }
+        else {
+            res.send(rows)
+        }
+    })
+})
 // Display all item requests
-
+app.get('/api/itemRequest', (req,res) => {
+    pool.query(`SELECT * FROM ${itemRequest}`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "could not retrieve item requests"});
+        } else {
+            res.send(rows);
+        }
+    })
+})
 // Display item requests for a certain user
-
-// Display full waitlist for a certain item
+app.get('api/itemRequest/search', (req, res) => {
+    pool.query(`SELECT ${itemRequest}.req_number, ${itemRequest}.item_id, 
+    ${itemRequest}.req_date, ${customer}.f_name,
+    ${customer}.l_name, ${customer}.id, 
+   
+    FROM ${itemRequest} 
+    INNER JOIN ${customer} ON ${itemRequest}.requester_id = ${customer}.id
+    WHERE ((${itemRequest}.req_number = ${req.body.req_number}) OR (${itemRequest}.id = ${req.body.requester_id}))AND ${itemRequest}.active = true`)
+})
+// todo Display full waitlist for a certain item
 
 
 // CHECKOUT statements
@@ -525,3 +556,6 @@ app.get('/api/location', (req,res) => {
 // Display all item checkouts
 
 // Display item checkouts for a certain user
+
+
+
