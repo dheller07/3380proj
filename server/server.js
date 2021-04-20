@@ -34,6 +34,8 @@ app.listen(port, () => {
     console.log(`App server now listening to port ${port}`);
 });
 
+// TODO add trigger table and corresponding get statements
+// TODO add lateFine table statements (should this be made into a trigger in the db? it should auto-create when a due date passes right?)
 // TODO add more filter capabilities to searches
 // TODO create checks to ensure if a foreign key ref doesn't exist - they user is informed
 
@@ -212,3 +214,61 @@ app.get('api/magazine/search', (req, res) => {
 // Display one customer filtered by query
 
 // Change customer active status
+
+
+/*
+                        ========================================
+                                  NON-USER PERSON QUERIES
+                        ========================================
+ */
+// AUTHOR statements
+// Create an author
+
+// Display all narrators
+
+// NARRATOR statements
+// Create a narrator
+
+// Display all narrators
+
+/*
+                        ========================================
+                                NON-ITEM OBJECT QUERIES
+                        ========================================
+ */
+// PUBLISHER statements
+// Create a publisher
+
+// Display all publishers
+
+// SERIES statements
+// Create a series
+
+// Display all series
+
+// LOCATION statements
+// Create a location
+
+// Display all locations
+
+/*
+                        ========================================
+                                      ACTION QUERIES
+                        ========================================
+ */
+// REQUEST ITEM statements
+// Create an item request
+
+// Display all item requests
+
+// Display item requests for a certain user
+
+// Display full waitlist for a certain item
+
+
+// CHECKOUT statements
+// Create an item checkout
+
+// Display all item checkouts
+
+// Display item checkouts for a certain user
