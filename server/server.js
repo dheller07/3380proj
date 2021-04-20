@@ -77,8 +77,9 @@ app.put('/api/item/modify', (req,res) => {
 // Create an audiobook
 app.post('/api/audiobook', (req, res) => {
     pool.query(`INSERT INTO ${audiobook} 
-(title, isbn, author_id, narrator_id, publisher, publication_year, edition, series, series_position, genre, waitlist_capacity, location) 
-VALUES (${req.body.title}, ${req.body.isbn}, 
+(id, title, isbn, author_id, narrator_id, publisher, publication_year, edition, series, series_position, genre, waitlist_capacity, location) 
+VALUES (SELECT id FROM item WHERE id = ${req.body.id},
+${req.body.title}, ${req.body.isbn}, 
 SELECT id FROM author WHERE f_name = ${req.body.f_name_auth} AND l_name = ${req.body.l_name_auth},
 SELECT id FROM narrator WHERE f_name = ${req.body.f_name_narr} AND l_name = ${req.body.l_name_narr},
 SELECT id FROM publisher WHERE publisher_name = ${req.body.publisher_name},
