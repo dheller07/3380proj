@@ -34,6 +34,11 @@ app.listen(port, () => {
     console.log(`App server now listening to port ${port}`);
 });
 
+// TODO add trigger table and corresponding get statements
+// TODO add lateFine table statements (should this be made into a trigger in the db? it should auto-create when a due date passes right?)
+// TODO add more filter capabilities to searches
+// TODO create checks to ensure if a foreign key ref doesn't exist - they user is informed
+
 /*
                         ========================================
                                     ITEM QUERIES
@@ -204,3 +209,152 @@ app.get('api/device/search', (req, res) => {
     INNER JOIN ${item} ON ${device}.id = ${item}.id
     WHERE ${device}.device_type = ${req.body.device_type} AND ${device}.model  = ${req.body.model}$ AND ${item}.active = true`)
 })
+// DVD statements
+// Create a dvd
+app.post('/api/dvd', (req, res) => {
+    pool.query(`INSERT INTO ${dvd} 
+(id, title, release_date, director, studio, waitlist_capacity, location) 
+VALUES (SELECT id FROM item WHERE id = ${req.body.id},
+${req.body.title}, ${req.body.director}, ${req.body.studio}, ${req.body.waitlist_capacity},
+SELECT id FROM location WHERE location_name = ${req.body.location_name})`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "dvd insert failed"})
+        }
+        else {
+            res.send(rows)
+        }
+    })
+})
+// Display all dvds
+app.get('/api/dvd', (req,res) => {
+    pool.query(`SELECT * FROM ${dvd}`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "could not retrieve dvds"});
+        } else {
+            res.send(rows);
+        }
+    })
+})
+// Display dvds filtered by query
+app.get('api/dvd/search', (req, res) => {
+    pool.query(`SELECT ${dvd}.title, ${dvd}.release_date, ${dvd}.director, ${dvd}.studio, ${dvd}.checked_out, ${dvd}.location
+    FROM ${dvd} 
+    INNER JOIN ${item} ON ${dvd}.id = ${item}.id
+    WHERE ${dvd}.title = ${req.body.title} AND ${item}.active = true`)
+})
+
+// MAGAZINE statements
+// Create a magazine
+app.post('/api/maazine', (req, res) => {
+    pool.query(`INSERT INTO ${magazine} 
+(id, title, issue, issue_date, topic, waitlist_capacity, location) 
+VALUES (SELECT id FROM item WHERE id = ${req.body.id},
+${req.body.title}, ${req.body.issue}, ${req.body.issue_date}, ${req.body.topic}, ${req.body.waitlist_capacity},
+SELECT id FROM location WHERE location_name = ${req.body.location_name})`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "magazine insert failed"})
+        }
+        else {
+            res.send(rows)
+        }
+    })
+})
+// Display all magazines
+app.get('/api/magazine', (req,res) => {
+    pool.query(`SELECT * FROM ${magazine}`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "could not retrieve magazines"});
+        } else {
+            res.send(rows);
+        }
+    })
+})
+// Display magazines filtered by query
+app.get('api/magazine/search', (req, res) => {
+    pool.query(`SELECT ${magazine}.title, ${magazine}.issue, ${magazine}.issue_date, ${magazine}.topic, ${magazine}.checked_out, ${magazine}.location
+    FROM ${magazine} 
+    INNER JOIN ${item} ON ${magazine}.id = ${item}.id
+    WHERE ${magazine}.title = ${req.body.title} AND ${item}.active = true`)
+})
+
+/*
+                        ========================================
+                                    USER QUERIES
+                        ========================================
+ */
+// EMPLOYEE statements
+// Create an employee
+
+// Display all employees
+
+// Display one employee filtered by query
+
+// Change employee active status
+
+
+// CUSTOMER statements
+// Create a customer
+
+// Display all customers
+
+// Display one customer filtered by query
+
+// Change customer active status
+
+
+/*
+                        ========================================
+                                  NON-USER PERSON QUERIES
+                        ========================================
+ */
+// AUTHOR statements
+// Create an author
+
+// Display all narrators
+
+// NARRATOR statements
+// Create a narrator
+
+// Display all narrators
+
+/*
+                        ========================================
+                                NON-ITEM OBJECT QUERIES
+                        ========================================
+ */
+// PUBLISHER statements
+// Create a publisher
+
+// Display all publishers
+
+// SERIES statements
+// Create a series
+
+// Display all series
+
+// LOCATION statements
+// Create a location
+
+// Display all locations
+
+/*
+                        ========================================
+                                      ACTION QUERIES
+                        ========================================
+ */
+// REQUEST ITEM statements
+// Create an item request
+
+// Display all item requests
+
+// Display item requests for a certain user
+
+// Display full waitlist for a certain item
+
+
+// CHECKOUT statements
+// Create an item checkout
+
+// Display all item checkouts
+
+// Display item checkouts for a certain user
