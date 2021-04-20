@@ -292,22 +292,82 @@ app.get('api/magazine/search', (req, res) => {
  */
 // EMPLOYEE statements
 // Create an employee
-
+app.post('/api/employee', (req, res) => {
+    pool.query(`INSERT INTO ${employee} 
+(id, f_name, l_name, ssn, birthdate, salary, job_title, phone_no) 
+VALUES (SELECT id FROM employee WHERE id = ${req.body.id},
+${req.body.f_name}, ${req.body.l_name}, ${req.body.ssn}, ${req.body.birthdate},
+${req.body.salary},${req.body.job_title}, ${req.body.phone_no})`,
+        (err, rows) => {
+            if (err) {
+                res.status(500).send({message: "employee insert failed"})
+            }
+            else {
+                res.send(rows)
+            }
+        })
+})
 // Display all employees
-
+app.get('/api/employee', (req,res) => {
+    pool.query(`SELECT * FROM ${employee}`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "could not retrieve employees"});
+        } else {
+            res.send(rows);
+        }
+    })
+})
 // Display one employee filtered by query
-
-// Change employee active status
+app.get('api/employee/search', (req, res) => {
+    pool.query(`SELECT ${employee}.f_name, ${employee}.l_name, 
+    ${employee}.ssn, ${employee}.birthdate,
+    ${employee}.salary, ${employee}.job_title, 
+    ${employee}.phone_no, ${employee}.id
+    FROM ${employee} 
+    WHERE (${employee}.ssn = ${req.body.ssn}) OR (${employee}.id = ${req.body.id} ) or 
+    ( {employee}.f_name = ${req.body.f_name} AND {employee}.l_name = ${req.body.l_name} ) 
+    AND ${employee}.active = true`)
+})
+// todo Change employee active status
 
 
 // CUSTOMER statements
 // Create a customer
-
+app.post('/api/customer', (req, res) => {
+    pool.query(`INSERT INTO ${customer} 
+(id, f_name, l_name, ssn, customer_role, item_limit, acct_balance, fine_rate) 
+VALUES (SELECT id FROM customer WHERE id = ${req.body.id},
+${req.body.f_name}, ${req.body.l_name}, ${req.body.customer_role}, ${req.body.item_limit},
+${req.body.acct_balance},${req.body.fine_rate})`,
+        (err, rows) => {
+            if (err) {
+                res.status(500).send({message: "customer insert failed"})
+            }
+            else {
+                res.send(rows)
+            }
+        })
+})
 // Display all customers
-
+app.get('/api/customer', (req,res) => {
+    pool.query(`(SELECT * FROM ${customer})`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "could not retrieve customer"});
+        } else {
+            res.send(rows);
+        }
+    })
+})
 // Display one customer filtered by query
-
-// Change customer active status
+app.get('api/customer/search', (req, res) => {
+    pool.query(`(SELECT ${customer}.f_name, ${customer}.l_name, 
+    ${customer}.customer_role, ${customer}.item_limit,
+    ${customer}.acct_balance, ${customer}.fine_rate, 
+    ${customer}.id)
+    FROM ${customer} 
+    WHERE (${customer}.id = ${req.body.id}) or (${customer}.f_name = ${req.body.f_name}AND${customer}.l_name = ${req.body.l_name}) AND ${employee}.active = true`)
+})
+// todo Change customer active status
 
 
 /*
