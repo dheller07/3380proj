@@ -103,4 +103,17 @@ app.get('/api/audiobook', (req,res) => {
         }
     })
 })
-// Change active status
+// Display audiobooks filtered by query
+// TODO add more filter capabilities
+app.get('api/audiobook/search', (req, res) => {
+    pool.query(`SELECT ${audiobook}.isbn, ${audiobook}.title, 
+    ${author}.f_name, ${author}.l_name,
+    ${narrator}.f_name, ${narrator}.l_name, 
+    ${audiobook}.edition, ${audiobook}.genre,
+    ${audiobook}.genre, ${audiobook}.checked_out, ${audiobook}.location
+    FROM ${audiobook} 
+    INNER JOIN ${author} ON ${audiobook}.author_id = ${author}.id
+    INNER JOIN ${narrator} ON ${audiobook}.narrator = ${narrator}.id
+    INNER JOIN ${item} ON ${audiobook}.id = ${item}.id
+    WHERE ${audiobook}.title = ${req.body.title} AND ${author}.l_name = ${req.body.l_name_auth} AND ${item}.active = true`)
+})
