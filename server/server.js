@@ -303,9 +303,28 @@ app.get('api/magazine/search', (req, res) => {
  */
 // AUTHOR statements
 // Create an author
-
-// Display all narrators
-
+app.post('/api/author', (req, res) => {
+    pool.query(`INSERT INTO ${author} 
+(f_name, l_name, origin, author_born, author_died) 
+VALUES (${req.body.f_name}, ${req.body.l_name}, ${req.body.origin}, ${req.body.author_born}, ${req.body.author_died}`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "author insert failed"})
+        }
+        else {
+            res.send(rows)
+        }
+    })
+})
+// Display all authors
+app.get('/api/author', (req,res) => {
+    pool.query(`SELECT * FROM ${author}`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "could not retrieve authors"});
+        } else {
+            res.send(rows);
+        }
+    })
+})
 // NARRATOR statements
 // Create a narrator
 
