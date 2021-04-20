@@ -69,7 +69,7 @@ app.get('/api/item', (req,res) => {
 })
 // Change item's active status
 app.put('/api/item/modify', (req,res) => {
-    pool.query(`UPDATE ${item} SET active = false WHERE id = ${req.body.item_id}`, (err, row) => {
+    pool.query(`UPDATE ${item} SET active = NOT active WHERE id = ${req.body.item_id}`, (err, row) => {
         if (err) {
             res.status(500).send({message: "Could not make item inactive"});
         } else {
@@ -333,8 +333,16 @@ app.get('api/employee/search', (req, res) => {
     ( {employee}.f_name = ${req.body.f_name} AND {employee}.l_name = ${req.body.l_name} ) 
     AND ${employee}.active = true)`)
 })
-// todo Change employee active status
-
+// Change employee's active status
+app.put('/api/employee/modify', (req,res) => {
+    pool.query(`UPDATE ${employee} SET active = NOT active WHERE id = ${req.body.id}`, (err, row) => {
+        if (err) {
+            res.status(500).send({message: "Could not make employee inactive"});
+        } else {
+            res.send(row);
+        }
+    })
+})
 
 // CUSTOMER statements
 // Create a customer
@@ -372,8 +380,16 @@ app.get('api/customer/search', (req, res) => {
     FROM ${customer} 
     WHERE (${customer}.id = ${req.body.id}) or (${customer}.f_name = ${req.body.f_name}AND${customer}.l_name = ${req.body.l_name}) AND ${employee}.active = true`)
 })
-// todo Change customer active status
-
+// Change customer's active status
+app.put('/api/customer/modify', (req,res) => {
+    pool.query(`UPDATE ${customer} SET active = NOT active WHERE id = ${req.body.id}`, (err, row) => {
+        if (err) {
+            res.status(500).send({message: "Could not make item inactive"});
+        } else {
+            res.send(row);
+        }
+    })
+})
 
 /*
                         ========================================
