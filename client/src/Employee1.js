@@ -319,6 +319,10 @@ function Employee1 () {
         window.location.href = "/Add"; 
     }
 
+    const ChangeDeleteItems = () => {
+        window.location.href = "/Delete"; 
+    }
+
     return (
         <div>
             <div>
@@ -333,6 +337,13 @@ function Employee1 () {
                 color={'blue'}
                 text={'Add Items'}
                 onClick={ChangetoAddItems}
+                />
+        </div>
+        <div>
+            <Button
+                color={'blue'}
+                text={'Delete Items'}
+                onClick={ChangeDeleteItems}
                 />
         </div>
         <div className = "container">

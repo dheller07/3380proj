@@ -11,6 +11,7 @@ import Mgz from './components/Mgz.js'
 import Device from './components/Device.js'
 import ChoiceBar from './components/ChoiceBar.js'
 import Message from './components/Message.js'
+import BookService from './services/book.service.js'
 
 
 function Customer() {
@@ -25,10 +26,27 @@ function Customer() {
   const[authorBook, setAuthorBook] = useState('')
 
   const theSearchBook = () => {
-   if(showBookResult === true) {
-     return (
-        <div> Searching for Book: {titleBook} {isbnBook} {authorBook}</div>
-     );
+    if(showBookResult === true) {
+      var data = {
+        title: titleBook,
+        isbn: isbnBook,
+        author_id: authorBook
+    };
+    BookService.getSearchResults(data)
+      .then(response => {
+        return (
+          <table>
+            <tr><th>Title</th> <th>ISBN</th> <th>Genre</th> <th>PublicationYear</th> </tr>
+            {response.map((bookInfo) => {
+              return <tr><th>{bookInfo.title}</th> <th>{bookInfo.isbn}</th> <th>{bookInfo.genre}</th> <th>{bookInfo.publication_year}</th></tr>
+            })}
+          </table> 
+        );
+      })
+      .catch(e => {
+        console.log(e)
+      });
+
    }
   }
   
@@ -43,8 +61,19 @@ function Customer() {
 
   const theSearchAudioBook = () => {
    if(showAudioBookResult === true) {
-     return (
-        <div> Searching for AudioBook: {titleAudioBook} {isbnAudioBook} {authorAudioBook}</div>
+      const state = [
+      {title: "The Wind", isbn: 1792, genre: "Narrative", publication_year: 1999 },
+      {title: "The Unknown", isbn: 1787, genre: "Novel", publication_year: 2021},
+      {title: "Mysteries", isbn: 1800, genre: "Mystery", publication_year: 2001},
+      ];
+      return (
+        <table>
+            <tr><th>Title</th> <th>ISBN</th> <th>Genre</th> <th>PublicationYear</th> </tr>
+            {state.map((bookInfo) => {
+              return <tr><th>{bookInfo.title}</th> <th>{bookInfo.isbn}</th> <th>{bookInfo.genre}</th> <th>{bookInfo.publication_year}</th></tr>
+            })}
+        </table>
+        
      );
    }
   }
