@@ -36,8 +36,7 @@ app.listen(port, () => {
 
 // TODO add more filter capabilities to searches
 // TODO create checks to ensure if a foreign key ref doesn't exist - they user is informed
-// TODO add query to update a latefine to paid = true
-// TODO add query to update a checkoutItem to returned = true
+// TODO check if table is empty before insert => assign id = 1 if the table is empty
 
 /*
                         ========================================
@@ -48,12 +47,22 @@ app.listen(port, () => {
 // ITEM statements
 // Create an item
 app.post('/api/item', (req, res) => {
-    pool.query(`INSERT INTO ${item} (active) VALUE (true)`, (err, rows) => {
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.employee_id} AND password = ${req.body.password}`, (err, user) => {
         if (err) {
-            res.status(500).send({message: "item insert failed"})
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
         }
         else {
-            res.send(rows)
+            pool.query(`INSERT INTO ${item} (active) VALUE (true)`, (err, rows) => {
+                if (err) {
+                    res.status(500).send({message: "item insert failed"})
+                }
+                else {
+                    res.send(rows)
+                }
+            })
         }
     })
 })
@@ -297,20 +306,28 @@ app.get('api/magazine/search', (req, res) => {
 // EMPLOYEE statements
 // Create an employee
 app.post('/api/employee', (req, res) => {
-    pool.query(`(INSERT INTO ${employee} 
-(id, f_name, l_name, ssn, birthdate, salary, job_title, phone_no) 
-VALUES (
-(SELECT id FROM employee WHERE id = ${req.body.id}),
-${req.body.f_name}, ${req.body.l_name}, ${req.body.ssn}, ${req.body.birthdate},
-${req.body.salary}, ${req.body.job_title}, ${req.body.phone_no}))`,
-        (err, rows) => {
-            if (err) {
-                res.status(500).send({message: "employee insert failed"})
-            }
-            else {
-                res.send(rows)
-            }
-        })
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.employee_id} AND password = ${req.body.password}`, (err, user) => {
+        if (err) {
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
+        }
+        else {
+            pool.query(`(INSERT INTO ${employee} 
+(password, f_name, l_name, ssn, birthdate, salary, job_title, phone_no) 
+VALUES (${req.body.password}, ${req.body.f_name}, ${req.body.l_name}, ${req.body.ssn}, 
+${req.body.birthdate}, ${req.body.salary}, ${req.body.job_title}, ${req.body.phone_no}))`,
+                (err, rows) => {
+                    if (err) {
+                        res.status(500).send({message: "employee insert failed"})
+                    }
+                    else {
+                        res.send(rows)
+                    }
+                })
+        }
+    })
 })
 // Display all employees
 app.get('/api/employee', (req,res) => {
@@ -347,19 +364,28 @@ app.put('/api/employee/modify', (req,res) => {
 // CUSTOMER statements
 // Create a customer
 app.post('/api/customer', (req, res) => {
-    pool.query(`(INSERT INTO ${customer} 
-(id, f_name, l_name, ssn, customer_role, item_limit, acct_balance, fine_rate) 
-VALUES (SELECT id FROM customer WHERE id = ${req.body.id},
-${req.body.f_name}, ${req.body.l_name}, ${req.body.customer_role}, ${req.body.item_limit},
-${req.body.acct_balance},${req.body.fine_rate}))`,
-        (err, rows) => {
-            if (err) {
-                res.status(500).send({message: "customer insert failed"})
-            }
-            else {
-                res.send(rows)
-            }
-        })
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.employee_id} AND password = ${req.body.password}`, (err, user) => {
+        if (err) {
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
+        }
+        else {
+            pool.query(`(INSERT INTO ${customer} 
+(password, f_name, l_name, ssn, customer_role, item_limit, acct_balance, fine_rate) 
+VALUES (${req.body.password}, ${req.body.f_name}, ${req.body.l_name}, ${req.body.customer_role}, 
+${req.body.item_limit}, ${req.body.acct_balance},${req.body.fine_rate}))`,
+                (err, rows) => {
+                    if (err) {
+                        res.status(500).send({message: "customer insert failed"})
+                    }
+                    else {
+                        res.send(rows)
+                    }
+                })
+        }
+    })
 })
 // Display all customers
 app.get('/api/customer', (req,res) => {
@@ -378,7 +404,7 @@ app.get('api/customer/search', (req, res) => {
     ${customer}.acct_balance, ${customer}.fine_rate, 
     ${customer}.id)
     FROM ${customer} 
-    WHERE (${customer}.id = ${req.body.id}) or (${customer}.f_name = ${req.body.f_name}AND${customer}.l_name = ${req.body.l_name}) AND ${employee}.active = true`)
+    WHERE (${customer}.id = ${req.body.id}) or (${customer}.f_name = ${req.body.f_name}AND${customer}.l_name = ${req.body.l_name}) AND ${customer}.active = true`)
 })
 // Change customer's active status
 app.put('/api/customer/modify', (req,res) => {
@@ -399,14 +425,24 @@ app.put('/api/customer/modify', (req,res) => {
 // AUTHOR statements
 // Create an author
 app.post('/api/author', (req, res) => {
-    pool.query(`INSERT INTO ${author} 
-(f_name, l_name, origin, author_born, author_died) 
-VALUES (${req.body.f_name}, ${req.body.l_name}, ${req.body.origin}, ${req.body.author_born}, ${req.body.author_died}`, (err, rows) => {
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.employee_id} AND password = ${req.body.password}`, (err, user) => {
         if (err) {
-            res.status(500).send({message: "author insert failed"})
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
         }
         else {
-            res.send(rows)
+            pool.query(`INSERT INTO ${author} 
+(f_name, l_name, origin, author_born, author_died) 
+VALUES (${req.body.f_name}, ${req.body.l_name}, ${req.body.origin}, ${req.body.author_born}, ${req.body.author_died}`, (err, rows) => {
+                if (err) {
+                    res.status(500).send({message: "author insert failed"})
+                }
+                else {
+                    res.send(rows)
+                }
+            })
         }
     })
 })
@@ -423,14 +459,24 @@ app.get('/api/author', (req,res) => {
 // NARRATOR statements
 // Create a narrator
 app.post('/api/narrator', (req, res) => {
-    pool.query(`INSERT INTO ${narrator} 
-(f_name, l_name, origin, narrator_born, narrator_died) 
-VALUES (${req.body.f_name}, ${req.body.l_name}, ${req.body.origin}, ${req.body.narrator_born}, ${req.body.narrator_died}`, (err, rows) => {
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.employee_id} AND password = ${req.body.password}`, (err, user) => {
         if (err) {
-            res.status(500).send({message: "narrator insert failed"})
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
         }
         else {
-            res.send(rows)
+            pool.query(`INSERT INTO ${narrator} 
+(f_name, l_name, origin, narrator_born, narrator_died) 
+VALUES (${req.body.f_name}, ${req.body.l_name}, ${req.body.origin}, ${req.body.narrator_born}, ${req.body.narrator_died}`, (err, rows) => {
+                if (err) {
+                    res.status(500).send({message: "narrator insert failed"})
+                }
+                else {
+                    res.send(rows)
+                }
+            })
         }
     })
 })
@@ -452,14 +498,24 @@ app.get('/api/narrator', (req,res) => {
 // PUBLISHER statements
 // Create a publisher
 app.post('/api/publisher', (req, res) => {
-    pool.query(`INSERT INTO ${publisher} 
-(publisher_name, headquarters) 
-VALUES (${req.body.publisher_name}, ${req.body.headquarters}`, (err, rows) => {
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.employee_id} AND password = ${req.body.password}`, (err, user) => {
         if (err) {
-            res.status(500).send({message: "publisher insert failed"})
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
         }
         else {
-            res.send(rows)
+            pool.query(`INSERT INTO ${publisher} 
+(publisher_name, headquarters) 
+VALUES (${req.body.publisher_name}, ${req.body.headquarters}`, (err, rows) => {
+                if (err) {
+                    res.status(500).send({message: "publisher insert failed"})
+                }
+                else {
+                    res.send(rows)
+                }
+            })
         }
     })
 })
@@ -478,14 +534,24 @@ app.get('/api/publisher', (req,res) => {
 // Create a series
 // TODO what is series_number? maybe not a necessary attribute?
 app.post('/api/series', (req, res) => {
-    pool.query(`INSERT INTO ${series} 
-(series_name, total_series, series_number) 
-VALUES (${req.body.series_name}, ${req.body.total_series}, ${req.body.series_number}`, (err, rows) => {
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.employee_id} AND password = ${req.body.password}`, (err, user) => {
         if (err) {
-            res.status(500).send({message: "series insert failed"})
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
         }
         else {
-            res.send(rows)
+            pool.query(`INSERT INTO ${series} 
+(series_name, total_series, series_number) 
+VALUES (${req.body.series_name}, ${req.body.total_series}, ${req.body.series_number}`, (err, rows) => {
+                if (err) {
+                    res.status(500).send({message: "series insert failed"})
+                }
+                else {
+                    res.send(rows)
+                }
+            })
         }
     })
 })
@@ -503,14 +569,24 @@ app.get('/api/series', (req,res) => {
 // LOCATION statements
 // Create a location
 app.post('/api/location', (req, res) => {
-    pool.query(`INSERT INTO ${location} 
-(location_name, address, phone_no) 
-VALUES (${req.body.location_name}, ${req.body.address}, ${req.body.phone_no}`, (err, rows) => {
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.employee_id} AND password = ${req.body.password}`, (err, user) => {
         if (err) {
-            res.status(500).send({message: "location insert failed"})
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
         }
         else {
-            res.send(rows)
+            pool.query(`INSERT INTO ${location} 
+(location_name, address, phone_no) 
+VALUES (${req.body.location_name}, ${req.body.address}, ${req.body.phone_no}`, (err, rows) => {
+                if (err) {
+                    res.status(500).send({message: "location insert failed"})
+                }
+                else {
+                    res.send(rows)
+                }
+            })
         }
     })
 })
@@ -532,17 +608,172 @@ app.get('/api/location', (req,res) => {
  */
 // REQUEST ITEM statements
 // Create an item request
-
+app.post('/api/itemRequest', (req, res) => {
+    pool.query(`SELECT 1 FROM ${customer} WHERE id = ${req.body.customer_id} AND password = ${req.body.password}`, (err, user) => {
+        if (err) {
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect customer id or password"})
+        }
+        else {
+            pool.query(`INSERT INTO ${itemRequest} 
+(req_number, item_id, requester_id) 
+VALUES (
+(SELECT id FROM item WHERE id = ${req.body.item_id}),
+${req.body.req_number}, 
+(SELECT id FROM customer WHERE id = ${req.body.requester_id} ),
+)`, (err, rows) => {
+                if (err) {
+                    res.status(500).send({message: "item request failed"})
+                }
+                else {
+                    res.send(rows)
+                }
+            })
+        }
+    })
+})
 // Display all item requests
-
+app.get('/api/itemRequest', (req,res) => {
+    pool.query(`SELECT * FROM ${itemRequest}`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "could not retrieve item requests"});
+        } else {
+            res.send(rows);
+        }
+    })
+})
 // Display item requests for a certain user
-
-// Display full waitlist for a certain item
+app.get('api/itemRequest/search', (req, res) => {
+    pool.query(`SELECT ${itemRequest}.req_number, ${itemRequest}.item_id, 
+    ${itemRequest}.req_date, ${customer}.f_name,
+    ${customer}.l_name, ${customer}.id, 
+   
+    FROM ${itemRequest} 
+    INNER JOIN ${customer} ON ${itemRequest}.requester_id = ${customer}.id
+    WHERE ((${itemRequest}.req_number = ${req.body.req_number}) OR (${itemRequest}.id = ${req.body.requester_id}))AND ${itemRequest}.active = true`)
+})
+// todo Display full waitlist for a certain item
 
 
 // CHECKOUT statements
 // Create an item checkout
+app.post('/api/checkoutItem', (req, res) => {
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.employee_id} AND password = ${req.body.password}`, (err, user) => {
+        if (err) {
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
+        }
+        else {
+            pool.query(`INSERT INTO ${checkoutItem} 
+(item, checkout_date, due_date, return_date, returned, borrower_id, employee_id) 
+VALUES (${req.body.item_id},
+(SELECT id FROM customer WHERE id = ${req.body.borrower_id} ),
+(SELECT id FROM employee WHERE id = ${req.body.employee_id} ),
+)`, (err, rows) => {
+                if (err) {
+                    res.status(500).send({message: "item checkout failed"})
+                }
+                else {
+                    res.send(rows)
+                }
+            })
+        }
+    })
+})
 
 // Display all item checkouts
+app.get('/api/checkoutItem', (req,res) => {
+    pool.query(`SELECT * FROM ${checkoutItem}`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "could not retrieve checkoutItems"});
+        } else {
+            res.send(rows);
+        }
+    })
+})
 
 // Display item checkouts for a certain user
+app.get('api/checkoutItem/search', (req, res) => {
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.employee_id} AND password = ${req.body.password}`, (err, user) => {
+        if (err) {
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
+        }
+        else {
+            pool.query(`SELECT ${checkoutItem}.id, ${checkoutItem}.item, 
+    ${checkoutItem}.checkout_date, ${checkoutItem}.due_date,
+    ${checkoutItem}.returned, ${customer}.id, ${customer}.f_name,
+    ${customer}.l_name, ${employee}.id,  ${employee}.f_name, ${employee}.l_name
+    FROM ${checkoutItem} 
+    INNER JOIN ${customer} ON ${checkoutItem}.borrower_id = ${customer}.id
+    INNER JOIN ${employee} ON ${checkoutItem}.employee_id = ${employee}.id
+    WHERE ((${checkoutItem}.id = ${req.body.id}) OR (${checkoutItem}.borrower_id = ${req.body.borrower_id}))AND ${itemRequest}.active = true`, (err, rows) => {
+                if (err) {
+                    res.status(500).send({message: "display item checkouts for a certain customer failed"})
+                }
+                else {
+                    res.send(rows)
+                }
+            })
+        }
+    })
+})
+
+// Update checkoutItem when an item is returned
+app.put('/api/checkoutItem/modify', (req,res) => {
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.id} AND password = ${req.body.password}`, (err, user) => {
+        if (err) {
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
+        }
+        else {
+            pool.query(`UPDATE ${checkoutItem} SET (returned = true AND return_date = NOW()) WHERE borrower_id = ${req.body.bowrrower_id} AND item = ${req.body.item_id}`, (err, row) => {
+                if (err) {
+                    res.status(500).send({message: "Item return failed"});
+                } else {
+                    res.send(row);
+                }
+            })
+        }
+    })
+})
+
+// LATE FINE statements
+// Display active lateFines
+app.get('/api/lateFine', (req,res) => {
+    pool.query(`SELECT * FROM ${lateFine}`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "could not retrieve late fines"});
+        } else {
+            res.send(rows);
+        }
+    })
+})
+// Update a lateFine when paid
+app.put('/api/lateFine/modify', (req,res) => {
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.id} AND password = ${req.body.password}`, (err, user) => {
+        if (err) {
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
+        }
+        else {
+            pool.query(`UPDATE ${lateFine} SET (paid = true AND paid_date = NOW()) WHERE borrower = ${req.body.bowrrower_id} AND checkout_item = ${req.body.item_id}`, (err, row) => {
+                if (err) {
+                    res.status(500).send({message: "Late fine payment failed"});
+                } else {
+                    res.send(row);
+                }
+            })
+        }
+    })
+})
