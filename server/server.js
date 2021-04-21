@@ -36,8 +36,6 @@ app.listen(port, () => {
 
 // TODO add more filter capabilities to searches
 // TODO create checks to ensure if a foreign key ref doesn't exist - they user is informed
-// TODO add query to update a latefine to paid = true
-// TODO add query to update a checkoutItem to returned = true
 // TODO check if table is empty before insert => assign id = 1 if the table is empty
 
 /*
