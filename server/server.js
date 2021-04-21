@@ -38,6 +38,7 @@ app.listen(port, () => {
 // TODO create checks to ensure if a foreign key ref doesn't exist - they user is informed
 // TODO add query to update a latefine to paid = true
 // TODO add query to update a checkoutItem to returned = true
+// TODO check if table is empty before insert => assign id = 1 if the table is empty
 
 /*
                         ========================================
@@ -298,11 +299,9 @@ app.get('api/magazine/search', (req, res) => {
 // Create an employee
 app.post('/api/employee', (req, res) => {
     pool.query(`(INSERT INTO ${employee} 
-(id, f_name, l_name, ssn, birthdate, salary, job_title, phone_no) 
-VALUES (
-(SELECT id FROM employee WHERE id = ${req.body.id}),
-${req.body.f_name}, ${req.body.l_name}, ${req.body.ssn}, ${req.body.birthdate},
-${req.body.salary}, ${req.body.job_title}, ${req.body.phone_no}))`,
+(password, f_name, l_name, ssn, birthdate, salary, job_title, phone_no) 
+VALUES (${req.body.password}, ${req.body.f_name}, ${req.body.l_name}, ${req.body.ssn}, 
+${req.body.birthdate}, ${req.body.salary}, ${req.body.job_title}, ${req.body.phone_no}))`,
         (err, rows) => {
             if (err) {
                 res.status(500).send({message: "employee insert failed"})
@@ -348,10 +347,9 @@ app.put('/api/employee/modify', (req,res) => {
 // Create a customer
 app.post('/api/customer', (req, res) => {
     pool.query(`(INSERT INTO ${customer} 
-(id, f_name, l_name, ssn, customer_role, item_limit, acct_balance, fine_rate) 
-VALUES (SELECT id FROM customer WHERE id = ${req.body.id},
-${req.body.f_name}, ${req.body.l_name}, ${req.body.customer_role}, ${req.body.item_limit},
-${req.body.acct_balance},${req.body.fine_rate}))`,
+(password, f_name, l_name, ssn, customer_role, item_limit, acct_balance, fine_rate) 
+VALUES (${req.body.password}, ${req.body.f_name}, ${req.body.l_name}, ${req.body.customer_role}, 
+${req.body.item_limit}, ${req.body.acct_balance},${req.body.fine_rate}))`,
         (err, rows) => {
             if (err) {
                 res.status(500).send({message: "customer insert failed"})
@@ -378,7 +376,7 @@ app.get('api/customer/search', (req, res) => {
     ${customer}.acct_balance, ${customer}.fine_rate, 
     ${customer}.id)
     FROM ${customer} 
-    WHERE (${customer}.id = ${req.body.id}) or (${customer}.f_name = ${req.body.f_name}AND${customer}.l_name = ${req.body.l_name}) AND ${employee}.active = true`)
+    WHERE (${customer}.id = ${req.body.id}) or (${customer}.f_name = ${req.body.f_name}AND${customer}.l_name = ${req.body.l_name}) AND ${customer}.active = true`)
 })
 // Change customer's active status
 app.put('/api/customer/modify', (req,res) => {
