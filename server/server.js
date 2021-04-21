@@ -308,18 +308,28 @@ app.get('api/magazine/search', (req, res) => {
 // EMPLOYEE statements
 // Create an employee
 app.post('/api/employee', (req, res) => {
-    pool.query(`(INSERT INTO ${employee} 
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.id} AND password = ${req.body.password}`, (err, user) => {
+        if (err) {
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
+        }
+        else {
+            pool.query(`(INSERT INTO ${employee} 
 (password, f_name, l_name, ssn, birthdate, salary, job_title, phone_no) 
 VALUES (${req.body.password}, ${req.body.f_name}, ${req.body.l_name}, ${req.body.ssn}, 
 ${req.body.birthdate}, ${req.body.salary}, ${req.body.job_title}, ${req.body.phone_no}))`,
-        (err, rows) => {
-            if (err) {
-                res.status(500).send({message: "employee insert failed"})
-            }
-            else {
-                res.send(rows)
-            }
-        })
+                (err, rows) => {
+                    if (err) {
+                        res.status(500).send({message: "employee insert failed"})
+                    }
+                    else {
+                        res.send(rows)
+                    }
+                })
+        }
+    })
 })
 // Display all employees
 app.get('/api/employee', (req,res) => {
@@ -356,18 +366,28 @@ app.put('/api/employee/modify', (req,res) => {
 // CUSTOMER statements
 // Create a customer
 app.post('/api/customer', (req, res) => {
-    pool.query(`(INSERT INTO ${customer} 
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.id} AND password = ${req.body.password}`, (err, user) => {
+        if (err) {
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
+        }
+        else {
+            pool.query(`(INSERT INTO ${customer} 
 (password, f_name, l_name, ssn, customer_role, item_limit, acct_balance, fine_rate) 
 VALUES (${req.body.password}, ${req.body.f_name}, ${req.body.l_name}, ${req.body.customer_role}, 
 ${req.body.item_limit}, ${req.body.acct_balance},${req.body.fine_rate}))`,
-        (err, rows) => {
-            if (err) {
-                res.status(500).send({message: "customer insert failed"})
-            }
-            else {
-                res.send(rows)
-            }
-        })
+                (err, rows) => {
+                    if (err) {
+                        res.status(500).send({message: "customer insert failed"})
+                    }
+                    else {
+                        res.send(rows)
+                    }
+                })
+        }
+    })
 })
 // Display all customers
 app.get('/api/customer', (req,res) => {
@@ -407,14 +427,24 @@ app.put('/api/customer/modify', (req,res) => {
 // AUTHOR statements
 // Create an author
 app.post('/api/author', (req, res) => {
-    pool.query(`INSERT INTO ${author} 
-(f_name, l_name, origin, author_born, author_died) 
-VALUES (${req.body.f_name}, ${req.body.l_name}, ${req.body.origin}, ${req.body.author_born}, ${req.body.author_died}`, (err, rows) => {
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.id} AND password = ${req.body.password}`, (err, user) => {
         if (err) {
-            res.status(500).send({message: "author insert failed"})
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
         }
         else {
-            res.send(rows)
+            pool.query(`INSERT INTO ${author} 
+(f_name, l_name, origin, author_born, author_died) 
+VALUES (${req.body.f_name}, ${req.body.l_name}, ${req.body.origin}, ${req.body.author_born}, ${req.body.author_died}`, (err, rows) => {
+                if (err) {
+                    res.status(500).send({message: "author insert failed"})
+                }
+                else {
+                    res.send(rows)
+                }
+            })
         }
     })
 })
@@ -431,14 +461,24 @@ app.get('/api/author', (req,res) => {
 // NARRATOR statements
 // Create a narrator
 app.post('/api/narrator', (req, res) => {
-    pool.query(`INSERT INTO ${narrator} 
-(f_name, l_name, origin, narrator_born, narrator_died) 
-VALUES (${req.body.f_name}, ${req.body.l_name}, ${req.body.origin}, ${req.body.narrator_born}, ${req.body.narrator_died}`, (err, rows) => {
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.id} AND password = ${req.body.password}`, (err, user) => {
         if (err) {
-            res.status(500).send({message: "narrator insert failed"})
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
         }
         else {
-            res.send(rows)
+            pool.query(`INSERT INTO ${narrator} 
+(f_name, l_name, origin, narrator_born, narrator_died) 
+VALUES (${req.body.f_name}, ${req.body.l_name}, ${req.body.origin}, ${req.body.narrator_born}, ${req.body.narrator_died}`, (err, rows) => {
+                if (err) {
+                    res.status(500).send({message: "narrator insert failed"})
+                }
+                else {
+                    res.send(rows)
+                }
+            })
         }
     })
 })
@@ -460,14 +500,24 @@ app.get('/api/narrator', (req,res) => {
 // PUBLISHER statements
 // Create a publisher
 app.post('/api/publisher', (req, res) => {
-    pool.query(`INSERT INTO ${publisher} 
-(publisher_name, headquarters) 
-VALUES (${req.body.publisher_name}, ${req.body.headquarters}`, (err, rows) => {
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.id} AND password = ${req.body.password}`, (err, user) => {
         if (err) {
-            res.status(500).send({message: "publisher insert failed"})
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
         }
         else {
-            res.send(rows)
+            pool.query(`INSERT INTO ${publisher} 
+(publisher_name, headquarters) 
+VALUES (${req.body.publisher_name}, ${req.body.headquarters}`, (err, rows) => {
+                if (err) {
+                    res.status(500).send({message: "publisher insert failed"})
+                }
+                else {
+                    res.send(rows)
+                }
+            })
         }
     })
 })
@@ -486,14 +536,24 @@ app.get('/api/publisher', (req,res) => {
 // Create a series
 // TODO what is series_number? maybe not a necessary attribute?
 app.post('/api/series', (req, res) => {
-    pool.query(`INSERT INTO ${series} 
-(series_name, total_series, series_number) 
-VALUES (${req.body.series_name}, ${req.body.total_series}, ${req.body.series_number}`, (err, rows) => {
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.id} AND password = ${req.body.password}`, (err, user) => {
         if (err) {
-            res.status(500).send({message: "series insert failed"})
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
         }
         else {
-            res.send(rows)
+            pool.query(`INSERT INTO ${series} 
+(series_name, total_series, series_number) 
+VALUES (${req.body.series_name}, ${req.body.total_series}, ${req.body.series_number}`, (err, rows) => {
+                if (err) {
+                    res.status(500).send({message: "series insert failed"})
+                }
+                else {
+                    res.send(rows)
+                }
+            })
         }
     })
 })
@@ -511,14 +571,24 @@ app.get('/api/series', (req,res) => {
 // LOCATION statements
 // Create a location
 app.post('/api/location', (req, res) => {
-    pool.query(`INSERT INTO ${location} 
-(location_name, address, phone_no) 
-VALUES (${req.body.location_name}, ${req.body.address}, ${req.body.phone_no}`, (err, rows) => {
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.id} AND password = ${req.body.password}`, (err, user) => {
         if (err) {
-            res.status(500).send({message: "location insert failed"})
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
         }
         else {
-            res.send(rows)
+            pool.query(`INSERT INTO ${location} 
+(location_name, address, phone_no) 
+VALUES (${req.body.location_name}, ${req.body.address}, ${req.body.phone_no}`, (err, rows) => {
+                if (err) {
+                    res.status(500).send({message: "location insert failed"})
+                }
+                else {
+                    res.send(rows)
+                }
+            })
         }
     })
 })
