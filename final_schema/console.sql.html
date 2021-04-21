@@ -198,6 +198,30 @@ console.sql</font>
     <span class="s0">FOREIGN KEY </span><span class="s1">(publisher) </span><span class="s0">REFERENCES </span><span class="s1">publisher(id)</span><span class="s0">,</span>
     <span class="s0">FOREIGN KEY </span><span class="s1">(series) </span><span class="s0">REFERENCES </span><span class="s1">series(id)</span><span class="s0">,</span>
     <span class="s0">FOREIGN KEY </span><span class="s1">(location) </span><span class="s0">REFERENCES </span><span class="s1">location(id)</span>
-<span class="s1">)</span><span class="s0">;</span></pre>
+<span class="s1">)</span><span class="s0">;</span>
+<hr class="ls0"><span class="s0">CREATE TABLE </span><span class="s1">reminders (</span>
+    <span class="s1">custid </span><span class="s0">int,</span>
+    <span class="s1">message </span><span class="s0">varchar(256),</span>
+    <span class="s0">PRIMARY KEY </span><span class="s1">(custid)</span><span class="s0">,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(custid) </span><span class="s0">REFERENCES </span><span class="s1">customer(id)</span><span class="s0">,</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(custid) </span><span class="s0">REFERENCES </span><span class="s1">employee(id)</span><span class="s0">,</span>
+<span class="s1">)</span><span class="s0">;</span>
+
+<hr class="ls0"><span class="s0">CREATE TRIGGER </span><span class="s1">latefine_notification</span>
+    <span class="s1">AFTER UPDATE ON </span><span class="s0">latefine</span>
+    <span class="s1">FOR EACH ROW </span>
+    <span class="s0">INSERT INTO </span><span class="s1">reminders</span>
+    <span class="s0">SET </span><span class="s1">custid = </span><span class="s1">new.id </span>
+    <span class="s0">message =  </span><span class="s1">'There is a latefine charged on your account' </span>
+
+<hr class="ls0"><span class="s0">CREATE TRIGGER </span><span class="s1">new_employee_notification</span>
+    <span class="s1">AFTER INSERT ON </span><span class="s0">employee</span>
+    <span class="s1">FOR EACH ROW </span>
+    <span class="s0">INSERT INTO </span><span class="s1">reminders</span>
+    <span class="s0">SET </span><span class="s1">empid = </span><span class="s1">new.id </span>
+    <span class="s0">message =  </span><span class="s1">'There is a new employee added to the system' </span>
+
+
+</pre>
 </body>
 </html>

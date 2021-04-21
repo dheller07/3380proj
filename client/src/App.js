@@ -5,6 +5,7 @@ import Login from './Login';
 import Customer from "./Customer";
 import Employee1 from "./Employee1";
 import AddItems from "./AddItems";
+import DeleteItems from "./DeleteItems"
 
 function App() {
 
@@ -16,6 +17,8 @@ function App() {
       <Route exact path = "/Librarian" component ={Employee1}/>
       <Route exact path = "/Search" component = {Customer}/>
       <Route exact path = "/Add" component = {AddItems}/>
+      <Route exact path = "/Delete" component = {DeleteItems}/>
+
       </Switch>
       </div>
     </Router>
