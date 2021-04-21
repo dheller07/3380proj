@@ -20,6 +20,7 @@ import AudioBookService from './services/audiobook.service'
 import DvdService from './services/dvd.service'
 import MgzService from './services/magazine.service'
 import DeviceService from './services/device.service'
+import axios from 'axios'
 
 function Employee1 () {
 
@@ -268,15 +269,17 @@ function Employee1 () {
     const theAddCustomer = () => {
         if(showTheAdd === true) {
             var data = {
+                pwd: passwordAdd,
                 f_name: firstAdd,
                 l_name: lastAdd,
                 customer_role: roleAdd,
                 item_limit: 5,
-                acc_balance: 0,
-                fine_rate: .2
+                acct_balance: 0.00,
+                fine_rate: 0.30
             };
-            CustomerService.create(data)
+            axios.post("http://localhost:8000/api/customer", data)
                 .then(response => {
+                    console.log(response)
                 })
                 .catch(e => {
                     console.log(e)

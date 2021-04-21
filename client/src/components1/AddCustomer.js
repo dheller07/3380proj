@@ -14,7 +14,7 @@ const AddCustomer = ({onShowTheAdd, myPasswordAdd, myFirstAdd, myLastAdd, myRole
             <div className='form-control'>
                 <label>Add Password:</label>
                 <input
-                    type='name'
+                    type='password'
                     placeholder='enter new Password'
                     onChange = {myPasswordAdd}
                 />
@@ -22,7 +22,7 @@ const AddCustomer = ({onShowTheAdd, myPasswordAdd, myFirstAdd, myLastAdd, myRole
             <div className='form-control'>
                 <label>First Name: </label>
                 <input
-                    type='name'
+                    type='text'
                     placeholder='enter First Name'
                     onChange = {myFirstAdd}
                 />
@@ -30,7 +30,7 @@ const AddCustomer = ({onShowTheAdd, myPasswordAdd, myFirstAdd, myLastAdd, myRole
             <div className='form-control'>
                 <label>Last Name: </label>
                 <input
-                    type='name'
+                    type='text'
                     placeholder='enter Last Name'
                     onChange = {myLastAdd}
                 />
@@ -38,7 +38,7 @@ const AddCustomer = ({onShowTheAdd, myPasswordAdd, myFirstAdd, myLastAdd, myRole
             <div className='form-control'>
                 <label>Customer Role: </label>
                 <input
-                    type='name'
+                    type='text'
                     placeholder='enter Customer Role'
                     onChange = {myRoleAdd}
                 />
