@@ -611,18 +611,28 @@ app.get('/api/location', (req,res) => {
 // REQUEST ITEM statements
 // Create an item request
 app.post('/api/itemRequest', (req, res) => {
-    pool.query(`INSERT INTO ${itemRequest} 
-(req_number, item_id, req_date, requester_id) 
-VALUES (
-(SELECT id FROM item WHERE id = ${req.body.item_id}),
-${req.body.req_number}, ${req.body.req_date}, 
-(SELECT id FROM customer WHERE id = ${req.body.requester_id} ),
-)`, (err, rows) => {
+    pool.query(`SELECT 1 FROM ${customer} WHERE id = ${req.body.id} AND password = ${req.body.password}`, (err, user) => {
         if (err) {
-            res.status(500).send({message: "item request failed"})
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect customer id or password"})
         }
         else {
-            res.send(rows)
+            pool.query(`INSERT INTO ${itemRequest} 
+(req_number, item_id, requester_id) 
+VALUES (
+(SELECT id FROM item WHERE id = ${req.body.item_id}),
+${req.body.req_number}, 
+(SELECT id FROM customer WHERE id = ${req.body.requester_id} ),
+)`, (err, rows) => {
+                if (err) {
+                    res.status(500).send({message: "item request failed"})
+                }
+                else {
+                    res.send(rows)
+                }
+            })
         }
     })
 })
@@ -652,22 +662,27 @@ app.get('api/itemRequest/search', (req, res) => {
 // CHECKOUT statements
 // Create an item checkout
 app.post('/api/checkoutItem', (req, res) => {
-    pool.query(`INSERT INTO ${checkoutItem} 
-(id, item, checkout_date, due_date, return_date, returned, borrower_id, employee_id) 
-VALUES (
-(SELECT id FROM item WHERE id = ${req.body.item}),
-
-${req.body.id}, ${req.body.checkout_date}, ${req.body.due_date},
-${req.body.return_date},${req.body.returned}
-(SELECT id FROM customer WHERE id = ${req.body.borrower_id} ),
-(SELECT id FROM employee WHERE id = ${req.body.employee_id} ),
-
-)`, (err, rows) => {
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.id} AND password = ${req.body.password}`, (err, user) => {
         if (err) {
-            res.status(500).send({message: "item checkout failed"})
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
         }
         else {
-            res.send(rows)
+            pool.query(`INSERT INTO ${checkoutItem} 
+(item, checkout_date, due_date, return_date, returned, borrower_id, employee_id) 
+VALUES (${req.body.item_id},
+(SELECT id FROM customer WHERE id = ${req.body.borrower_id} ),
+(SELECT id FROM employee WHERE id = ${req.body.employee_id} ),
+)`, (err, rows) => {
+                if (err) {
+                    res.status(500).send({message: "item checkout failed"})
+                }
+                else {
+                    res.send(rows)
+                }
+            })
         }
     })
 })
@@ -682,18 +697,35 @@ app.get('/api/checkoutItem', (req,res) => {
         }
     })
 })
+
 // Display item checkouts for a certain user
 app.get('api/checkoutItem/search', (req, res) => {
-    pool.query(`SELECT ${checkoutItem}.id, ${checkoutItem}.item, 
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.id} AND password = ${req.body.password}`, (err, user) => {
+        if (err) {
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
+        }
+        else {
+            pool.query(`SELECT ${checkoutItem}.id, ${checkoutItem}.item, 
     ${checkoutItem}.checkout_date, ${checkoutItem}.due_date,
     ${checkoutItem}.returned, ${customer}.id, ${customer}.f_name,
     ${customer}.l_name, ${employee}.id,  ${employee}.f_name, ${employee}.l_name
-
-   
     FROM ${checkoutItem} 
     INNER JOIN ${customer} ON ${checkoutItem}.borrower_id = ${customer}.id
     INNER JOIN ${employee} ON ${checkoutItem}.employee_id = ${employee}.id
-    WHERE ((${checkoutItem}.id = ${req.body.id}) OR (${checkoutItem}.borrower_id = ${req.body.borrower_id}))AND ${itemRequest}.active = true`)
+    WHERE ((${checkoutItem}.id = ${req.body.id}) OR (${checkoutItem}.borrower_id = ${req.body.borrower_id}))AND ${itemRequest}.active = true`, (err, rows) => {
+                if (err) {
+                    res.status(500).send({message: "display item checkouts for a certain customer failed"})
+                }
+                else {
+                    res.send(rows)
+                }
+            })
+        }
+    })
+
 })
 
 
