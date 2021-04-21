@@ -49,12 +49,22 @@ app.listen(port, () => {
 // ITEM statements
 // Create an item
 app.post('/api/item', (req, res) => {
-    pool.query(`INSERT INTO ${item} (active) VALUE (true)`, (err, rows) => {
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.id} AND password = ${req.body.password}`, (err, user) => {
         if (err) {
-            res.status(500).send({message: "item insert failed"})
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
         }
         else {
-            res.send(rows)
+            pool.query(`INSERT INTO ${item} (active) VALUE (true)`, (err, rows) => {
+                if (err) {
+                    res.status(500).send({message: "item insert failed"})
+                }
+                else {
+                    res.send(rows)
+                }
+            })
         }
     })
 })
