@@ -8,13 +8,18 @@ import AddItems from "./AddItems";
 import DeleteItems from "./DeleteItems"
 
 function App() {
-
+    const axios = require('axios').create({
+        baseUrl: 'http://localhost:8000',
+        headers: {
+            "Content-type": "application/json"
+        }
+    });
   return (
     <Router>
       <div className="App"><h1>LIBRARY</h1>
       <Switch>
-      <Route exact path = "/" component = {Login }/>
-      <Route exact path = "/Librarian" component ={Employee1}/>
+      <Route exact path = "/" component = {Login}/>
+      <Route path = "/Librarian" component = {Employee1}/>
       <Route exact path = "/Search" component = {Customer}/>
       <Route exact path = "/Add" component = {AddItems}/>
       <Route exact path = "/Delete" component = {DeleteItems}/>

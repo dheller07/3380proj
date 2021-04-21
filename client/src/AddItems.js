@@ -19,7 +19,7 @@ import DeviceService from './services/device.service'
 
 
 
-function AddItems () {
+function AddItems (serverCommunication) {
 
  //BOOK PART -------------------------------------
     const [showSearchBook, setShowBook] = useState(true)
@@ -53,7 +53,7 @@ function AddItems () {
                 waitlist_capacity: 0,
                 location: 1
             };
-            BookService.create(data)
+            serverCommunication.post('/book',data)
                 .then(response => {
                     console.log(response);
                 })
