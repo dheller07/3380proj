@@ -24,6 +24,7 @@ const Mgz = ({onMgzResult, myTitleMgz, myIdMgz}) => {
                     onChange = {myIdMgz}
                 />
             </div>
+
     
             <button className='btn btn-block' onClick = { submitMgzSearch} > Search  </button>
         </form>

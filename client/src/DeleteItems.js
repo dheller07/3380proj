@@ -9,12 +9,18 @@ import AudioBook from './components3/AudioBook.js'
 import Dvd from './components3/Dvd.js'
 import Mgz from './components3/Mgz.js'
 import Device from './components3/Device.js'
+import Author from './components3/Author.js'
+import Narrator from './components3/Narrator.js'
+import Location from './components3/Location.js'
 
 import BookService from './services/book.service'
 import AudioBookService from './services/audiobook.service'
 import DvdService from './services/dvd.service'
 import MgzService from './services/magazine.service'
 import DeviceService from './services/device.service'
+import AuthorService from './services/author.service'
+import NarratorService from './services/narrators.service'
+import LocationService from './services/location.service'
 
 
 
@@ -144,6 +150,81 @@ function DeleteItems () {
         }
     }
 
+    //Author PART -----------------------------------
+    const [showSearchAuthor, setShowAuthor] = useState(false)
+
+    const[showAuthorResult, setShowAuthorResult] = useState(false)
+
+    const[IDAuthor, setIDAuthor] =useState('')
+
+
+
+    const theRemoveAuthor = () => {
+        if(showAuthorResult === true) {
+            AuthorService.delete(IDAuthor)
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(e => {
+                    console.log(e)
+                });
+            return (
+                <div> Removing Author: {IDAuthor} </div>
+            );
+        
+        }
+    }
+
+    //Narrator PART -----------------------------------
+    const [showSearchNarrator, setShowNarrator] = useState(false)
+
+    const[showNarratorResult, setShowNarratorResult] = useState(false)
+
+    const[IDNarrator, setIDNarrator] =useState('')
+
+
+
+    const theRemoveNarrator = () => {
+        if(showNarratorResult === true) {
+            NarratorService.delete(IDNarrator)
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(e => {
+                    console.log(e)
+                });
+            return (
+                <div> Removing Narrator: {IDNarrator} </div>
+            );
+        
+        }
+    }
+
+    //Location PART -----------------------------------
+    const [showSearchLocation, setShowLocation] = useState(false)
+
+    const[showLocationResult, setShowLocationResult] = useState(false)
+
+    const[IDLocation, setIDLocation] =useState('')
+
+
+
+    const theRemoveLocation = () => {
+        if(showLocationResult === true) {
+            LocationService.delete(IDLocation)
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(e => {
+                    console.log(e)
+                });
+            return (
+                <div> Removing Location: {IDLocation} </div>
+            );
+        
+        }
+    }
+
   //Change to Search Page---------
 
     return (
@@ -161,7 +242,13 @@ function DeleteItems () {
                 onMgz={() => setShowMgz(!showSearchMgz)}
                 showMgz={showSearchMgz}
                 onDevice={() => setShowDevice(!showSearchDevice)}
-                showDevice={showSearchDevice}                
+                    showDevice={showSearchDevice}
+                    onAuthor={() => setShowAuthor(!showSearchAuthor)}
+                    showAuthor={showSearchAuthor}
+                    onNarrator={() => setShowNarrator(!showSearchNarrator)}
+                    showNarrator={showSearchNarrator}
+                    onLocation={() => setShowLocation(!showSearchLocation)}
+                    showLocation={showSearchLocation}
             />
             
 
@@ -189,6 +276,21 @@ function DeleteItems () {
             onDeviceResult = {() => setShowDeviceResult(!showDeviceResult)}
             myIDDevice = {(e) => setIDDevice(e.target.value)}
             
+                />}
+                {showSearchAuthor && <Author 
+            onAuthorResult = {() => setShowAuthorResult(!showAuthorResult)}
+            myIDAuthor = {(e) => setIDAuthor(e.target.value)}
+            
+                />}
+                {showSearchNarrator && <Narrator
+            onNarratorResult = {() => setShowNarratorResult(!showNarratorResult)}
+            myIDNarrator = {(e) => setIDNarrator(e.target.value)}
+            
+                />}
+                {showSearchLocation && <Location
+            onLocationResult = {() => setShowLocationResult(!showLocationResult)}
+            myIDLocation = {(e) => setIDLocation(e.target.value)}
+            
         />}
 
         </div>
@@ -199,6 +301,10 @@ function DeleteItems () {
                 {theRemoveDvd()}
                 {theRemoveMgz()}
                 {theRemoveDevice()}
+                {theRemoveAuthor()}
+                {theRemoveNarrator()}
+                {theRemoveLocation()}
+
             </div>
 
         </div>

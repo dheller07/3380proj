@@ -86,7 +86,7 @@ const ChoiceBar = ({ showBook, onBook,
                     onClick={onRemoveLibrarian}
                 />
             </span>
-            <span>
+            {/* <span>
                 <Button
                     color={showAuthor ? 'red' : 'green'}
                     text={showAuthor ? 'Add Author' : 'Add Author'}
@@ -106,7 +106,7 @@ const ChoiceBar = ({ showBook, onBook,
                     text={showLocation ? 'Add Location' : 'Add Locations '}
                     onClick={onLocation}
                 />
-            </span>
+            </span> */}
         </h4>
     )
 }

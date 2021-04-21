@@ -1,10 +1,17 @@
+import BookSearch from "../searchResult/Books"
+
+import { BrowserRouter as Link, Route, Switch } from "react-router-dom"
+import Button from "./Button"
+
+<Route path="/BookSearch" component={BookSearch} />
 
 const Book = ({onBookResult, myTitleBook, myIsbnBook, myAuthorBook}) => {
     
-    const submitBookSearch = (event) => {
-        //window.location.href = "/Tasks";
-        onBookResult();
-        event.preventDefault();
+    const submitBookSearch = () => {
+
+        window.location.href = "/BookSearch";
+        // onBookResult();
+        // event.preventDefault();
     }
 
 
@@ -35,8 +42,15 @@ const Book = ({onBookResult, myTitleBook, myIsbnBook, myAuthorBook}) => {
                     onChange = {myAuthorBook}
                 />
             </div>
-    
-        <button className='btn btn-block' onClick = { submitBookSearch} > Search  </button>
+        
+            {/* <Button
+                // className='btn btn-block'
+                text={'Search'}
+                onClick={submitBookSearch}
+            /> */}
+        
+         {/* <button className='btn btn-block' onClick = { submitBookSearch} > Search  </button> */}
+        <Link to="/BookSearch"><button className='btn btn-block' > Search  </button></Link>
         </form>
     )
 
