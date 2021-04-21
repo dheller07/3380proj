@@ -750,5 +750,32 @@ app.put('/api/checkoutItem/modify', (req,res) => {
 
 // LATE FINE statements
 // Display active lateFines
-
+app.get('/api/lateFine', (req,res) => {
+    pool.query(`SELECT * FROM ${lateFine}`, (err, rows) => {
+        if (err) {
+            res.status(500).send({message: "could not retrieve late fines"});
+        } else {
+            res.send(rows);
+        }
+    })
+})
 // Update a lateFine when paid
+app.put('/api/lateFine/modify', (req,res) => {
+    pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.body.id} AND password = ${req.body.password}`, (err, user) => {
+        if (err) {
+            res.status(500).send({ message: "user authentication query failed"})
+        }
+        else if (user.length < 1) {
+            res.status(500).send({ message: "incorrect employee id or password"})
+        }
+        else {
+            pool.query(`UPDATE ${lateFine} SET (paid = true AND paid_date = NOW()) WHERE borrower = ${req.body.bowrrower_id} AND checkout_item = ${req.body.item_id}`, (err, row) => {
+                if (err) {
+                    res.status(500).send({message: "Late fine payment failed"});
+                } else {
+                    res.send(row);
+                }
+            })
+        }
+    })
+})
