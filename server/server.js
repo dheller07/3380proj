@@ -373,25 +373,23 @@ app.put('/api/employee/modify', (req, res) => {
 // CUSTOMER statements
 // Create a customer
 app.post('/api/customer', (req, res) => {
+    /*
     pool.query(`SELECT 1 FROM ${employee} WHERE id = ${req.employee_id} AND password = ${req.pwd}`, (err, user) => {
         if (err) {
             res.status(500).send({message: "user authentication query failed"})
         } else if (user.length < 1) {
             res.status(500).send({message: "incorrect employee id or password"})
-        } else {
+        } else {*/
             const new_customer = {
-                pwd: String(req.pwd),
-                f_name: String(req.f_name),
-                l_name: String(req.l_name),
-                customer_role: String(req.customer_role),
-                item_limit: parseInt(req.item_limit),
-                acct_balance: parseFloat(req.acct_balance),
-                fine_rate: parseFloat(req.fine_rate)
+                pwd: req.pwd,
+                f_name: req.f_name,
+                l_name: req.l_name,
+                customer_role: req.customer_role,
+                item_limit: req.item_limit,
+                acct_balance: req.acct_balance,
+                fine_rate: req.fine_rate
             }
-            pool.connect(function (err) {
-                if (err) throw err;
-                console.log("connected!")
-                pool.query('INSERT INTO customer (password, f_name, l_name, customer_role, item_limit, acct_balance, fine_rate) VALUES ($1, $2, $3, $4, $5, $6, $7);',
+            pool.query('INSERT INTO customer (password, f_name, l_name, customer_role, item_limit, acct_balance, fine_rate) VALUES ($1, $2, $3, $4, $5, $6, $7);',
                     [new_customer.pwd, new_customer.f_name, new_customer.l_name, new_customer.customer_role, new_customer.item_limit, new_customer.acct_balance, new_customer.fine_rate],
                     (err, rows) => {
                         if (err) {
@@ -400,10 +398,9 @@ app.post('/api/customer', (req, res) => {
                             res.send(rows)
                         }
                     })
-            })
 
-        }
-    })
+    /*    }
+    })*/
 })
 // Display all customers
 app.get('/api/customer', (req, res) => {
