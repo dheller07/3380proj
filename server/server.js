@@ -697,15 +697,17 @@ app.get('/api/narrator', (req, res) => {
 // PUBLISHER statements
 // Create a publisher
 app.post('/api/publisher', (req, res) => {
-    pool.query(`SELECT 1 FROM employee WHERE id = ${req.body.employee_id} AND password = ${req.body.pwd}`, (err, user) => {
-        if (err) {
-            res.status(500).send({message: "user authentication query failed"})
-        } else if (user.length < 1) {
-            res.status(500).send({message: "incorrect employee id or password"})
-        } else {
-            pool.query(`INSERT INTO publisher 
+    const emp = {id: req.body.employee_id, pwd: req.body.employee_pwd}
+    employeeAuth(emp);
+    if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
+    else {
+        let publisher = {
+            publisher_name: req.body.publisher_name,
+            headquarters: req.body.headquarters
+        }
+        pool.query(`INSERT INTO publisher 
 (publisher_name, headquarters) 
-VALUES (${req.body.publisher_name}, ${req.body.headquarters}`, (err, rows) => {
+VALUES (?, ?`, [publisher.publisher_name, publisher.headquarters], (err, rows) => {
                 if (err) {
                     res.status(500).send({message: "publisher insert failed"})
                 } else {
@@ -713,7 +715,6 @@ VALUES (${req.body.publisher_name}, ${req.body.headquarters}`, (err, rows) => {
                 }
             })
         }
-    })
 })
 // Display all publishers
 app.get('/api/publisher', (req, res) => {
@@ -730,15 +731,18 @@ app.get('/api/publisher', (req, res) => {
 // Create a series
 // TODO what is series_number? maybe not a necessary attribute?
 app.post('/api/series', (req, res) => {
-    pool.query(`SELECT 1 FROM employee WHERE id = ${req.body.employee_id} AND password = ${req.body.pwd}`, (err, user) => {
-        if (err) {
-            res.status(500).send({message: "user authentication query failed"})
-        } else if (user.length < 1) {
-            res.status(500).send({message: "incorrect employee id or password"})
-        } else {
-            pool.query(`INSERT INTO series 
+    const emp = {id: req.body.employee_id, pwd: req.body.employee_pwd}
+    employeeAuth(emp);
+    if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
+    else {
+        let series = {
+            series_name: req.body.series_name,
+            total_series: req.body.total_series,
+            series_number: req.body.series_number
+        }
+        pool.query(`INSERT INTO series 
 (series_name, total_series, series_number) 
-VALUES (${req.body.series_name}, ${req.body.total_series}, ${req.body.series_number}`, (err, rows) => {
+VALUES (?, ?, ?`, [series.series_name, series.total_series, series.series_number], (err, rows) => {
                 if (err) {
                     res.status(500).send({message: "series insert failed"})
                 } else {
@@ -746,7 +750,6 @@ VALUES (${req.body.series_name}, ${req.body.total_series}, ${req.body.series_num
                 }
             })
         }
-    })
 })
 // Display all series
 app.get('/api/series', (req, res) => {
@@ -762,15 +765,18 @@ app.get('/api/series', (req, res) => {
 // LOCATION statements
 // Create a location
 app.post('/api/location', (req, res) => {
-    pool.query(`SELECT 1 FROM employee WHERE id = ${req.body.employee_id} AND password = ${req.body.pwd}`, (err, user) => {
-        if (err) {
-            res.status(500).send({message: "user authentication query failed"})
-        } else if (user.length < 1) {
-            res.status(500).send({message: "incorrect employee id or password"})
-        } else {
-            pool.query(`INSERT INTO location 
+    const emp = {id: req.body.employee_id, pwd: req.body.employee_pwd}
+    employeeAuth(emp);
+    if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
+    else {
+        let location = {
+            location_name: req.body.location_name,
+            address: req.body.address,
+            phone_no: req.body.phone_no
+        }
+        pool.query(`INSERT INTO location 
 (location_name, address, phone_no) 
-VALUES (${req.body.location_name}, ${req.body.address}, ${req.body.phone_no}`, (err, rows) => {
+VALUES (?, ?, ?`, [location.location_name, location.address, location.phone_no], (err, rows) => {
                 if (err) {
                     res.status(500).send({message: "location insert failed"})
                 } else {
@@ -778,7 +784,6 @@ VALUES (${req.body.location_name}, ${req.body.address}, ${req.body.phone_no}`, (
                 }
             })
         }
-    })
 })
 // Display all locations
 app.get('/api/location', (req, res) => {
