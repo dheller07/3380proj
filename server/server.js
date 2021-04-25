@@ -540,38 +540,33 @@ app.put('/api/employee/modify', (req, res) => {
 // CUSTOMER statements
 // Create a customer
 app.post('/api/customer', (req, res) => {
-    /*
-    pool.query(`SELECT 1 FROM employee WHERE id = ${req.body.employee_id} AND password = ${req.body.pwd}`, (err, user) => {
-        if (err) {
-            res.status(500).send({message: "user authentication query failed"})
-        } else if (user.length < 1) {
-            res.status(500).send({message: "incorrect employee id or password"})
-        } else {*/
-            const new_customer = {
-                pwd: req.body.pwd,
-                f_name: req.body.f_name,
-                l_name: req.body.l_name,
-                customer_role: req.body.customer_role,
-                item_limit: req.body.item_limit,
-                acct_balance: req.body.acct_balance,
-                fine_rate: req.body.fine_rate
-            }
-            pool.query('INSERT INTO customer (password, f_name, l_name, customer_role, item_limit, acct_balance, fine_rate) VALUES (?, ?, ?, ?, ?, ?, ?)',
-                    [new_customer.pwd, new_customer.f_name, new_customer.l_name, new_customer.customer_role, new_customer.item_limit, new_customer.acct_balance, new_customer.fine_rate],
-                    (err, rows) => {
-                        if (err) {
-                            res.status(500).send(err.message);
-                        } else {
-                            res.send(rows)
-                        }
-                    })
-
-    /*    }
-    })*/
+    const emp = {id: req.body.employee_id, pwd: req.body.employee_pwd}
+    employeeAuth(emp);
+    if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
+    else {
+        const new_customer = {
+            pwd: req.body.pwd,
+            f_name: req.body.f_name,
+            l_name: req.body.l_name,
+            customer_role: req.body.customer_role,
+            item_limit: req.body.item_limit,
+            acct_balance: req.body.acct_balance,
+            fine_rate: req.body.fine_rate
+        }
+        pool.query('INSERT INTO customer (password, f_name, l_name, customer_role, item_limit, acct_balance, fine_rate) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [new_customer.pwd, new_customer.f_name, new_customer.l_name, new_customer.customer_role, new_customer.item_limit, new_customer.acct_balance, new_customer.fine_rate],
+            (err, rows) => {
+                if (err) {
+                    res.status(500).send(err.message);
+                } else {
+                    res.send(rows)
+                }
+            })
+    }
 })
 // Display all customers
 app.get('/api/customer', (req, res) => {
-    pool.query(`(SELECT * FROM customer)`, (err, rows) => {
+    pool.query(`SELECT * FROM customer`, (err, rows) => {
         if (err) {
             res.status(500).send({message: "could not retrieve customer"});
         } else {
@@ -581,30 +576,41 @@ app.get('/api/customer', (req, res) => {
 })
 // Display one customer filtered by query
 app.get('api/customer/search', (req, res) => {
-    pool.query(`(SELECT customer.f_name, customer.l_name, 
+    const emp = {id: req.body.employee_id, pwd: req.body.employee_pwd}
+    employeeAuth(emp);
+    if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
+    else {
+        let customer_search = {
+            id: req.body.id,
+            f_name: req.body.f_name,
+            l_name: req.body.l_name
+        }
+        pool.query(`SELECT customer.f_name, customer.l_name, 
     customer.customer_role, customer.item_limit,
     customer.acct_balance, customer.fine_rate, 
     customer.id)
     FROM customer 
-    WHERE (customer.id = ${req.body.id}) or (customer.f_name = ${req.body.f_name}ANDcustomer.l_name = ${req.body.l_name}) AND customer.active = true`)
+    WHERE (customer.id = ? OR (customer.f_name = ? AND customer.l_name = ?)) AND customer.active = true`,
+            [customer_search.id, customer_search.f_name, customer_search.l_name])
+    }
 })
 // Change customer's active status
 app.put('/api/customer/modify', (req, res) => {
-    pool.query(`SELECT 1 FROM employee WHERE id = ${req.body.employee_id} AND password = ${req.body.pwd}`, (err, user) => {
-        if (err) {
-            res.status(500).send({message: "user authentication query failed"})
-        } else if (user.length < 1) {
-            res.status(500).send({message: "incorrect employee id or password"})
-        } else {
-            pool.query(`UPDATE customer SET active = NOT active WHERE id = ${req.body.id}`, (err, row) => {
-                if (err) {
-                    res.status(500).send({message: "Could not make item inactive"});
-                } else {
-                    res.send(row);
-                }
-            })
+    const emp = {id: req.body.employee_id, pwd: req.body.employee_pwd}
+    employeeAuth(emp);
+    if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
+    else {
+        let customer_change = {
+            id: req.body.id
         }
-    })
+        pool.query(`UPDATE customer SET active = NOT active WHERE id = ?`, [customer_change.id], (err, row) => {
+                    if (err) {
+                        res.status(500).send({message: "Could not make item inactive"});
+                    } else {
+                        res.send(row);
+                    }
+                })
+    }
 })
 
 
