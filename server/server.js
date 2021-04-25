@@ -54,8 +54,7 @@ let customerAuth = (customer) => {
 */
 let getNewItemId = (id) => {
     pool.query(`INSERT INTO item (active) VALUE (true)`, (err, row) => {
-        if (err) throw err
-        else id = row.id
+        if (err) throw err.message
     })
 }
 let modifyItemStatus = (id) => {
@@ -125,27 +124,26 @@ app.post('/api/audiobook', (req, res) => {
     else {
         let id = 0;
         getNewItemId(id)
-        let new_audiobook = {
-            id: id,
-            title: req.body.title,
-            isbn: req.body.isbn,
-            f_name_auth: req.body.f_name_auth,
-            l_name_auth: req.body.l_name_auth,
-            f_name_narr: req.body.f_name_narr,
-            l_name_narr: req.body.l_name_narr,
-            publisher_name: req.body.publisher_name,
-            publication_year: req.body.publication_year,
-            edition: req.body.edition,
-            series_name: req.body.series_name,
-            series_position: req.body.series_position,
-            genre: req.body.genre,
-            waitlist_capacity: req.body.waitlist_capacity,
-            location_name: req.body.location_name
-        }
-        pool.query('SELECT COUNT(*) FROM item', (err, tot) => {
+        pool.query('SELECT COUNT(*) AS total FROM item', (err, rows) => {
             if (err) res.send(err.message)
             else {
-                new_audiobook.id = tot + 1;
+                let new_audiobook = {
+                    id: rows[0].total + 1,
+                    title: req.body.title,
+                    isbn: req.body.isbn,
+                    f_name_auth: req.body.f_name_auth,
+                    l_name_auth: req.body.l_name_auth,
+                    f_name_narr: req.body.f_name_narr,
+                    l_name_narr: req.body.l_name_narr,
+                    publisher_name: req.body.publisher_name,
+                    publication_year: req.body.publication_year,
+                    edition: req.body.edition,
+                    series_name: req.body.series_name,
+                    series_position: req.body.series_position,
+                    genre: req.body.genre,
+                    waitlist_capacity: req.body.waitlist_capacity,
+                    location_name: req.body.location_name
+                }
                 pool.query(`INSERT INTO audiobook
 (id, title, isbn, author_id, narrator_id, publisher, publication_year, edition, series, series_position, genre, waitlist_capacity, location) 
 VALUES (
@@ -211,23 +209,26 @@ app.post('/api/book', (req, res) => {
     else {
         let id = 0;
         getNewItemId(id);
-        let book = {
-            id: id,
-            title: req.body.title,
-            isbn: req.body.isbn,
-            f_name_auth: req.body.f_name_auth,
-            l_name_auth: req.body.l_name_auth,
-            publisher_name: req.body.publisher_name,
-            publication_year: req.body.publication_year,
-            edition: req.body.edition,
-            series_name: req.body.series_name,
-            series_position: req.body.series_position,
-            genre: req.body.genre,
-            ebook: req.body.ebook,
-            waitlist_capacity: req.body.waitlist_capacity,
-            location_name: req.body.location_name
-        }
-        pool.query(`INSERT INTO book 
+        pool.query('SELECT COUNT(*) AS total FROM item', (err, rows) => {
+            if (err) res.send(err.message)
+            else {
+                let book = {
+                    id: rows[0].total + 1,
+                    title: req.body.title,
+                    isbn: req.body.isbn,
+                    f_name_auth: req.body.f_name_auth,
+                    l_name_auth: req.body.l_name_auth,
+                    publisher_name: req.body.publisher_name,
+                    publication_year: req.body.publication_year,
+                    edition: req.body.edition,
+                    series_name: req.body.series_name,
+                    series_position: req.body.series_position,
+                    genre: req.body.genre,
+                    ebook: req.body.ebook,
+                    waitlist_capacity: req.body.waitlist_capacity,
+                    location_name: req.body.location_name
+                }
+                pool.query(`INSERT INTO book 
 (id, title, isbn, author_id, publisher, publication_year, edition, series, series_position, genre, ebook, waitlist_capacity, location) 
 VALUES (
 (SELECT id FROM item WHERE id = ?),
@@ -239,16 +240,17 @@ VALUES (
 ?, ?, ?, ?,
 (SELECT id FROM location WHERE location_name = ?)
 )`, [book.id, book.title, book.isbn, book.f_name_auth, book.l_name_auth,
-            book.publisher_name, book.publication_year, book.edition,
-            book.series_name, book.series_position, book.genre, book.ebook,
-            book.waitlist_capacity, book.location_name], (err, rows) => {
-            if (err) {
-                res.status(500).send({message: "Book insert failed"})
-            } else {
-                res.send(rows)
+                    book.publisher_name, book.publication_year, book.edition,
+                    book.series_name, book.series_position, book.genre, book.ebook,
+                    book.waitlist_capacity, book.location_name], (err, rows) => {
+                    if (err) {
+                        res.status(500).send({message: "Book insert failed"})
+                    } else {
+                        res.send(rows)
+                    }
+                })
             }
-        })
-    }
+        })}
 })
 
 // Display all books
@@ -288,30 +290,36 @@ app.post('/api/device', (req, res) => {
     employeeAuth(emp);
     if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
     else {
-        let id = 0;
-        getNewItemId(id);
-        let device = {
-            id: id,
-            device_type: req.body.device_type,
-            model: req.body.model,
-            waitlist_capacity: req.body.waitlist_capacity,
-            location_name: req.body.location_name
-        }
-        pool.query(`INSERT INTO device 
+        let item_id = 0;
+        getNewItemId(item_id);
+        pool.query('SELECT COUNT(*) AS total FROM item', (err, rows) => {
+            if (err) res.send(err.message)
+            else {
+                console.log(rows[0].total)
+                let device = {
+                    id: rows[0].total + 1,
+                    device_type: req.body.device_type,
+                    model: req.body.model,
+                    waitlist_capacity: req.body.waitlist_capacity,
+                    location_name: req.body.location_name
+                }
+                pool.query(`INSERT INTO device 
 (id, device_type, model, waitlist_capacity, location) 
 VALUES (
 (SELECT id FROM item WHERE id = ?),
-?, ?,?,
+?, ?, ?,
 (SELECT id FROM location WHERE location_name = ?)
 )`, [device.id, device.device_type, device.model, device.waitlist_capacity, device.location_name], (err, rows) => {
-            if (err) {
-                res.status(500).send({message: "device insert failed"})
-            } else {
-                res.send(rows)
+                    if (err) {
+                        res.send(err.message)
+                        //res.status(500).send({message: "device insert failed"})
+                    } else {
+                        res.send(rows)
+                    }
+                })
             }
         })
-    }
-})
+}})
 // Display all devices
 app.get('/api/device', (req, res) => {
     pool.query(`SELECT * FROM device`, (err, rows) => {
@@ -345,29 +353,33 @@ app.post('/api/dvd', (req, res) => {
     else {
         let id = 0
         getNewItemId(id)
-        let dvd = {
-            id: id,
-            title: req.body.title,
-            release_date: req.body.release_date,
-            director: req.body.director,
-            studio: req.body.studio,
-            waitlist_capacity: req.body.waitlist_capacity,
-            location_name: req.body.location_name
-        }
-        pool.query(`INSERT INTO dvd 
+        pool.query('SELECT COUNT(*) AS total FROM item', (err, rows) => {
+            if (err) res.send(err.message)
+            else {
+                let dvd = {
+                    id: rows[0].total + 1,
+                    title: req.body.title,
+                    release_date: req.body.release_date,
+                    director: req.body.director,
+                    studio: req.body.studio,
+                    waitlist_capacity: req.body.waitlist_capacity,
+                    location_name: req.body.location_name
+                }
+                pool.query(`INSERT INTO dvd 
 (id, title, release_date, director, studio, waitlist_capacity, location) 
 VALUES (
 (SELECT id FROM item WHERE id = ?),
 ?, ?, ?, ?,
 (SELECT id FROM location WHERE location_name = ?)
 )`, [dvd.id, dvd.title, dvd.release_date, dvd.director, dvd.studio, dvd.waitlist_capacity, dvd.location_name], (err, rows) => {
-            if (err) {
-                res.status(500).send({message: "dvd insert failed"})
-            } else {
-                res.send(rows)
+                    if (err) {
+                        res.status(500).send({message: "dvd insert failed"})
+                    } else {
+                        res.send(rows)
+                    }
+                })
             }
-        })
-    }
+    })}
 })
 // Display all dvds
 app.get('/api/dvd', (req, res) => {
@@ -400,15 +412,18 @@ app.post('/api/magazine', (req, res) => {
     else {
         let id = 0
         getNewItemId(id)
-        let magazine = {
-            id: id,
-            title: req.body.title,
-            issue: req.body.issue,
-            issue_date: req.body.issue_date,
-            topic: req.body.topic,
-            waitlist_capacity: req.body.waitlist_capacity,
-            location_name: req.body.location_name
-        }
+        pool.query('SELECT COUNT(*) AS total FROM item', (err, rows) => {
+            if (err) res.send(err.message)
+            else {
+                let magazine = {
+                    id: rows[0].total + 1,
+                    title: req.body.title,
+                    issue: req.body.issue,
+                    issue_date: req.body.issue_date,
+                    topic: req.body.topic,
+                    waitlist_capacity: req.body.waitlist_capacity,
+                    location_name: req.body.location_name
+                }
         pool.query(`INSERT INTO magazine 
 (id, title, issue, issue_date, topic, waitlist_capacity, location) 
 VALUES (
@@ -423,7 +438,7 @@ VALUES (
                 res.send(rows)
             }
         })
-    }
+    }})}
 })
 // Display all magazines
 app.get('/api/magazine', (req, res) => {
@@ -450,7 +465,7 @@ app.get('api/magazine/search', (req, res) => {
                         ========================================
                                     USER QUERIES
                         ========================================
- */
+*/
 // EMPLOYEE statements
 // Create an employee
 app.post('/api/employee', (req, res) => {
