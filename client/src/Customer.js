@@ -11,7 +11,7 @@ import Mgz from './components/Mgz.js'
 import Device from './components/Device.js'
 import ChoiceBar from './components/ChoiceBar.js'
 import Message from './components/Message.js'
-import BookService from './services/book.service.js'
+import axios from "axios";
 
 
 function Customer() {
@@ -27,12 +27,12 @@ function Customer() {
 
   const theSearchBook = () => {
     if(showBookResult === true) {
-      var data = {
+      let data = {
         title: titleBook,
         isbn: isbnBook,
         author_id: authorBook
     };
-    BookService.getSearchResults(data)
+      axios.get("http://localhost:8000/api/book/search", data)
       .then(response => {
         return (
           <table>
