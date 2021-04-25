@@ -2,26 +2,14 @@ import http from "../http-common";
 
 class MgzService {
     getAll() {
-        return http.get("/magazines")
+        return http.get("/magazine")
     }
 
-    get(id) {
-        return http.get(`/magazines/${id}`)
+    get(data) {
+        return http.get(`/magazine/search`, data)
     }
     create(data) {
-        return http.post("/magazines", data);
-    }
-
-    update(id, data) {
-        return http.put(`/magazines/${id}`, data);
-    }
-
-    delete(id) {
-        return http.delete(`/magazines/${id}`);
-    }
-
-    deleteAll() {
-        return http.delete(`/magazines`);
+        return http.post("/magazine", data);
     }
 }
 

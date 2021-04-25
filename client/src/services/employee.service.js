@@ -3,26 +3,18 @@ import http from "../http-common";
 
  class EmployeeService {
      getAll() {
-         return http.get("/employees")
+         return http.get("/employee")
      }
 
-     get(id) {
-         return http.get(`/employees/${id}`)
+     get(data) {
+         return http.get(`/employee/search`, data)
      }
      create(data) {
-         return http.post("/employees", data);
+         return http.post("/employee", data);
      }
 
-     update(id, data) {
-         return http.put(`/employees/${id}`, data);
-     }
-
-     delete(id) {
-         return http.delete(`/employees/${id}`);
-     }
-
-     deleteAll() {
-         return http.delete(`/employees`);
+     update(data) {
+         return http.put(`/employees/modify`, data);
      }
  }
 

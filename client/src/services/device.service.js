@@ -2,26 +2,14 @@ import http from "../http-common";
 
 class DeviceService {
     getAll() {
-        return http.get("/devices")
+        return http.get("/device")
     }
 
-    get(id) {
-        return http.get(`/devices/${id}`)
+    getSearchResults(data) {
+        return http.get(`/device/search`, data)
     }
     create(data) {
-        return http.post("/devices", data);
-    }
-
-    update(id, data) {
-        return http.put(`/devices/${id}`, data);
-    }
-
-    delete(id) {
-        return http.delete(`/devices/${id}`);
-    }
-
-    deleteAll() {
-        return http.delete(`/devices`);
+        return http.post("/device", data);
     }
 }
 

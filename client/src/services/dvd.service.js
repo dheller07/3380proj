@@ -2,26 +2,14 @@ import http from "../http-common";
 
 class DvdService {
     getAll() {
-        return http.get("/dvds")
+        return http.get("/dvd")
     }
 
-    get(id) {
-        return http.get(`/dvds/${id}`)
+    getSearchResults(data) {
+        return http.get(`/dvd/search`, data)
     }
     create(data) {
         return http.post("/dvds", data);
-    }
-
-    update(id, data) {
-        return http.put(`/dvds/${id}`, data);
-    }
-
-    delete(id) {
-        return http.delete(`/dvds/${id}`);
-    }
-
-    deleteAll() {
-        return http.delete(`/dvds`);
     }
 }
 

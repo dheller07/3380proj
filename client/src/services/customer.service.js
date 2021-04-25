@@ -2,26 +2,18 @@ import http from "../http-common";
 
 class CustomerService {
     getAll() {
-        return http.get("/customers")
+        return http.get("/customer")
     }
 
-    get(id) {
-        return http.get(`/customers/${id}`)
+    getSearchResults(data) {
+        return http.get(`/customer/search`, data)
     }
     create(data) {
-        return http.post("/customers", data);
+        return http.post("/customer", data);
     }
 
-    update(id, data) {
-        return http.put(`/customers/${id}`, data);
-    }
-
-    delete(id) {
-        return http.delete(`/customers/${id}`);
-    }
-
-    deleteAll() {
-        return http.delete(`/customers`);
+    update(data) {
+        return http.put(`/customers/modify`, data);
     }
 }
 

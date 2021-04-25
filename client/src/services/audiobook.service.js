@@ -2,26 +2,14 @@ import http from "../http-common";
 
 class AudioBookService {
     getAll() {
-        return http.get("/audiobooks")
+        return http.get("/audiobook")
     }
 
-    get(id) {
-        return http.get(`/audiobooks/${id}`)
+    get(data) {
+        return http.get(`/audiobooks/search`, data)
     }
     create(data) {
-        return http.post("/audiobooks", data);
-    }
-
-    update(id, data) {
-        return http.put(`/audiobooks/${id}`, data);
-    }
-
-    delete(id) {
-        return http.delete(`/audiobooks/${id}`);
-    }
-
-    deleteAll() {
-        return http.delete(`/audiobooks`);
+        return http.post("/audiobook", data);
     }
 }
 
