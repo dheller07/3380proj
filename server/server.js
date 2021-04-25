@@ -16,7 +16,7 @@ const pool = mysql.createConnection({
     database: dbConfig.DB,
 });
 
-pool.connect(function(err) {
+pool.connect(function (err) {
     if (err) return console.log("error connecting to db :(")
     else return console.log("db connection working")
 })
@@ -35,15 +35,17 @@ app.listen(port, () => {
                         ========================================
 */
 let employeeAuth = (employee) => {
-    pool.query(`SELECT 1 FROM employee WHERE id = ? AND password = ?`,[employee.id, employee.pwd], (err, user) => {
+    pool.query(`SELECT 1 FROM employee WHERE id = ? AND password = ?`, [employee.id, employee.pwd], (err, user) => {
         if (err || user.length < 1) throw err
         else if (user.length < 1) employee.id = null
-})}
+    })
+}
 let customerAuth = (customer) => {
-    pool.query(`SELECT 1 FROM customer WHERE id = ? AND password = ?`,[customer.id, customer.pwd], (err, user) => {
+    pool.query(`SELECT 1 FROM customer WHERE id = ? AND password = ?`, [customer.id, customer.pwd], (err, user) => {
         if (err || user.length < 1) throw err
         else if (user.length < 1) customer.id = null
-    })}
+    })
+}
 
 /*
                         ========================================
@@ -57,7 +59,7 @@ let getNewItemId = (id) => {
     })
 }
 let modifyItemStatus = (id) => {
-    pool.query(`UPDATE item SET active = NOT active WHERE id = ?`,[id], (err, row) => {
+    pool.query(`UPDATE item SET active = NOT active WHERE id = ?`, [id], (err, row) => {
         if (err) throw err
     })
 }
@@ -163,7 +165,7 @@ VALUES (
 (SELECT id FROM series WHERE series_name = ?), 
 ?, ?, ?, ?,
 (SELECT id FROM location WHERE location_name = ?)
-)`,[new_audiobook.id, new_audiobook.title, new_audiobook.isbn, new_audiobook.f_name_auth, new_audiobook.l_name_auth,
+)`, [new_audiobook.id, new_audiobook.title, new_audiobook.isbn, new_audiobook.f_name_auth, new_audiobook.l_name_auth,
                     new_audiobook.f_name_narr, new_audiobook.l_name_narr, new_audiobook.publisher_name, new_audiobook.publication_year,
                     new_audiobook.edition, new_audiobook.series_name, new_audiobook.series_position, new_audiobook.genre, new_audiobook.waitlist_capacity,
                     new_audiobook.location_name], (err, rows) => {
@@ -477,15 +479,15 @@ app.post('/api/employee', (req, res) => {
 (password, f_name, l_name, ssn, birthdate, salary, job_title, phone_no) 
 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
             [employee.pwd, employee.f_name, employee.l_name, employee.ssn, employee.birthdate, employee.salary, employee.job_title, employee.phone_no],
-                    (err, rows) => {
-                        if (err) {
-                            res.status(500).send({message: "employee insert failed"})
-                        } else {
-                            res.send(rows)
-                        }
-                    })
-            }
-        })
+            (err, rows) => {
+                if (err) {
+                    res.status(500).send({message: "employee insert failed"})
+                } else {
+                    res.send(rows)
+                }
+            })
+    }
+})
 // Display all employees
 app.get('/api/employee', (req, res) => {
     pool.query(`SELECT * FROM employee`, (err, rows) => {
@@ -528,13 +530,13 @@ app.put('/api/employee/modify', (req, res) => {
             id: req.body.id,
         }
         pool.query(`UPDATE employee SET active = NOT active WHERE id = ?` [employee_change.id], (err, row) => {
-                    if (err) {
-                        res.status(500).send({message: "Could not make employee inactive"});
-                    } else {
-                        res.send(row);
-                    }
-                })
+            if (err) {
+                res.status(500).send({message: "Could not make employee inactive"});
+            } else {
+                res.send(row);
             }
+        })
+    }
 })
 
 // CUSTOMER statements
@@ -604,12 +606,12 @@ app.put('/api/customer/modify', (req, res) => {
             id: req.body.id
         }
         pool.query(`UPDATE customer SET active = NOT active WHERE id = ?`, [customer_change.id], (err, row) => {
-                    if (err) {
-                        res.status(500).send({message: "Could not make item inactive"});
-                    } else {
-                        res.send(row);
-                    }
-                })
+            if (err) {
+                res.status(500).send({message: "Could not make item inactive"});
+            } else {
+                res.send(row);
+            }
+        })
     }
 })
 
@@ -636,13 +638,13 @@ app.post('/api/author', (req, res) => {
         pool.query(`INSERT INTO author 
 (f_name, l_name, origin, author_born, author_died) 
 VALUES (?, ?, ?, ?, ?`, [author.f_name, author.l_name, author.origin, author.author_born, author.author_died], (err, rows) => {
-                if (err) {
-                    res.status(500).send({message: "author insert failed"})
-                } else {
-                    res.send(rows)
-                }
-            })
-        }
+            if (err) {
+                res.status(500).send({message: "author insert failed"})
+            } else {
+                res.send(rows)
+            }
+        })
+    }
 })
 // Display all authors
 app.get('/api/author', (req, res) => {
@@ -671,13 +673,13 @@ app.post('/api/narrator', (req, res) => {
         pool.query(`INSERT INTO narrator 
 (f_name, l_name, origin, narrator_born, narrator_died) 
 VALUES (?, ?, ?, ?, ?`, [narrator.f_name, narrator.l_name, narrator.origin, narrator.narrator_born, narrator.narrator_died], (err, rows) => {
-                if (err) {
-                    res.status(500).send({message: "narrator insert failed"})
-                } else {
-                    res.send(rows)
-                }
-            })
-        }
+            if (err) {
+                res.status(500).send({message: "narrator insert failed"})
+            } else {
+                res.send(rows)
+            }
+        })
+    }
 })
 // Display all narrators
 app.get('/api/narrator', (req, res) => {
@@ -708,13 +710,13 @@ app.post('/api/publisher', (req, res) => {
         pool.query(`INSERT INTO publisher 
 (publisher_name, headquarters) 
 VALUES (?, ?`, [publisher.publisher_name, publisher.headquarters], (err, rows) => {
-                if (err) {
-                    res.status(500).send({message: "publisher insert failed"})
-                } else {
-                    res.send(rows)
-                }
-            })
-        }
+            if (err) {
+                res.status(500).send({message: "publisher insert failed"})
+            } else {
+                res.send(rows)
+            }
+        })
+    }
 })
 // Display all publishers
 app.get('/api/publisher', (req, res) => {
@@ -743,13 +745,13 @@ app.post('/api/series', (req, res) => {
         pool.query(`INSERT INTO series 
 (series_name, total_series, series_number) 
 VALUES (?, ?, ?`, [series.series_name, series.total_series, series.series_number], (err, rows) => {
-                if (err) {
-                    res.status(500).send({message: "series insert failed"})
-                } else {
-                    res.send(rows)
-                }
-            })
-        }
+            if (err) {
+                res.status(500).send({message: "series insert failed"})
+            } else {
+                res.send(rows)
+            }
+        })
+    }
 })
 // Display all series
 app.get('/api/series', (req, res) => {
@@ -777,13 +779,13 @@ app.post('/api/location', (req, res) => {
         pool.query(`INSERT INTO location 
 (location_name, address, phone_no) 
 VALUES (?, ?, ?`, [location.location_name, location.address, location.phone_no], (err, rows) => {
-                if (err) {
-                    res.status(500).send({message: "location insert failed"})
-                } else {
-                    res.send(rows)
-                }
-            })
-        }
+            if (err) {
+                res.status(500).send({message: "location insert failed"})
+            } else {
+                res.send(rows)
+            }
+        })
+    }
 })
 // Display all locations
 app.get('/api/location', (req, res) => {
@@ -817,13 +819,13 @@ app.post('/api/itemRequest', (req, res) => {
 (req_number, item_id, requester_id) 
 VALUES (
 (SELECT id FROM item WHERE id = ?), ?, (SELECT id FROM customer WHERE id = ?))`, [item_request.id, item_request.req_number, item_request.requester_id], (err, rows) => {
-                if (err) {
-                    res.status(500).send({message: "item request failed"})
-                } else {
-                    res.send(rows)
-                }
-            })
-        }
+            if (err) {
+                res.status(500).send({message: "item request failed"})
+            } else {
+                res.send(rows)
+            }
+        })
+    }
 })
 // Display all item requests
 app.get('/api/itemRequest', (req, res) => {
@@ -874,13 +876,13 @@ VALUES (?,
 (SELECT id FROM customer WHERE id = ?),
 (SELECT id FROM employee WHERE id = ?),
 )`, [item_checkout.item, item_checkout.borrower, item_checkout.employee], (err, rows) => {
-                if (err) {
-                    res.status(500).send({message: "item checkout failed"})
-                } else {
-                    res.send(rows)
-                }
-            })
-        }
+            if (err) {
+                res.status(500).send({message: "item checkout failed"})
+            } else {
+                res.send(rows)
+            }
+        })
+    }
 })
 
 // Display all item checkouts
@@ -912,13 +914,13 @@ app.get('api/checkoutItem/search', (req, res) => {
     INNER JOIN customer ON checkoutItem.borrower_id = customer.id
     INNER JOIN employee ON checkoutItem.employee_id = employee.id
     WHERE (checkoutItem.id = ? OR checkoutItem.borrower_id = ?) AND itemRequest.active = true`, [checkout_search.id, checkout_search.borrower], (err, rows) => {
-                if (err) {
-                    res.status(500).send({message: "display item checkouts for a certain customer failed"})
-                } else {
-                    res.send(rows)
-                }
-            })
-        }
+            if (err) {
+                res.status(500).send({message: "display item checkouts for a certain customer failed"})
+            } else {
+                res.send(rows)
+            }
+        })
+    }
 })
 
 // Update checkoutItem when an item is returned
@@ -932,13 +934,13 @@ app.put('/api/checkoutItem/modify', (req, res) => {
             item: req.body.item_id
         }
         pool.query(`UPDATE checkoutItem SET (returned = true AND return_date = NOW()) WHERE borrower_id = ? AND item = ?`, [checkout_update.borrower, checkout_update.item], (err, row) => {
-                if (err) {
-                    res.status(500).send({message: "Item return failed"});
-                } else {
-                    res.send(row);
-                }
-            })
-        }
+            if (err) {
+                res.status(500).send({message: "Item return failed"});
+            } else {
+                res.send(row);
+            }
+        })
+    }
 })
 
 // LATE FINE statements
@@ -954,19 +956,20 @@ app.get('/api/lateFine', (req, res) => {
 })
 // Update a lateFine when paid
 app.put('/api/lateFine/modify', (req, res) => {
-    pool.query(`SELECT 1 FROM employee WHERE id = ${req.body.id} AND password = ${req.body.pwd}`, (err, user) => {
-        if (err) {
-            res.status(500).send({message: "user authentication query failed"})
-        } else if (user.length < 1) {
-            res.status(500).send({message: "incorrect employee id or password"})
-        } else {
-            pool.query(`UPDATE lateFine SET (paid = true AND paid_date = NOW()) WHERE borrower = ${req.body.bowrrower_id} AND checkout_item = ${req.body.item_id}`, (err, row) => {
-                if (err) {
-                    res.status(500).send({message: "Late fine payment failed"});
-                } else {
-                    res.send(row);
-                }
-            })
+    const emp = {id: req.body.employee_id, pwd: req.body.employee_pwd}
+    employeeAuth(emp);
+    if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
+    else {
+        let latefine_update = {
+            borrower: req.body.borrower_id,
+            item: req.body.item_id
         }
-    })
+        pool.query(`UPDATE lateFine SET (paid = true AND paid_date = NOW()) WHERE borrower = ? AND checkout_item = ?`, [latefine_update.borrower, latefine_update.item], (err, row) => {
+            if (err) {
+                res.status(500).send({message: "Late fine payment failed"});
+            } else {
+                res.send(row);
+            }
+        })
+    }
 })
