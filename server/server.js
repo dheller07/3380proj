@@ -124,7 +124,7 @@ app.put('/api/item/modify', (req, res) => {
 // AUDIOBOOK statements
 // Create an audiobook
 app.post('/api/audiobook', (req, res) => {
-    const emp = {id: req.body.employee_id, pwd: req.body.pwd}
+    const emp = {id: req.body.employee_id, pwd: req.body.employee_pwd}
     employeeAuth(emp);
     if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
     else {
@@ -210,7 +210,7 @@ app.get('api/audiobook/search', (req, res) => {
 // BOOK statements
 // Create a book
 app.post('/api/book', (req, res) => {
-    const emp = {id: req.body.employee_id, pwd: req.body.pwd}
+    const emp = {id: req.body.employee_id, pwd: req.body.employee_pwd}
     employeeAuth(emp);
     if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
     else {
@@ -289,7 +289,7 @@ app.get('api/book/search', (req, res) => {
 // DEVICE statements
 // Create a device
 app.post('/api/device', (req, res) => {
-    const emp = {id: req.body.employee_id, pwd: req.body.pwd}
+    const emp = {id: req.body.employee_id, pwd: req.body.employee_pwd}
     employeeAuth(emp);
     if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
     else {
@@ -344,7 +344,7 @@ app.get('api/device/search', (req, res) => {
 // DVD statements
 // Create a dvd
 app.post('/api/dvd', (req, res) => {
-    const emp = {id: req.body.employee_id, pwd: req.body.pwd}
+    const emp = {id: req.body.employee_id, pwd: req.body.employee_pwd}
     employeeAuth(emp);
     if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
     else {
@@ -399,7 +399,7 @@ app.get('api/dvd/search', (req, res) => {
 // MAGAZINE statements
 // Create a magazine
 app.post('/api/magazine', (req, res) => {
-    const emp = {id: req.body.employee_id, pwd: req.body.pwd}
+    const emp = {id: req.body.employee_id, pwd: req.body.employee_pwd}
     employeeAuth(emp);
     if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
     else {
@@ -459,26 +459,33 @@ app.get('api/magazine/search', (req, res) => {
 // EMPLOYEE statements
 // Create an employee
 app.post('/api/employee', (req, res) => {
-    pool.query(`SELECT 1 FROM employee WHERE id = ${req.body.employee_id} AND password = ${req.body.pwd}`, (err, user) => {
-        if (err) {
-            res.status(500).send({message: "user authentication query failed"})
-        } else if (user.length < 1) {
-            res.status(500).send({message: "incorrect employee id or password"})
-        } else {
-            pool.query(`(INSERT INTO employee 
-(password, f_name, l_name, ssn, birthdate, salary, job_title, phone_no) 
-VALUES (${req.body.pwd}, ${req.body.f_name}, ${req.body.l_name}, ${req.body.ssn}, 
-${req.body.birthdate}, ${req.body.salary}, ${req.body.job_title}, ${req.body.phone_no}))`,
-                (err, rows) => {
-                    if (err) {
-                        res.status(500).send({message: "employee insert failed"})
-                    } else {
-                        res.send(rows)
-                    }
-                })
+    const emp = {id: req.body.employee_id, pwd: req.body.employee_pwd}
+    employeeAuth(emp);
+    if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
+    else {
+        let employee = {
+            pwd: req.body.pwd,
+            f_name: req.body.f_name,
+            l_name: req.body.l_name,
+            ssn: req.body.ssn,
+            birthdate: req.body.birthdate,
+            salary: req.body.salary,
+            job_title: req.body.job_title,
+            phone_no: req.body.phone_no
         }
-    })
-})
+        pool.query(`INSERT INTO employee 
+(password, f_name, l_name, ssn, birthdate, salary, job_title, phone_no) 
+VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            [employee.pwd, employee.f_name, employee.l_name, employee.ssn, employee.birthdate, employee.salary, employee.job_title, employee.phone_no],
+                    (err, rows) => {
+                        if (err) {
+                            res.status(500).send({message: "employee insert failed"})
+                        } else {
+                            res.send(rows)
+                        }
+                    })
+            }
+        })
 // Display all employees
 app.get('/api/employee', (req, res) => {
     pool.query(`(SELECT * FROM employee)`, (err, rows) => {
@@ -491,7 +498,11 @@ app.get('/api/employee', (req, res) => {
 })
 // Display one employee filtered by query
 app.get('api/employee/search', (req, res) => {
-    pool.query(`(SELECT employee.f_name, employee.l_name, 
+    const emp = {id: req.body.employee_id, pwd: req.body.pwd}
+    employeeAuth(emp);
+    if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
+    else {
+        pool.query(`(SELECT employee.f_name, employee.l_name, 
     employee.ssn, employee.birthdate,
     employee.salary, employee.job_title, 
     employee.phone_no, employee.id
@@ -499,25 +510,30 @@ app.get('api/employee/search', (req, res) => {
     WHERE (employee.ssn = ${req.body.ssn}) OR (employee.id = ${req.body.id} ) or 
     ( {employee}.f_name = ${req.body.f_name} AND {employee}.l_name = ${req.body.l_name} ) 
     AND employee.active = true)`)
+    }
 })
 // Change employee's active status
 app.put('/api/employee/modify', (req, res) => {
-    pool.query(`SELECT 1 FROM employee WHERE id = ${req.body.employee_id} AND password = ${req.body.pwd}`, (err, user) => {
-        if (err) {
-            res.status(500).send({message: "user authentication query failed"})
-        } else if (user.length < 1) {
-            res.status(500).send({message: "incorrect employee id or password"})
-        } else {
-            pool.query(`UPDATE employee SET active = NOT active WHERE id = ${req.body.id}`, (err, row) => {
-                if (err) {
-                    res.status(500).send({message: "Could not make employee inactive"});
-                } else {
-                    res.send(row);
-                }
-            })
-        }
-    })
-
+    const emp = {id: req.body.employee_id, pwd: req.body.pwd}
+    employeeAuth(emp);
+    if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
+    else {
+        pool.query(`SELECT 1 FROM employee WHERE id = ${req.body.employee_id} AND password = ${req.body.pwd}`, (err, user) => {
+            if (err) {
+                res.status(500).send({message: "user authentication query failed"})
+            } else if (user.length < 1) {
+                res.status(500).send({message: "incorrect employee id or password"})
+            } else {
+                pool.query(`UPDATE employee SET active = NOT active WHERE id = ${req.body.id}`, (err, row) => {
+                    if (err) {
+                        res.status(500).send({message: "Could not make employee inactive"});
+                    } else {
+                        res.send(row);
+                    }
+                })
+            }
+        })
+    }
 })
 
 // CUSTOMER statements
