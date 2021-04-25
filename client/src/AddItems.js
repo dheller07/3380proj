@@ -1,5 +1,6 @@
 import { useState} from 'react'
 import './index.css'
+import axios from 'axios'
 
 import Header from './components/Header.js'
 import ChoiceBar from './components2/ChoiceBar.js'
@@ -10,16 +11,8 @@ import Dvd from './components2/Dvd.js'
 import Mgz from './components2/Mgz.js'
 import Device from './components2/Device.js'
 
-import BookService from './services/book.service'
-import AudioBookService from './services/audiobook.service'
-import DvdService from './services/dvd.service'
-import MgzService from './services/magazine.service'
-import DeviceService from './services/device.service'
 
-
-
-
-function AddItems (serverCommunication) {
+function AddItems () {
 
  //BOOK PART -------------------------------------
     const [showSearchBook, setShowBook] = useState(true)
@@ -40,7 +33,7 @@ function AddItems (serverCommunication) {
 
     const theAddBook = () => {
         if(showBookResult === true) {
-            var data = {
+            let data = {
                 title: titleBook,
                 isbn: isbnBook,
                 author_id: authorBook,
@@ -57,7 +50,7 @@ function AddItems (serverCommunication) {
                 employee_id: usernameBook,
                 employee_pwd: passwordBook
             };
-            BookService.create(data)
+            axios.post("http://localhost:8000/api/book", data)
                 .then(response => {
                     console.log(response);
                 })
@@ -90,7 +83,7 @@ function AddItems (serverCommunication) {
 
     const theAddAudioBook = () => {
         if(showAudioBookResult === true) {
-            var data = {
+            let data = {
                 title: titleAudioBook,
                 isbn: isbnAudioBook,
                 author_id: authorAudioBook,
@@ -107,7 +100,7 @@ function AddItems (serverCommunication) {
                 employee_id: usernameAudioBook,
                 employee_pwd: passwordAudioBook
             };
-            AudioBookService.create(data)
+            axios.post("http://localhost:8000/api/audiobook", data)
                 .then(response => {
                     console.log(response);
                 })
@@ -135,7 +128,7 @@ function AddItems (serverCommunication) {
 
     const theAddDvd = () => {
         if(showDvdResult === true) {
-            var data = {
+            let data = {
                 title: titleDvd,
                 release_date: dateDvd,
                 director: directorDvd,
@@ -145,7 +138,7 @@ function AddItems (serverCommunication) {
                 employee_id: usernameDvd,
                 employee_pwd: passwordDvd
             };
-            DvdService.create(data)
+            axios.post("http://localhost:8000/api/dvd", data)
                 .then(response => {
                     console.log(response);
                 })
@@ -172,7 +165,7 @@ function AddItems (serverCommunication) {
 
     const theAddMgz = () => {
         if(showMgzResult === true) {
-            var data = {
+            let data = {
                 title: titleMgz,
                 issue: issueMgz,
                 issue_date: dateMgz,
@@ -182,7 +175,7 @@ function AddItems (serverCommunication) {
                 employee_id: usernameMgz,
                 employee_pwd: passwordMgz
             };
-            MgzService.create(data)
+            axios.post("http://localhost:8000/api/magazine", data)
                 .then(response => {
                     console.log(response);
                 })
@@ -209,7 +202,7 @@ function AddItems (serverCommunication) {
 
     const theAddDevice = () => {
         if(showDeviceResult === true) {
-            var data = {
+            let data = {
                 device_type: typeDevice,
                 model: modelDevice,
                 checked_out: 0,
@@ -218,7 +211,7 @@ function AddItems (serverCommunication) {
                 employee_id: usernameDevice,
                 employee_pwd: passwordDevice
             };
-            DeviceService.create(data)
+            axios.post("http://localhost:8000/api/device", data)
                 .then(response => {
                     console.log(response);
                 })
@@ -228,7 +221,6 @@ function AddItems (serverCommunication) {
             return (
                 <div> Adding Device: {typeDevice} {modelDevice} </div>
             );
-        
         }
     }
 

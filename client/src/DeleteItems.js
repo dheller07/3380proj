@@ -9,14 +9,7 @@ import AudioBook from './components3/AudioBook.js'
 import Dvd from './components3/Dvd.js'
 import Mgz from './components3/Mgz.js'
 import Device from './components3/Device.js'
-
-import BookService from './services/book.service'
-import AudioBookService from './services/audiobook.service'
-import DvdService from './services/dvd.service'
-import MgzService from './services/magazine.service'
-import DeviceService from './services/device.service'
-
-
+import axios from "axios";
 
 
 function DeleteItems () {
@@ -31,8 +24,8 @@ function DeleteItems () {
 
     const theRemoveBook = () => {
         if(showBookResult === true) {
-            
-            BookService.delete(IDBook)
+
+            axios.put("http://localhost:8000/api/book", IDBook)
                 .then(response => {
                     console.log(response);
                 })
@@ -55,8 +48,8 @@ function DeleteItems () {
 
     const theRemoveAudioBook = () => {
         if(showAudioBookResult === true) {
-            
-            AudioBookService.delete(IDAudioBook)
+
+            axios.put("http://localhost:8000/api/audiobook", IDAudioBook)
                 .then(response => {
                     console.log(response);
                 })
@@ -81,7 +74,7 @@ function DeleteItems () {
     const theRemoveDvd = () => {
         if(showDvdResult === true) {
 
-            DvdService.delete(IDDvd)
+            axios.put("http://localhost:8000/api/dvd", IDDvd)
                 .then(response => {
                     console.log(response);
                 })
@@ -104,7 +97,7 @@ function DeleteItems () {
 
     const theRemoveMgz = () => {
         if(showMgzResult === true) {
-            MgzService.delete(IDMgz)
+            axios.put("http://localhost:8000/api/magazine", IDMgz)
                 .then(response => {
                     console.log(response);
                 })
@@ -130,7 +123,7 @@ function DeleteItems () {
 
     const theRemoveDevice = () => {
         if(showDeviceResult === true) {
-            DeviceService.delete(IDDevice)
+            axios.put("http://localhost:8000/api/device", IDDevice)
                 .then(response => {
                     console.log(response);
                 })
