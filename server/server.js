@@ -859,18 +859,21 @@ app.get('api/itemRequest/search', (req, res) => {
 // CHECKOUT statements
 // Create an item checkout
 app.post('/api/checkoutItem', (req, res) => {
-    pool.query(`SELECT 1 FROM employee WHERE id = ${req.body.employee_id} AND password = ${req.body.pwd}`, (err, user) => {
-        if (err) {
-            res.status(500).send({message: "user authentication query failed"})
-        } else if (user.length < 1) {
-            res.status(500).send({message: "incorrect employee id or password"})
-        } else {
-            pool.query(`INSERT INTO checkoutItem 
-(item, checkout_date, due_date, return_date, returned, borrower_id, employee_id) 
-VALUES (${req.body.item_id},
-(SELECT id FROM customer WHERE id = ${req.body.borrower_id} ),
-(SELECT id FROM employee WHERE id = ${req.body.employee_id} ),
-)`, (err, rows) => {
+    const emp = {id: req.body.employee_id, pwd: req.body.employee_pwd}
+    employeeAuth(emp);
+    if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
+    else {
+        let item_checkout = {
+            item: req.body.item_id,
+            borrower: req.body.borrower_id,
+            employee: emp.id
+        }
+        pool.query(`INSERT INTO checkoutItem 
+(item, borrower_id, employee_id) 
+VALUES (?,
+(SELECT id FROM customer WHERE id = ?),
+(SELECT id FROM employee WHERE id = ?),
+)`, [item_checkout.item, item_checkout.borrower, item_checkout.employee], (err, rows) => {
                 if (err) {
                     res.status(500).send({message: "item checkout failed"})
                 } else {
@@ -878,7 +881,6 @@ VALUES (${req.body.item_id},
                 }
             })
         }
-    })
 })
 
 // Display all item checkouts
@@ -894,20 +896,22 @@ app.get('/api/checkoutItem', (req, res) => {
 
 // Display item checkouts for a certain user
 app.get('api/checkoutItem/search', (req, res) => {
-    pool.query(`SELECT 1 FROM employee WHERE id = ${req.body.employee_id} AND password = ${req.body.pwd}`, (err, user) => {
-        if (err) {
-            res.status(500).send({message: "user authentication query failed"})
-        } else if (user.length < 1) {
-            res.status(500).send({message: "incorrect employee id or password"})
-        } else {
-            pool.query(`SELECT checkoutItem.id, checkoutItem.item, 
+    const emp = {id: req.body.employee_id, pwd: req.body.employee_pwd}
+    employeeAuth(emp);
+    if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
+    else {
+        let checkout_search = {
+            id: req.body.id,
+            borrower: req.body.borrower_id
+        }
+        pool.query(`SELECT checkoutItem.id, checkoutItem.item, 
     checkoutItem.checkout_date, checkoutItem.due_date,
     checkoutItem.returned, customer.id, customer.f_name,
     customer.l_name, employee.id,  employee.f_name, employee.l_name
     FROM checkoutItem 
     INNER JOIN customer ON checkoutItem.borrower_id = customer.id
     INNER JOIN employee ON checkoutItem.employee_id = employee.id
-    WHERE ((checkoutItem.id = ${req.body.id}) OR (checkoutItem.borrower_id = ${req.body.borrower_id}))AND itemRequest.active = true`, (err, rows) => {
+    WHERE (checkoutItem.id = ? OR checkoutItem.borrower_id = ?) AND itemRequest.active = true`, [checkout_search.id, checkout_search.borrower], (err, rows) => {
                 if (err) {
                     res.status(500).send({message: "display item checkouts for a certain customer failed"})
                 } else {
@@ -915,18 +919,19 @@ app.get('api/checkoutItem/search', (req, res) => {
                 }
             })
         }
-    })
 })
 
 // Update checkoutItem when an item is returned
 app.put('/api/checkoutItem/modify', (req, res) => {
-    pool.query(`SELECT 1 FROM employee WHERE id = ${req.body.id} AND password = ${req.body.pwd}`, (err, user) => {
-        if (err) {
-            res.status(500).send({message: "user authentication query failed"})
-        } else if (user.length < 1) {
-            res.status(500).send({message: "incorrect employee id or password"})
-        } else {
-            pool.query(`UPDATE checkoutItem SET (returned = true AND return_date = NOW()) WHERE borrower_id = ${req.body.bowrrower_id} AND item = ${req.body.item_id}`, (err, row) => {
+    const emp = {id: req.body.employee_id, pwd: req.body.employee_pwd}
+    employeeAuth(emp);
+    if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
+    else {
+        let checkout_update = {
+            borrower: req.body.borrower_id,
+            item: req.body.item_id
+        }
+        pool.query(`UPDATE checkoutItem SET (returned = true AND return_date = NOW()) WHERE borrower_id = ? AND item = ?`, [checkout_update.borrower, checkout_update.item], (err, row) => {
                 if (err) {
                     res.status(500).send({message: "Item return failed"});
                 } else {
@@ -934,7 +939,6 @@ app.put('/api/checkoutItem/modify', (req, res) => {
                 }
             })
         }
-    })
 })
 
 // LATE FINE statements
