@@ -622,15 +622,20 @@ app.put('/api/customer/modify', (req, res) => {
 // AUTHOR statements
 // Create an author
 app.post('/api/author', (req, res) => {
-    pool.query(`SELECT 1 FROM employee WHERE id = ${req.body.employee_id} AND password = ${req.body.pwd}`, (err, user) => {
-        if (err) {
-            res.status(500).send({message: "user authentication query failed"})
-        } else if (user.length < 1) {
-            res.status(500).send({message: "incorrect employee id or password"})
-        } else {
-            pool.query(`INSERT INTO author 
+    const emp = {id: req.body.employee_id, pwd: req.body.employee_pwd}
+    employeeAuth(emp);
+    if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
+    else {
+        let author = {
+            f_name: req.body.f_name,
+            l_name: req.body.l_name,
+            origin: req.body.origin,
+            author_born: req.body.author_born,
+            author_died: req.body.author_died
+        }
+        pool.query(`INSERT INTO author 
 (f_name, l_name, origin, author_born, author_died) 
-VALUES (${req.body.f_name}, ${req.body.l_name}, ${req.body.origin}, ${req.body.author_born}, ${req.body.author_died}`, (err, rows) => {
+VALUES (?, ?, ?, ?, ?`, [author.f_name, author.l_name, author.origin, author.author_born, author.author_died], (err, rows) => {
                 if (err) {
                     res.status(500).send({message: "author insert failed"})
                 } else {
@@ -638,7 +643,6 @@ VALUES (${req.body.f_name}, ${req.body.l_name}, ${req.body.origin}, ${req.body.a
                 }
             })
         }
-    })
 })
 // Display all authors
 app.get('/api/author', (req, res) => {
@@ -653,15 +657,20 @@ app.get('/api/author', (req, res) => {
 // NARRATOR statements
 // Create a narrator
 app.post('/api/narrator', (req, res) => {
-    pool.query(`SELECT 1 FROM employee WHERE id = ${req.body.employee_id} AND password = ${req.body.pwd}`, (err, user) => {
-        if (err) {
-            res.status(500).send({message: "user authentication query failed"})
-        } else if (user.length < 1) {
-            res.status(500).send({message: "incorrect employee id or password"})
-        } else {
-            pool.query(`INSERT INTO narrator 
+    const emp = {id: req.body.employee_id, pwd: req.body.employee_pwd}
+    employeeAuth(emp);
+    if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
+    else {
+        let narrator = {
+            f_name: req.body.f_name,
+            l_name: req.body.l_name,
+            origin: req.body.origin,
+            narrator_born: req.body.narrator_born,
+            narrator_died: req.body.narrator_died
+        }
+        pool.query(`INSERT INTO narrator 
 (f_name, l_name, origin, narrator_born, narrator_died) 
-VALUES (${req.body.f_name}, ${req.body.l_name}, ${req.body.origin}, ${req.body.narrator_born}, ${req.body.narrator_died}`, (err, rows) => {
+VALUES (?, ?, ?, ?, ?`, [narrator.f_name, narrator.l_name, narrator.origin, narrator.narrator_born, narrator.narrator_died], (err, rows) => {
                 if (err) {
                     res.status(500).send({message: "narrator insert failed"})
                 } else {
@@ -669,7 +678,6 @@ VALUES (${req.body.f_name}, ${req.body.l_name}, ${req.body.origin}, ${req.body.n
                 }
             })
         }
-    })
 })
 // Display all narrators
 app.get('/api/narrator', (req, res) => {
