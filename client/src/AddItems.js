@@ -51,7 +51,9 @@ function AddItems (serverCommunication) {
                 checked_out: 0,
                 ebook: 0,
                 waitlist_capacity: 0,
-                location: 1
+                location: 1,
+                username: setUsernameAudioBook,
+                password: setPasswordAudioBook
             };
             serverCommunication.post('/book',data)
                 .then(response => {
@@ -81,6 +83,8 @@ function AddItems (serverCommunication) {
     const[seriesAudioBook, setSeriesAudioBook] = useState('')
     const[seriesPositionAudioBook, setSeriesPositionAudioBook] = useState('')
     const[genreAudioBook, setGenreAudioBook] = useState('')
+    const[usernameAudioBook, setUsernameAudioBook] = useState('')
+    const[passwordAudioBook, setPasswordAudioBook] = useState('')
 
     const theAddAudioBook = () => {
         if(showAudioBookResult === true) {
@@ -97,7 +101,9 @@ function AddItems (serverCommunication) {
                 genre: genreAudioBook,
                 checked_out: 0,
                 waitlist_capacity: 0,
-                location: 2
+                location: 2,
+                username: usernameAudioBook,
+                password: passwordAudioBook
             };
             AudioBookService.create(data)
                 .then(response => {
@@ -260,6 +266,8 @@ function AddItems (serverCommunication) {
             mySeriesAudioBook = {(e) => setSeriesAudioBook(e.target.value)}
             mySeriesPositionAudioBook = {(e) => setSeriesPositionAudioBook(e.target.value)}
             myGenreAudioBook = {(e) => setGenreAudioBook(e.target.value)}
+            myUsernameAudioBook = {(e) => setUsernameAudioBook(e.target.value)}
+            myPasswordAudioBook = {(e) => setPasswordAudioBook(e.target.value)}
         />}
         {showSearchDvd && <Dvd  
             onDvdResult = {() => setShowDvdResult(!showDvdResult)}

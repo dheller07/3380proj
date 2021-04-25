@@ -1,5 +1,5 @@
 
-const AudioBook = ({onAudioBookResult, myTitleAudioBook, myIsbnAudioBook, myAuthorAudioBook, myNarratorAudioBook, myPublisherAudioBook, myYearAudioBook, myEditionAudioBook, mySeriesAudioBook, mySeriesPositionAudioBook, myGenreAudioBook}) => {
+const AudioBook = ({onAudioBookResult, myTitleAudioBook, myIsbnAudioBook, myAuthorAudioBook, myNarratorAudioBook, myPublisherAudioBook, myYearAudioBook, myEditionAudioBook, mySeriesAudioBook, mySeriesPositionAudioBook, myGenreAudioBook}, myUsernameAudioBook, myPasswordAudioBook) => {
 
     const submitBookAdd = (event) => {
         onAudioBookResult();
@@ -68,6 +68,18 @@ const AudioBook = ({onAudioBookResult, myTitleAudioBook, myIsbnAudioBook, myAuth
                     type='text'
                     placeholder='enter the Genre'
                     onChange = {myGenreAudioBook}
+                />
+                <label>Username</label>
+                <input
+                    type='text'
+                    placeholder='enter username'
+                    onChange = {myUsernameAudioBook}
+                />
+                <label>Password</label>
+                <input
+                    type='text'
+                    placeholder='enter password'
+                    onChange = {myPasswordAudioBook}
                 />
             </div>
             
