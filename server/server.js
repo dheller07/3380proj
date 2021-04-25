@@ -143,7 +143,8 @@ app.post('/api/audiobook', (req, res) => {
             edition: req.body.edition,
             series_name: req.body.series_name,
             series_position: req.body.series_position,
-            waitlist_capacity: req.body.waitlist_capacity(),
+            genre: req.body.genre,
+            waitlist_capacity: req.body.waitlist_capacity,
             location_name: req.body.location_name
         }
         pool.query('SELECT COUNT(*) FROM item', (err, tot) => {
@@ -160,11 +161,11 @@ VALUES (
 (SELECT id FROM publisher WHERE publisher_name = ?),
 ?, ?,
 (SELECT id FROM series WHERE series_name = ?), 
-?, ?, ?,
+?, ?, ?, ?,
 (SELECT id FROM location WHERE location_name = ?)
 )`,[new_audiobook.id, new_audiobook.title, new_audiobook.isbn, new_audiobook.f_name_auth, new_audiobook.l_name_auth,
                     new_audiobook.f_name_narr, new_audiobook.l_name_narr, new_audiobook.publisher_name, new_audiobook.publication_year,
-                    new_audiobook.edition, new_audiobook.series_name, new_audiobook.series_position, new_audiobook.waitlist_capacity,
+                    new_audiobook.edition, new_audiobook.series_name, new_audiobook.series_position, new_audiobook.genre, new_audiobook.waitlist_capacity,
                     new_audiobook.location_name], (err, rows) => {
                     if (err) {
                         res.status(500).send({message: "audiobook insert failed"})
@@ -209,18 +210,39 @@ app.get('api/audiobook/search', (req, res) => {
 // BOOK statements
 // Create a book
 app.post('/api/book', (req, res) => {
+    let id = 0;
+    getNewItemId(id);
+    let book = {
+        id: id,
+        title: req.body.title,
+        isbn: req.body.isbn,
+        f_name_auth: req.body.f_name_auth,
+        l_name_auth: req.body.l_name_auth,
+        publisher_name: req.body.publisher_name,
+        publication_year: req.body.publication_year,
+        edition: req.body.edition,
+        series_name: req.body.series_name,
+        series_position: req.body.series_position,
+        genre: req.body.genre,
+        ebook: req.body.ebook,
+        waitlist_capacity: req.body.waitlist_capacity,
+        location_name: req.body.location_name
+    }
     pool.query(`INSERT INTO book 
 (id, title, isbn, author_id, publisher, publication_year, edition, series, series_position, genre, ebook, waitlist_capacity, location) 
 VALUES (
-(SELECT id FROM item WHERE id = ${req.body.id}),
-${req.body.title}, ${req.body.isbn}, 
-(SELECT id FROM author WHERE f_name = ${req.body.f_name_auth} AND l_name = ${req.body.l_name_auth}),
-(SELECT id FROM publisher WHERE publisher_name = ${req.body.publisher_name}),
-${req.body.publication_year}, ${req.body.edition},
-(SELECT id FROM series WHERE series_name = ${req.body.series_name}), 
-${req.body.series_position}, ${req.body.genre}, ${req.body.waitlist_capacity},
-(SELECT id FROM location WHERE location_name = ${req.body.location_name})
-)`, (err, rows) => {
+(SELECT id FROM item WHERE id = ?),
+?, ?, 
+(SELECT id FROM author WHERE f_name = ? AND l_name = ?),
+(SELECT id FROM publisher WHERE publisher_name = ?),
+?, ?,
+(SELECT id FROM series WHERE series_name = ?), 
+?, ?, ?, ?,
+(SELECT id FROM location WHERE location_name = ?)
+)`, [book.id, book.title, book.isbn, book.f_name_auth, book.l_name_auth,
+        book.publisher_name, book.publication_year, book.edition,
+        book.series_name, book.series_position, book.genre, book.ebook,
+        book.waitlist_capacity, book.location_name], (err, rows) => {
         if (err) {
             res.status(500).send({message: "Book insert failed"})
         } else {
@@ -241,6 +263,10 @@ app.get('/api/book', (req, res) => {
 })
 // Display books filtered by query
 app.get('api/book/search', (req, res) => {
+    let book_search = {
+        title: req.body.title,
+        l_name_auth: req.body.l_name_auth
+    }
     pool.query(`SELECT book.isbn, book.title, 
     author.f_name, author.l_name,
     publisher.publisher_name, 
@@ -252,19 +278,28 @@ app.get('api/book/search', (req, res) => {
     INNER JOIN series ON book.series = series.id
     INNER JOIN location ON book.location = location.id
     INNER JOIN item ON book.id = item.id
-    WHERE book.title = ${req.body.title} AND author.l_name = ${req.body.l_name_auth} AND item.active = true`)
+    WHERE book.title = ? AND author.l_name = ? AND item.active = true`, [book_search.title, book_search.l_name_auth])
 })
 
 // DEVICE statements
 // Create a device
 app.post('/api/device', (req, res) => {
+    let id = 0;
+    getNewItemId(id);
+    let device = {
+        id: id,
+        device_type: req.body.device_type,
+        model: req.body.model,
+        waitlist_capacity: req.body.waitlist_capacity,
+        location_name: req.body.location_name
+    }
     pool.query(`INSERT INTO device 
 (id, device_type, model, waitlist_capacity, location) 
 VALUES (
-(SELECT id FROM item WHERE id = ${req.body.id}),
-${req.body.device_type}, ${req.body.model},${req.body.waitlist_capacity},
-(SELECT id FROM location WHERE location_name = ${req.body.location_name})
-)`, (err, rows) => {
+(SELECT id FROM item WHERE id = ?),
+?, ?,?,
+(SELECT id FROM location WHERE location_name = ?)
+)`,[device.id, device.device_type, device.model, device.waitlist_capacity, device.location_name], (err, rows) => {
         if (err) {
             res.status(500).send({message: "device insert failed"})
         } else {
@@ -284,24 +319,39 @@ app.get('/api/device', (req, res) => {
 })
 // Display device filtered by query
 app.get('api/device/search', (req, res) => {
+    let device_search = {
+        device_type: req.body.device_type,
+        model: req.body.model
+    }
     pool.query(`SELECT device.device_type, device.model, 
     device.checked_out, location.location_name
     FROM device 
     INNER JOIN location ON device.location = location.id
     INNER JOIN item ON device.id = item.id
-    WHERE device.device_type = ${req.body.device_type} AND device.model  = ${req.body.model}$ AND item.active = true`)
+    WHERE device.device_type = ? AND device.model = ? AND item.active = true`, [device_search.device_type, device_search.model])
 })
 
 // DVD statements
 // Create a dvd
 app.post('/api/dvd', (req, res) => {
+    let id = 0
+    getNewItemId(id)
+    let dvd = {
+        id: id,
+        title: req.body.title,
+        release_date: req.body.release_date,
+        director: req.body.director,
+        studio: req.body.studio,
+        waitlist_capacity: req.body.waitlist_capacity,
+        location_name: req.body.location_name
+    }
     pool.query(`INSERT INTO dvd 
 (id, title, release_date, director, studio, waitlist_capacity, location) 
 VALUES (
-(SELECT id FROM item WHERE id = ${req.body.id}),
-${req.body.title}, ${req.body.director}, ${req.body.studio}, ${req.body.waitlist_capacity},
-(SELECT id FROM location WHERE location_name = ${req.body.location_name})
-)`, (err, rows) => {
+(SELECT id FROM item WHERE id = ?),
+?, ?, ?, ?,
+(SELECT id FROM location WHERE location_name = ?)
+)`,[dvd.id, dvd.title, dvd.release_date, dvd.director, dvd.studio, dvd.waitlist_capacity, dvd.location_name], (err, rows) => {
         if (err) {
             res.status(500).send({message: "dvd insert failed"})
         } else {
@@ -321,23 +371,38 @@ app.get('/api/dvd', (req, res) => {
 })
 // Display dvds filtered by query
 app.get('api/dvd/search', (req, res) => {
+    let dvd_search = {
+        title: req.body.title,
+    }
     pool.query(`SELECT dvd.title, dvd.release_date, dvd.director, dvd.studio, dvd.checked_out, location.location_name
     FROM dvd 
     INNER JOIN location ON dvd.location = location.id
     INNER JOIN item ON dvd.id = item.id
-    WHERE dvd.title = ${req.body.title} AND item.active = true`)
+    WHERE dvd.title = ? AND item.active = true`, [dvd_search.title])
 })
 
 // MAGAZINE statements
 // Create a magazine
 app.post('/api/magazine', (req, res) => {
+    let id = 0
+    getNewItemId(id)
+    let magazine = {
+        id: id,
+        title: req.body.title,
+        issue: req.body.issue,
+        issue_date: req.body.issue_date,
+        topic: req.body.topic,
+        waitlist_capacity: req.body.waitlist_capacity,
+        location_name: req.body.location_name
+    }
     pool.query(`INSERT INTO magazine 
 (id, title, issue, issue_date, topic, waitlist_capacity, location) 
 VALUES (
-(SELECT id FROM item WHERE id = ${req.body.id}),
-${req.body.title}, ${req.body.issue}, ${req.body.issue_date}, ${req.body.topic}, ${req.body.waitlist_capacity},
-(SELECT id FROM location WHERE location_name = ${req.body.location_name})
-)`, (err, rows) => {
+(SELECT id FROM item WHERE id = ?),
+?, ?, ?, ?, ?,
+(SELECT id FROM location WHERE location_name = ?)
+)`, [magazine.id, magazine.title, magazine.issue, magazine.issue_date, magazine.topic,
+        magazine.waitlist_capacity, magazine.location_name], (err, rows) => {
         if (err) {
             res.status(500).send({message: "magazine insert failed"})
         } else {
@@ -357,10 +422,13 @@ app.get('/api/magazine', (req, res) => {
 })
 // Display magazines filtered by query
 app.get('api/magazine/search', (req, res) => {
+    let magazine_search = {
+        title: req.body.title
+    }
     pool.query(`SELECT magazine.title, magazine.issue, magazine.issue_date, magazine.topic, magazine.checked_out, magazine.location
     FROM magazine 
     INNER JOIN item ON magazine.id = item.id
-    WHERE magazine.title = ${req.body.title} AND item.active = true`)
+    WHERE magazine.title = ? AND item.active = true`, [magazine_search.title])
 })
 
 /*
