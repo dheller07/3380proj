@@ -804,19 +804,19 @@ app.get('/api/location', (req, res) => {
 // REQUEST ITEM statements
 // Create an item request
 app.post('/api/itemRequest', (req, res) => {
-    pool.query(`SELECT 1 FROM customer WHERE id = ${req.body.customer_id} AND password = ${req.body.pwd}`, (err, user) => {
-        if (err) {
-            res.status(500).send({message: "user authentication query failed"})
-        } else if (user.length < 1) {
-            res.status(500).send({message: "incorrect customer id or password"})
-        } else {
-            pool.query(`INSERT INTO itemRequest 
+    const cust = {id: req.body.requester_id, pwd: req.body.customer_pwd}
+    customerAuth(cust);
+    if (cust.id === null) res.status(400).send({message: "Customer credentials incorrect"})
+    else {
+        let item_request = {
+            id: req.body.id,
+            req_number: req.body.req_number,
+            requester_id: cust.id
+        }
+        pool.query(`INSERT INTO itemRequest 
 (req_number, item_id, requester_id) 
 VALUES (
-(SELECT id FROM item WHERE id = ${req.body.item_id}),
-${req.body.req_number}, 
-(SELECT id FROM customer WHERE id = ${req.body.requester_id} ),
-)`, (err, rows) => {
+(SELECT id FROM item WHERE id = ?), ?, (SELECT id FROM customer WHERE id = ?))`, [item_request.id, item_request.req_number, item_request.requester_id], (err, rows) => {
                 if (err) {
                     res.status(500).send({message: "item request failed"})
                 } else {
@@ -824,7 +824,6 @@ ${req.body.req_number},
                 }
             })
         }
-    })
 })
 // Display all item requests
 app.get('/api/itemRequest', (req, res) => {
@@ -838,13 +837,21 @@ app.get('/api/itemRequest', (req, res) => {
 })
 // Display item requests for a certain user
 app.get('api/itemRequest/search', (req, res) => {
-    pool.query(`SELECT itemRequest.req_number, itemRequest.item_id, 
+    const cust = {id: req.body.requester_id, pwd: req.body.customer_pwd}
+    customerAuth(cust);
+    if (cust.id === null) res.status(400).send({message: "Customer credentials incorrect"})
+    else {
+        let item_request = {
+            req_number: req.body.req_number,
+            id: cust.id
+        }
+        pool.query(`SELECT itemRequest.req_number, itemRequest.item_id, 
     itemRequest.req_date, customer.f_name,
-    customer.l_name, customer.id, 
-   
+    customer.l_name, customer.id
     FROM itemRequest 
     INNER JOIN customer ON itemRequest.requester_id = customer.id
-    WHERE ((itemRequest.req_number = ${req.body.req_number}) OR (itemRequest.id = ${req.body.requester_id}))AND itemRequest.active = true`)
+    WHERE ((itemRequest.req_number = ?) OR (itemRequest.id = ?)) AND itemRequest.active = true`, [item_request.req_number, item_request.id])
+    }
 })
 // todo Display full waitlist for a certain item
 
