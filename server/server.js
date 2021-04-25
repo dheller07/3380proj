@@ -488,7 +488,7 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
         })
 // Display all employees
 app.get('/api/employee', (req, res) => {
-    pool.query(`(SELECT * FROM employee)`, (err, rows) => {
+    pool.query(`SELECT * FROM employee`, (err, rows) => {
         if (err) {
             res.status(500).send({message: "could not retrieve employees"});
         } else {
@@ -498,33 +498,36 @@ app.get('/api/employee', (req, res) => {
 })
 // Display one employee filtered by query
 app.get('api/employee/search', (req, res) => {
-    const emp = {id: req.body.employee_id, pwd: req.body.pwd}
+    const emp = {id: req.body.employee_id, pwd: req.body.employee_pwd}
     employeeAuth(emp);
     if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
     else {
-        pool.query(`(SELECT employee.f_name, employee.l_name, 
+        let employee_search = {
+            ssn: req.body.ssn,
+            id: req.body.id,
+            f_name: req.body.f_name,
+            l_name: req.body.l_name
+        }
+        pool.query(`SELECT employee.f_name, employee.l_name, 
     employee.ssn, employee.birthdate,
     employee.salary, employee.job_title, 
     employee.phone_no, employee.id
     FROM employee 
-    WHERE (employee.ssn = ${req.body.ssn}) OR (employee.id = ${req.body.id} ) or 
-    ( {employee}.f_name = ${req.body.f_name} AND {employee}.l_name = ${req.body.l_name} ) 
-    AND employee.active = true)`)
+    WHERE (employee.ssn = ?) OR (employee.id = ?) OR 
+    (employee.f_name = ? AND employee.l_name = ?) 
+    AND employee.active = true`, [employee_search.ssn, employee_search.id, employee_search.f_name, employee_search.l_name])
     }
 })
 // Change employee's active status
 app.put('/api/employee/modify', (req, res) => {
-    const emp = {id: req.body.employee_id, pwd: req.body.pwd}
+    const emp = {id: req.body.employee_id, pwd: req.body.employee_pwd}
     employeeAuth(emp);
     if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
     else {
-        pool.query(`SELECT 1 FROM employee WHERE id = ${req.body.employee_id} AND password = ${req.body.pwd}`, (err, user) => {
-            if (err) {
-                res.status(500).send({message: "user authentication query failed"})
-            } else if (user.length < 1) {
-                res.status(500).send({message: "incorrect employee id or password"})
-            } else {
-                pool.query(`UPDATE employee SET active = NOT active WHERE id = ${req.body.id}`, (err, row) => {
+        let employee_change = {
+            id: req.body.id,
+        }
+        pool.query(`UPDATE employee SET active = NOT active WHERE id = ?` [employee_change.id], (err, row) => {
                     if (err) {
                         res.status(500).send({message: "Could not make employee inactive"});
                     } else {
@@ -532,8 +535,6 @@ app.put('/api/employee/modify', (req, res) => {
                     }
                 })
             }
-        })
-    }
 })
 
 // CUSTOMER statements
