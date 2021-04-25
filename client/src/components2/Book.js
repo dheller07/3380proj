@@ -71,7 +71,7 @@ const Book = ({onBookResult, myTitleBook, myIsbnBook, myAuthorBook, myPublisherB
                 />
                 <label>Password</label>
                 <input
-                    type='text'
+                    type='password'
                     placeholder='enter password'
                     onChange = {myPasswordBook}
                 />

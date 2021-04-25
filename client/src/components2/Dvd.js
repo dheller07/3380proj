@@ -41,7 +41,7 @@ const Dvd = ({onDvdResult, myTitleDvd, myDateDvd, myDirectorDvd, myStudioDvd, my
                 />
                 <label>Password</label>
                 <input
-                    type='text'
+                    type='password'
                     placeholder='enter password'
                     onChange = {myPasswordDvd}
                 />

@@ -41,7 +41,7 @@ const Mgz = ({onMgzResult, myTitleMgz, myIssueMgz, myDateMgz, myTopicMgz, myUser
                 />
                 <label>Password</label>
                 <input
-                    type='text'
+                    type='password'
                     placeholder='enter password'
                     onChange = {myPasswordMgz}
                 />

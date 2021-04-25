@@ -427,8 +427,7 @@ function Employee1 () {
             myIdRemove = {(e) => {setIdRemove(e.target.value)}}
         />}
 
-        </div> 
-        REFRESH AFTER EACH ACTION
+        </div>
         <div>
             {theReturnBook()}
             {theCheckoutBook()}

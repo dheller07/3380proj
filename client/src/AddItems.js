@@ -54,8 +54,8 @@ function AddItems (serverCommunication) {
                 ebook: 0,
                 waitlist_capacity: 0,
                 location: 1,
-                username: usernameBook,
-                password: passwordBook
+                employee_id: usernameBook,
+                employee_pwd: passwordBook
             };
             BookService.create(data)
                 .then(response => {
@@ -104,8 +104,8 @@ function AddItems (serverCommunication) {
                 checked_out: 0,
                 waitlist_capacity: 0,
                 location: 2,
-                username: usernameAudioBook,
-                password: passwordAudioBook
+                employee_id: usernameAudioBook,
+                employee_pwd: passwordAudioBook
             };
             AudioBookService.create(data)
                 .then(response => {
@@ -142,8 +142,8 @@ function AddItems (serverCommunication) {
                 studio: studioDvd,
                 location: 2,
                 checked_out: 0,
-                username: usernameDvd,
-                password: passwordDvd
+                employee_id: usernameDvd,
+                employee_pwd: passwordDvd
             };
             DvdService.create(data)
                 .then(response => {
@@ -179,8 +179,8 @@ function AddItems (serverCommunication) {
                 topic: topicMgz,
                 location: 3,
                 checked_out: 0,
-                username: usernameMgz,
-                password: passwordMgz
+                employee_id: usernameMgz,
+                employee_pwd: passwordMgz
             };
             MgzService.create(data)
                 .then(response => {
@@ -215,8 +215,8 @@ function AddItems (serverCommunication) {
                 checked_out: 0,
                 waitlist_capacity: 0,
                 location: 4,
-                username: usernameDevice,
-                password: passwordDevice
+                employee_id: usernameDevice,
+                employee_pwd: passwordDevice
             };
             DeviceService.create(data)
                 .then(response => {

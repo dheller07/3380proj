@@ -29,7 +29,7 @@ const Device = ({onDeviceResult, myTypeDevice, myModelDevice, myUsernameDevice, 
                 />
                 <label>Password</label>
                 <input
-                    type='text'
+                    type='password'
                     placeholder='enter password'
                     onChange = {myPasswordDevice}
                 />

@@ -77,7 +77,7 @@ const AudioBook = ({onAudioBookResult, myTitleAudioBook, myIsbnAudioBook, myAuth
                 />
                 <label>Password</label>
                 <input
-                    type='text'
+                    type='password'
                     placeholder='enter password'
                     onChange = {myPasswordAudioBook}
                 />
