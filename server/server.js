@@ -100,29 +100,22 @@ app.get('/api/item', (req, res) => {
     })
 })
 // Change item's active status
-/*
+
 app.put('/api/item/modify', (req, res) => {
-    const existing_employee = {
-        id: req.body.employee_id,
-        pwd: req.body.pwd
+    const emp = {id: req.body.employee_id, pwd: req.body.employee_pwd}
+    employeeAuth(emp);
+    if (emp.id === null) res.status(400).send({message: "Employee credentials incorrect"})
+    else {
+        pool.query(`UPDATE item SET active = NOT active WHERE id = ?`, [req.body.item_id], (err, row) => {
+            if (err) {
+                res.status(500).send({message: "Could not make item inactive"});
+            } else {
+                res.send(row);
+            }
+        })
     }
-    pool.query(`SELECT 1 FROM employee WHERE id = ? AND password = ?`,[existing_employee.id, existing_employee.pwd], (err, user) => {
-        if (err) {
-            res.status(500).send({message: "user authentication query failed"})
-        } else if (user.length < 1) {
-            res.status(500).send({message: "incorrect employee id or password"})
-        } else {
-            pool.query(`UPDATE item SET active = NOT active WHERE id = ?`,[req.body.item_id], (err, row) => {
-                if (err) {
-                    res.status(500).send({message: "Could not make item inactive"});
-                } else {
-                    res.send(row);
-                }
-            })
-        }
-    })
 })
-*/
+
 // AUDIOBOOK statements
 // Create an audiobook
 app.post('/api/audiobook', (req, res) => {
