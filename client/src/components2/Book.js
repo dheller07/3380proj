@@ -1,5 +1,5 @@
 
-const Book = ({onBookResult, myTitleBook, myIsbnBook, myAuthorBook, myPublisherBook, myYearBook, myEditionBook, mySeriesBook, mySeriesPositionBook, myGenreBook}) => {
+const Book = ({onBookResult, myTitleBook, myIsbnBook, myAuthorBook, myPublisherBook, myYearBook, myEditionBook, mySeriesBook, mySeriesPositionBook, myGenreBook, myUsernameBook, myPasswordBook}) => {
 
     const submitBookAdd = (event) => {
         onBookResult();
@@ -62,6 +62,18 @@ const Book = ({onBookResult, myTitleBook, myIsbnBook, myAuthorBook, myPublisherB
                     type='text'
                     placeholder='enter the Genre'
                     onChange = {myGenreBook}
+                />
+                <label>Username</label>
+                <input
+                    type='text'
+                    placeholder='enter username'
+                    onChange = {myUsernameBook}
+                />
+                <label>Password</label>
+                <input
+                    type='text'
+                    placeholder='enter password'
+                    onChange = {myPasswordBook}
                 />
             </div>
             

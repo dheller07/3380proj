@@ -35,6 +35,8 @@ function AddItems (serverCommunication) {
     const[seriesBook, setSeriesBook] = useState('')
     const[seriesPositionBook, setSeriesPositionBook] = useState('')
     const[genreBook, setGenreBook] = useState('')
+    const[usernameBook, setUsernameBook] = useState('')
+    const[passwordBook, setPasswordBook] = useState('')
 
     const theAddBook = () => {
         if(showBookResult === true) {
@@ -52,10 +54,10 @@ function AddItems (serverCommunication) {
                 ebook: 0,
                 waitlist_capacity: 0,
                 location: 1,
-                username: setUsernameAudioBook,
-                password: setPasswordAudioBook
+                username: usernameBook,
+                password: passwordBook
             };
-            serverCommunication.post('/book',data)
+            BookService.create(data)
                 .then(response => {
                     console.log(response);
                 })
@@ -128,6 +130,8 @@ function AddItems (serverCommunication) {
     const[dateDvd, setDateDvd] = useState('')
     const[directorDvd, setDirectorDvd] = useState('')
     const[studioDvd, setStudioDvd] = useState('')
+    const[usernameDvd, setUsernameDvd] = useState('')
+    const[passwordDvd, setPasswordDvd] = useState('')
 
     const theAddDvd = () => {
         if(showDvdResult === true) {
@@ -137,8 +141,9 @@ function AddItems (serverCommunication) {
                 director: directorDvd,
                 studio: studioDvd,
                 location: 2,
-                checked_out: 0
-                
+                checked_out: 0,
+                username: usernameDvd,
+                password: passwordDvd
             };
             DvdService.create(data)
                 .then(response => {
@@ -162,6 +167,8 @@ function AddItems (serverCommunication) {
     const[issueMgz, setIssueMgz] = useState('')
     const[dateMgz, setDateMgz] = useState('')
     const[topicMgz, setTopicMgz] = useState('')
+    const[usernameMgz, setUsernameMgz] = useState('')
+    const[passwordMgz, setPasswordMgz] = useState('')
 
     const theAddMgz = () => {
         if(showMgzResult === true) {
@@ -171,8 +178,9 @@ function AddItems (serverCommunication) {
                 issue_date: dateMgz,
                 topic: topicMgz,
                 location: 3,
-                checked_out: 0
-                
+                checked_out: 0,
+                username: usernameMgz,
+                password: passwordMgz
             };
             MgzService.create(data)
                 .then(response => {
@@ -196,7 +204,8 @@ function AddItems (serverCommunication) {
 
     const[typeDevice, setTypeDevice] =useState('')
     const[modelDevice, setModelDevice] = useState('')
-
+    const[usernameDevice, setUsernameDevice] = useState('')
+    const[passwordDevice, setPasswordDevice] = useState('')
 
     const theAddDevice = () => {
         if(showDeviceResult === true) {
@@ -205,7 +214,9 @@ function AddItems (serverCommunication) {
                 model: modelDevice,
                 checked_out: 0,
                 waitlist_capacity: 0,
-                location: 4
+                location: 4,
+                username: usernameDevice,
+                password: passwordDevice
             };
             DeviceService.create(data)
                 .then(response => {
@@ -253,6 +264,8 @@ function AddItems (serverCommunication) {
             mySeriesBook = {(e) => setSeriesBook(e.target.value)}
             mySeriesPositionBook = {(e) => setSeriesPositionBook(e.target.value)}
             myGenreBook = {(e) => setGenreBook(e.target.value)}
+            myUsernameBook = {(e) => setUsernameBook(e.target.value)}
+            myPasswordBook={(e) => setPasswordBook(e.target.value)}
         />}
         {showSearchAudioBook && <AudioBook 
             onAudioBookResult = {() => setShowAudioBookResult(!showAudioBookResult)}
@@ -275,6 +288,8 @@ function AddItems (serverCommunication) {
             myDateDvd = {(e) => setDateDvd(e.target.value)}
             myDirectorDvd = {(e) => setDirectorDvd(e.target.value)}
             myStudioDvd = {(e) => setStudioDvd(e.target.value)}
+            myUsernameDvd = {(e) => setUsernameDvd(e.target.value)}
+            myPasswordDvd = {(e) => setPasswordDvd(e.target.value)}
         />}
         {showSearchMgz && <Mgz  
             onMgzResult = {() => setShowMgzResult(!showMgzResult)}
@@ -282,15 +297,18 @@ function AddItems (serverCommunication) {
             myIssueMgz = {(e) => setIssueMgz(e.target.value)}
             myDateMgz = {(e) => setDateMgz(e.target.value)}
             myTopicMgz = {(e) => setTopicMgz(e.target.value)}
+            myUsernameMgz = {(e) => setUsernameMgz(e.target.value)}
+            myPasswordMgz = {(e) => setPasswordMgz(e.target.value)}
         />}
         {showSearchDevice && <Device 
             onDeviceResult = {() => setShowDeviceResult(!showDeviceResult)}
             myTypeDevice = {(e) => setTypeDevice(e.target.value)}
             myModelDevice = {(e) => setModelDevice(e.target.value)}
+            myUsernameDevice = {(e) => setUsernameDevice(e.target.value)}
+            myPasswordDevice = {(e) => setPasswordDevice(e.target.value)}
         />}
 
         </div>
-        REFRESH AFTER EACH ACTION
             <div>
                 {theAddBook()}
                 {theAddAudioBook()}

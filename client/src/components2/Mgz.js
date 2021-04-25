@@ -1,5 +1,5 @@
 
-const Mgz = ({onMgzResult, myTitleMgz, myIssueMgz, myDateMgz, myTopicMgz}) => {
+const Mgz = ({onMgzResult, myTitleMgz, myIssueMgz, myDateMgz, myTopicMgz, myUsernameMgz, myPasswordMgz}) => {
 
     const submitMgzAdd = (event) => {
         onMgzResult();
@@ -32,6 +32,18 @@ const Mgz = ({onMgzResult, myTitleMgz, myIssueMgz, myDateMgz, myTopicMgz}) => {
                     type='text'
                     placeholder='enter the Topic'
                     onChange = {myTopicMgz}
+                />
+                <label>Username</label>
+                <input
+                    type='text'
+                    placeholder='enter username'
+                    onChange = {myUsernameMgz}
+                />
+                <label>Password</label>
+                <input
+                    type='text'
+                    placeholder='enter password'
+                    onChange = {myPasswordMgz}
                 />
             </div>
             
