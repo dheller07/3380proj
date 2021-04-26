@@ -303,7 +303,7 @@ function Employee1 () {
 
     const theRemoveCustomer = () => {
         if(showTheRemove === true) {
-            CustomerService.delete(idRemove)
+            axios.put("http://localhost:8000/api/customer", idRemove)
                 .then(response => {
                 })
                 .catch(e => {
@@ -332,7 +332,7 @@ function Employee1 () {
     return (
         <div>
             <div>
-            <Button
+                <Button
                 color={'blue'}
                 text={'Search'}
                 onClick={ChangetoSearch}
@@ -354,7 +354,7 @@ function Employee1 () {
         </div>
         <div className = "container">
             <Header title = "Librarian" />
-            
+
             
             <ChoiceBar
                 onBook={() => setShowBook(!showSearchBook)}

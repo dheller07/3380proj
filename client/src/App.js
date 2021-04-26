@@ -11,7 +11,7 @@ function App() {
     <Router>
       <div className="App"><h1>LIBRARY</h1>
       <Switch>
-      <Route exact path = "/" component = {Customer}/>
+      <Route exact path = "/" component = {Employee1}/>
       <Route path = "/Librarian" component = {Employee1}/>
       <Route exact path = "/Search" component = {Customer}/>
       <Route exact path = "/Add" component = {AddItems}/>

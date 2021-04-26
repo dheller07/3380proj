@@ -12,6 +12,7 @@ import Device from './components/Device.js'
 import ChoiceBar from './components/ChoiceBar.js'
 import Message from './components/Message.js'
 import axios from "axios";
+import Button from "./components/Button";
 
 
 function Customer() {
@@ -148,9 +149,44 @@ function Customer() {
    }
   }
 
+    const ChangeToEmployee = () => {
+        window.location.href = "/Librarian";
+    }
+
+    //Change to Add Items Page------
+    const ChangetoAddItems = () => {
+        window.location.href = "/Add";
+    }
+
+    const ChangeDeleteItems = () => {
+        window.location.href = "/Delete";
+    }
+
   return (
       <div>
-        
+
+          <div>
+              <Button
+                  color={'blue'}
+                  text={'Add Items'}
+                  onClick={ChangetoAddItems}
+              />
+          </div>
+          <div>
+              <Button
+                  color={'blue'}
+                  text={'Employee'}
+                  onClick={ChangeToEmployee}
+              />
+          </div>
+          <div>
+              <Button
+                  color={'blue'}
+                  text={'Delete Items'}
+                  onClick={ChangeDeleteItems}
+              />
+          </div>
+
       <div className="container">
         <Header />
         {/* <Route path='/book' component={Book}/> */}

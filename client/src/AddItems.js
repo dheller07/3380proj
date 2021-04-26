@@ -10,6 +10,7 @@ import AudioBook from './components2/AudioBook.js'
 import Dvd from './components2/Dvd.js'
 import Mgz from './components2/Mgz.js'
 import Device from './components2/Device.js'
+import Button from "./components/Button";
 
 
 function AddItems () {
@@ -226,8 +227,44 @@ function AddItems () {
 
   //Change to Search Page---------
 
+    const ChangetoSearch = () => {
+        window.location.href = "/Search";
+    }
+
+    //Change to Add Items Page------
+    const ChangeToEmployee = () => {
+        window.location.href = "/Librarian";
+    }
+
+    const ChangeDeleteItems = () => {
+        window.location.href = "/Delete";
+    }
+
     return (
         <div>
+
+            <div>
+                <Button
+                    color={'blue'}
+                    text={'Search'}
+                    onClick={ChangetoSearch}
+                />
+            </div>
+            <div>
+                <Button
+                    color={'blue'}
+                    text={'Employee'}
+                    onClick={ChangeToEmployee}
+                />
+            </div>
+            <div>
+                <Button
+                    color={'blue'}
+                    text={'Delete Items'}
+                    onClick={ChangeDeleteItems}
+                />
+            </div>
+
         <div className = "container">
             <Header title = "Add Items" />
             

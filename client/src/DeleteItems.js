@@ -10,6 +10,7 @@ import Dvd from './components3/Dvd.js'
 import Mgz from './components3/Mgz.js'
 import Device from './components3/Device.js'
 import axios from "axios";
+import Button from "./components/Button";
 
 
 function DeleteItems () {
@@ -139,8 +140,43 @@ function DeleteItems () {
 
   //Change to Search Page---------
 
+    const ChangetoSearch = () => {
+        window.location.href = "/Search";
+    }
+
+    //Change to Add Items Page------
+    const ChangetoAddItems = () => {
+        window.location.href = "/Add";
+    }
+
+    const ChangeToEmployee = () => {
+        window.location.href = "/Librarian";
+    }
+
     return (
         <div>
+            <div>
+                <Button
+                    color={'blue'}
+                    text={'Search'}
+                    onClick={ChangetoSearch}
+                />
+            </div>
+            <div>
+                <Button
+                    color={'blue'}
+                    text={'Add Items'}
+                    onClick={ChangetoAddItems}
+                />
+            </div>
+            <div>
+                <Button
+                    color={'blue'}
+                    text={'Employee'}
+                    onClick={ChangeToEmployee}
+                />
+            </div>
+
         <div className = "container">
             <Header title = "Delete Items" />
             
