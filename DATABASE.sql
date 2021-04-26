@@ -134,7 +134,7 @@ CREATE TABLE `book` (
 
 LOCK TABLES `book` WRITE;
 /*!40000 ALTER TABLE `book` DISABLE KEYS */;
-INSERT INTO `book` VALUES (1,'9780316129084','Leviathan Wakes',2,1,2011,NULL,2,1,'Science Fiction',0,0,10,1),(2,'9780316038379','Twilight',1,1,2006,NULL,1,1,'YA Fiction',0,0,10,2),(3,'9780316007696','New Moon',1,1,2008,NULL,1,2,'YA Fiction',0,1,10,2),(4,'9780316027656','Eclipse',1,1,2009,NULL,1,3,'YA Fiction',0,0,10,2),(5,'9780316032834','Breaking Dawn',1,1,2009,NULL,1,4,'YA Fiction',0,1,10,2),(6,'9780316129060','Caliban\'s War',2,1,2012,NULL,2,2,'Science Fiction',0,0,10,1),(7,'9781841499925','Abbadon\'s Gate',2,1,2013,NULL,2,3,'Science Fiction',0,0,10,1),(8,'9780316217620','Cibola Burn',2,1,2014,NULL,2,4,'Science Fiction',0,0,10,1),(9,'9780316217590','Nemesis Games',2,1,2015,NULL,2,5,'Science Fiction',0,1,10,1),(10,'9780316332873','Tiamat\'s Wrath',2,1,2019,NULL,2,6,'Science Fiction',0,0,10,1),(11,'9780002007771','Water for Elephants',3,2,2006,1,NULL,NULL,'Fiction',0,0,10,2);
+INSERT INTO `book` VALUES (1,'9780316129084','Leviathan Wakes',2,1,2011,NULL,2,1,'Science Fiction',1,0,10,1),(2,'9780316038379','Twilight',1,1,2006,NULL,1,1,'YA Fiction',1,0,10,2),(3,'9780316007696','New Moon',1,1,2008,NULL,1,2,'YA Fiction',0,1,10,2),(4,'9780316027656','Eclipse',1,1,2009,NULL,1,3,'YA Fiction',0,0,10,2),(5,'9780316032834','Breaking Dawn',1,1,2009,NULL,1,4,'YA Fiction',1,1,10,2),(6,'9780316129060','Caliban\'s War',2,1,2012,NULL,2,2,'Science Fiction',0,0,10,1),(7,'9781841499925','Abbadon\'s Gate',2,1,2013,NULL,2,3,'Science Fiction',0,0,10,1),(8,'9780316217620','Cibola Burn',2,1,2014,NULL,2,4,'Science Fiction',0,0,10,1),(9,'9780316217590','Nemesis Games',2,1,2015,NULL,2,5,'Science Fiction',0,1,10,1),(10,'9780316332873','Tiamat\'s Wrath',2,1,2019,NULL,2,6,'Science Fiction',0,0,10,1),(11,'9780002007771','Water for Elephants',3,2,2006,1,NULL,NULL,'Fiction',0,0,10,2);
 /*!40000 ALTER TABLE `book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -150,7 +150,7 @@ CREATE TABLE `checkoutItem` (
   `item` int NOT NULL,
   `checkout_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `due_date` datetime NOT NULL,
-  `return_date` datetime NOT NULL,
+  `return_date` datetime DEFAULT NULL,
   `returned` tinyint(1) DEFAULT NULL,
   `borrower_id` int NOT NULL,
   `employee_id` int NOT NULL,
@@ -166,7 +166,7 @@ CREATE TABLE `checkoutItem` (
   CONSTRAINT `checkoutItem_ibfk_2` FOREIGN KEY (`borrower_id`) REFERENCES `customer` (`id`),
   CONSTRAINT `checkoutItem_ibfk_3` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`),
   CONSTRAINT `checkoutItem_ibfk_4` FOREIGN KEY (`customer_role`) REFERENCES `customer` (`customer_role`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -175,6 +175,7 @@ CREATE TABLE `checkoutItem` (
 
 LOCK TABLES `checkoutItem` WRITE;
 /*!40000 ALTER TABLE `checkoutItem` DISABLE KEYS */;
+INSERT INTO `checkoutItem` VALUES (1,1,'2021-04-19 00:00:00','2021-04-26 00:00:00',NULL,0,2202,1010,'Student',0),(2,2,'2021-04-17 00:00:00','2021-04-24 00:00:00',NULL,0,2202,1010,'Student',1),(3,5,'2021-04-01 00:00:00','2021-04-08 00:00:00','2021-04-18 00:00:00',1,2201,1010,'Student',1);
 /*!40000 ALTER TABLE `checkoutItem` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -186,8 +187,89 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`cdoo`@`localhost`*/ /*!50003 TRIGGER `overdue_item` AFTER UPDATE ON `checkoutItem` FOR EACH ROW INSERT INTO lateFine
-    SET checkout_item = new.item, borrower = new.borrower_id, days_late = 1, fine_amount = (SELECT fine_rate FROM customer WHERE id = new.borrower_id), paid = false */;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `updateBookStatus` AFTER INSERT ON `checkoutItem` FOR EACH ROW UPDATE book
+    SET checked_out = true WHERE id = new.item */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `updateAudiobookStatus` AFTER INSERT ON `checkoutItem` FOR EACH ROW UPDATE audiobook
+    SET checked_out = true WHERE id = new.item */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `updateDeviceStatus` AFTER INSERT ON `checkoutItem` FOR EACH ROW UPDATE device
+    SET checked_out = true WHERE id = new.item */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `updateDVDStatus` AFTER INSERT ON `checkoutItem` FOR EACH ROW UPDATE dvd
+    SET checked_out = true WHERE id = new.item */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `updateMagazineStatus` AFTER INSERT ON `checkoutItem` FOR EACH ROW UPDATE magazine
+    SET checked_out = true WHERE id = new.item */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `overdue_item` AFTER UPDATE ON `checkoutItem` FOR EACH ROW BEGIN
+IF OLD.overdue <> new.overdue THEN
+INSERT INTO lateFine (checkout_item, borrower, days_late, fine_amount, paid) VALUES (OLD.item, OLD.borrower_id, 1, (SELECT fine_rate FROM customer WHERE id = OLD.borrower_id), false); END IF; END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -213,7 +295,7 @@ CREATE TABLE `customer` (
   `active` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `customer_role` (`customer_role`)
-) ENGINE=InnoDB AUTO_INCREMENT=2204 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2206 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -222,7 +304,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
-INSERT INTO `customer` VALUES (2201,'Jane','Doe','Faculty',10,0,0.15,'teacherZr0ck',1),(2202,'Paris','Hilton','Student',5,0,0.3,'thatsH0T',1),(2203,'Charlie','Brown','Student',5,0,0.3,'iLikeb00ks',1);
+INSERT INTO `customer` VALUES (2201,'Jane','Doe','Faculty',10,0,0.15,'teacherZr0ck',1),(2202,'Paris','Hilton','Student',5,0,0.3,'thatsH0T',1),(2203,'Charlie','Brown','Student',5,0,0.3,'iLikeb00ks',1),(2204,'Bill','Nye','Faculty',5,0,0.3,'myPa55word',1),(2205,'Wednesday','Adams','Student',5,0,0.3,'r34ding',1);
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -353,7 +435,7 @@ CREATE TABLE `item` (
   `active` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -362,7 +444,7 @@ CREATE TABLE `item` (
 
 LOCK TABLES `item` WRITE;
 /*!40000 ALTER TABLE `item` DISABLE KEYS */;
-INSERT INTO `item` VALUES (1,1),(2,1),(3,1),(4,1),(5,1),(6,1),(7,1),(8,1),(9,1),(10,1),(11,1),(12,1),(13,1),(14,1),(15,1),(16,1),(17,1),(18,1),(19,1),(20,1),(21,1),(22,1),(23,1),(24,1),(25,1),(26,1),(27,1),(28,1),(29,1),(30,1),(31,1),(32,1);
+INSERT INTO `item` VALUES (1,1),(2,1),(3,1),(4,1),(5,1),(6,1),(7,1),(8,1),(9,1),(10,1),(11,1),(12,1),(13,1),(14,1),(15,1),(16,1),(17,1),(18,1),(19,1),(20,1),(21,1),(22,1),(23,1),(24,1),(25,1),(26,1),(27,1),(28,1),(29,1),(30,1),(31,1),(32,1),(33,1),(34,1),(35,1),(36,1),(37,1),(38,1),(39,1),(40,1),(41,1),(42,1),(43,1);
 /*!40000 ALTER TABLE `item` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -410,13 +492,14 @@ CREATE TABLE `lateFine` (
   `fine_amount` float DEFAULT NULL,
   `paid` tinyint(1) DEFAULT NULL,
   `paid_date` datetime DEFAULT NULL,
+  `days_late` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
   KEY `checkout_item` (`checkout_item`),
   KEY `borrower` (`borrower`),
   CONSTRAINT `lateFine_ibfk_1` FOREIGN KEY (`checkout_item`) REFERENCES `checkoutItem` (`id`),
   CONSTRAINT `lateFine_ibfk_2` FOREIGN KEY (`borrower`) REFERENCES `customer` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -425,6 +508,7 @@ CREATE TABLE `lateFine` (
 
 LOCK TABLES `lateFine` WRITE;
 /*!40000 ALTER TABLE `lateFine` DISABLE KEYS */;
+INSERT INTO `lateFine` VALUES (2,3,2201,2,1,'2021-04-25 20:22:04',10),(3,2,2202,0.3,0,NULL,1);
 /*!40000 ALTER TABLE `lateFine` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -627,4 +711,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-21 17:21:36
+-- Dump completed on 2021-04-25 20:23:44

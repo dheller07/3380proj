@@ -13,13 +13,6 @@ import Message from './components1/Message.js'
 import Button from './components/Button.js'
 import AddCustomer from './components1/AddCustomer.js'
 import RemoveCustomer from './components1/RemoveCustomer.js'
-
-import CustomerService from './services/customer.service'
-import BookService from './services/book.service'
-import AudioBookService from './services/audiobook.service'
-import DvdService from './services/dvd.service'
-import MgzService from './services/magazine.service'
-import DeviceService from './services/device.service'
 import axios from 'axios'
 
 function Employee1 () {
@@ -37,9 +30,10 @@ function Employee1 () {
     const theReturnBook = () => {
         if(showBookResult1 === true) {
             var data = {
+                item_id: idBook,
                 checked_out: 0
             };
-            BookService.update(idBook, data)
+            axios.put("http://localhost:8000/api/book", data)
                 .then(response => {
                 })
                 .catch(e => {
@@ -54,9 +48,10 @@ function Employee1 () {
     const theCheckoutBook = () => {
         if(showBookResult2 === true) {
             var data = {
+                item_id: idBook,
                 checked_out: 1
             };
-            BookService.update(idBook, data)
+            axios.put("http://localhost:8000/api/book", data)
                 .then(response => {
                 })
                 .catch(e => {
@@ -79,9 +74,10 @@ function Employee1 () {
     const theReturnAudioBook = () => {
         if(showAudioBookResult1 === true) {
             var data = {
+                item_id: idAudioBook,
                 checked_out: 0
             };
-            AudioBookService.update(idAudioBook, data)
+            axios.put("http://localhost:8000/api/audiobook", data)
                 .then(response => {
                 })
                 .catch(e => {
@@ -95,9 +91,10 @@ function Employee1 () {
 
     const theCheckoutAudioBook = () => {
         var data = {
+            item_id: idAudioBook,
             checked_out: 1
         };
-        AudioBookService.update(idAudioBook, data)
+        axios.put("http://localhost:8000/api/audiobook", data)
             .then(response => {
             })
             .catch(e => {
@@ -122,9 +119,10 @@ function Employee1 () {
     const theReturnDvd = () => {
         if(showDvdResult1 === true) {
             var data = {
+                item_id: idDvd,
                 checked_out: 0
             };
-            DvdService.update(idDvd, data)
+            axios.put("http://localhost:8000/api/dvd", data)
                 .then(response => {
                 })
                 .catch(e => {
@@ -139,9 +137,10 @@ function Employee1 () {
     const theCheckoutDvd = () => {
         if(showDvdResult2 === true) {
             var data = {
+                item_id: idDvd,
                 checked_out: 1
             };
-            DvdService.update(idDvd, data)
+            axios.put("http://localhost:8000/api/dvd", data)
                 .then(response => {
                 })
                 .catch(e => {
@@ -164,9 +163,10 @@ function Employee1 () {
     const theReturnMgz = () => {
         if(showMgzResult1 === true) {
             var data = {
+                item_id: idMgz,
                 checked_out: 0
             };
-            MgzService.update(idMgz, data)
+            axios.put("http://localhost:8000/api/magazine", data)
                 .then(response => {
                 })
                 .catch(e => {
@@ -181,9 +181,10 @@ function Employee1 () {
     const theCheckoutMgz = () => {
         if(showMgzResult2 === true) {
             var data = {
+                item_id: idMgz,
                 checked_out: 1
             };
-            MgzService.update(idMgz, data)
+            axios.put("http://localhost:8000/api/magazine", data)
                 .then(response => {
                 })
                 .catch(e => {
@@ -206,9 +207,10 @@ function Employee1 () {
     const theReturnDevice = () => {
         if(showDeviceResult1 === true) {
             var data = {
+                item_id: idDevice,
                 checked_out: 0
             };
-            DeviceService.update(idDevice, data)
+            axios.put("http://localhost:8000/api/device", data)
                 .then(response => {
                 })
                 .catch(e => {
@@ -223,9 +225,10 @@ function Employee1 () {
     const theCheckoutDevice = () => {
         if(showDeviceResult2 === true) {
             var data = {
+                item_id: idDevice,
                 checked_out: 1
             };
-            DeviceService.update(idDevice, data)
+            axios.put("http://localhost:8000/api/device", data)
                 .then(response => {
                 })
                 .catch(e => {
@@ -300,7 +303,7 @@ function Employee1 () {
 
     const theRemoveCustomer = () => {
         if(showTheRemove === true) {
-            CustomerService.delete(idRemove)
+            axios.put("http://localhost:8000/api/customer", idRemove)
                 .then(response => {
                 })
                 .catch(e => {
@@ -329,7 +332,7 @@ function Employee1 () {
     return (
         <div>
             <div>
-            <Button
+                <Button
                 color={'blue'}
                 text={'Search'}
                 onClick={ChangetoSearch}
@@ -351,7 +354,7 @@ function Employee1 () {
         </div>
         <div className = "container">
             <Header title = "Librarian" />
-            
+
             
             <ChoiceBar
                 onBook={() => setShowBook(!showSearchBook)}
@@ -427,8 +430,7 @@ function Employee1 () {
             myIdRemove = {(e) => {setIdRemove(e.target.value)}}
         />}
 
-        </div> 
-        REFRESH AFTER EACH ACTION
+        </div>
         <div>
             {theReturnBook()}
             {theCheckoutBook()}

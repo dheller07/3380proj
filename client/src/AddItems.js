@@ -1,5 +1,6 @@
 import { useState} from 'react'
 import './index.css'
+import axios from 'axios'
 
 import Header from './components/Header.js'
 import ChoiceBar from './components2/ChoiceBar.js'
@@ -9,17 +10,10 @@ import AudioBook from './components2/AudioBook.js'
 import Dvd from './components2/Dvd.js'
 import Mgz from './components2/Mgz.js'
 import Device from './components2/Device.js'
-
-import BookService from './services/book.service'
-import AudioBookService from './services/audiobook.service'
-import DvdService from './services/dvd.service'
-import MgzService from './services/magazine.service'
-import DeviceService from './services/device.service'
+import Button from "./components/Button";
 
 
-
-
-function AddItems (serverCommunication) {
+function AddItems () {
 
  //BOOK PART -------------------------------------
     const [showSearchBook, setShowBook] = useState(true)
@@ -35,10 +29,12 @@ function AddItems (serverCommunication) {
     const[seriesBook, setSeriesBook] = useState('')
     const[seriesPositionBook, setSeriesPositionBook] = useState('')
     const[genreBook, setGenreBook] = useState('')
+    const[usernameBook, setUsernameBook] = useState('')
+    const[passwordBook, setPasswordBook] = useState('')
 
     const theAddBook = () => {
         if(showBookResult === true) {
-            var data = {
+            let data = {
                 title: titleBook,
                 isbn: isbnBook,
                 author_id: authorBook,
@@ -51,9 +47,11 @@ function AddItems (serverCommunication) {
                 checked_out: 0,
                 ebook: 0,
                 waitlist_capacity: 0,
-                location: 1
+                location: 1,
+                employee_id: usernameBook,
+                employee_pwd: passwordBook
             };
-            serverCommunication.post('/book',data)
+            axios.post("http://localhost:8000/api/book", data)
                 .then(response => {
                     console.log(response);
                 })
@@ -81,10 +79,12 @@ function AddItems (serverCommunication) {
     const[seriesAudioBook, setSeriesAudioBook] = useState('')
     const[seriesPositionAudioBook, setSeriesPositionAudioBook] = useState('')
     const[genreAudioBook, setGenreAudioBook] = useState('')
+    const[usernameAudioBook, setUsernameAudioBook] = useState('')
+    const[passwordAudioBook, setPasswordAudioBook] = useState('')
 
     const theAddAudioBook = () => {
         if(showAudioBookResult === true) {
-            var data = {
+            let data = {
                 title: titleAudioBook,
                 isbn: isbnAudioBook,
                 author_id: authorAudioBook,
@@ -97,9 +97,11 @@ function AddItems (serverCommunication) {
                 genre: genreAudioBook,
                 checked_out: 0,
                 waitlist_capacity: 0,
-                location: 2
+                location: 2,
+                employee_id: usernameAudioBook,
+                employee_pwd: passwordAudioBook
             };
-            AudioBookService.create(data)
+            axios.post("http://localhost:8000/api/audiobook", data)
                 .then(response => {
                     console.log(response);
                 })
@@ -122,19 +124,22 @@ function AddItems (serverCommunication) {
     const[dateDvd, setDateDvd] = useState('')
     const[directorDvd, setDirectorDvd] = useState('')
     const[studioDvd, setStudioDvd] = useState('')
+    const[usernameDvd, setUsernameDvd] = useState('')
+    const[passwordDvd, setPasswordDvd] = useState('')
 
     const theAddDvd = () => {
         if(showDvdResult === true) {
-            var data = {
+            let data = {
                 title: titleDvd,
                 release_date: dateDvd,
                 director: directorDvd,
                 studio: studioDvd,
                 location: 2,
-                checked_out: 0
-                
+                checked_out: 0,
+                employee_id: usernameDvd,
+                employee_pwd: passwordDvd
             };
-            DvdService.create(data)
+            axios.post("http://localhost:8000/api/dvd", data)
                 .then(response => {
                     console.log(response);
                 })
@@ -156,19 +161,22 @@ function AddItems (serverCommunication) {
     const[issueMgz, setIssueMgz] = useState('')
     const[dateMgz, setDateMgz] = useState('')
     const[topicMgz, setTopicMgz] = useState('')
+    const[usernameMgz, setUsernameMgz] = useState('')
+    const[passwordMgz, setPasswordMgz] = useState('')
 
     const theAddMgz = () => {
         if(showMgzResult === true) {
-            var data = {
+            let data = {
                 title: titleMgz,
                 issue: issueMgz,
                 issue_date: dateMgz,
                 topic: topicMgz,
                 location: 3,
-                checked_out: 0
-                
+                checked_out: 0,
+                employee_id: usernameMgz,
+                employee_pwd: passwordMgz
             };
-            MgzService.create(data)
+            axios.post("http://localhost:8000/api/magazine", data)
                 .then(response => {
                     console.log(response);
                 })
@@ -190,18 +198,21 @@ function AddItems (serverCommunication) {
 
     const[typeDevice, setTypeDevice] =useState('')
     const[modelDevice, setModelDevice] = useState('')
-
+    const[usernameDevice, setUsernameDevice] = useState('')
+    const[passwordDevice, setPasswordDevice] = useState('')
 
     const theAddDevice = () => {
         if(showDeviceResult === true) {
-            var data = {
+            let data = {
                 device_type: typeDevice,
                 model: modelDevice,
                 checked_out: 0,
                 waitlist_capacity: 0,
-                location: 4
+                location: 4,
+                employee_id: usernameDevice,
+                employee_pwd: passwordDevice
             };
-            DeviceService.create(data)
+            axios.post("http://localhost:8000/api/device", data)
                 .then(response => {
                     console.log(response);
                 })
@@ -211,14 +222,49 @@ function AddItems (serverCommunication) {
             return (
                 <div> Adding Device: {typeDevice} {modelDevice} </div>
             );
-        
         }
     }
 
   //Change to Search Page---------
 
+    const ChangetoSearch = () => {
+        window.location.href = "/Search";
+    }
+
+    //Change to Add Items Page------
+    const ChangeToEmployee = () => {
+        window.location.href = "/Librarian";
+    }
+
+    const ChangeDeleteItems = () => {
+        window.location.href = "/Delete";
+    }
+
     return (
         <div>
+
+            <div>
+                <Button
+                    color={'blue'}
+                    text={'Search'}
+                    onClick={ChangetoSearch}
+                />
+            </div>
+            <div>
+                <Button
+                    color={'blue'}
+                    text={'Employee'}
+                    onClick={ChangeToEmployee}
+                />
+            </div>
+            <div>
+                <Button
+                    color={'blue'}
+                    text={'Delete Items'}
+                    onClick={ChangeDeleteItems}
+                />
+            </div>
+
         <div className = "container">
             <Header title = "Add Items" />
             
@@ -247,6 +293,8 @@ function AddItems (serverCommunication) {
             mySeriesBook = {(e) => setSeriesBook(e.target.value)}
             mySeriesPositionBook = {(e) => setSeriesPositionBook(e.target.value)}
             myGenreBook = {(e) => setGenreBook(e.target.value)}
+            myUsernameBook = {(e) => setUsernameBook(e.target.value)}
+            myPasswordBook={(e) => setPasswordBook(e.target.value)}
         />}
         {showSearchAudioBook && <AudioBook 
             onAudioBookResult = {() => setShowAudioBookResult(!showAudioBookResult)}
@@ -260,6 +308,8 @@ function AddItems (serverCommunication) {
             mySeriesAudioBook = {(e) => setSeriesAudioBook(e.target.value)}
             mySeriesPositionAudioBook = {(e) => setSeriesPositionAudioBook(e.target.value)}
             myGenreAudioBook = {(e) => setGenreAudioBook(e.target.value)}
+            myUsernameAudioBook = {(e) => setUsernameAudioBook(e.target.value)}
+            myPasswordAudioBook = {(e) => setPasswordAudioBook(e.target.value)}
         />}
         {showSearchDvd && <Dvd  
             onDvdResult = {() => setShowDvdResult(!showDvdResult)}
@@ -267,6 +317,8 @@ function AddItems (serverCommunication) {
             myDateDvd = {(e) => setDateDvd(e.target.value)}
             myDirectorDvd = {(e) => setDirectorDvd(e.target.value)}
             myStudioDvd = {(e) => setStudioDvd(e.target.value)}
+            myUsernameDvd = {(e) => setUsernameDvd(e.target.value)}
+            myPasswordDvd = {(e) => setPasswordDvd(e.target.value)}
         />}
         {showSearchMgz && <Mgz  
             onMgzResult = {() => setShowMgzResult(!showMgzResult)}
@@ -274,15 +326,18 @@ function AddItems (serverCommunication) {
             myIssueMgz = {(e) => setIssueMgz(e.target.value)}
             myDateMgz = {(e) => setDateMgz(e.target.value)}
             myTopicMgz = {(e) => setTopicMgz(e.target.value)}
+            myUsernameMgz = {(e) => setUsernameMgz(e.target.value)}
+            myPasswordMgz = {(e) => setPasswordMgz(e.target.value)}
         />}
         {showSearchDevice && <Device 
             onDeviceResult = {() => setShowDeviceResult(!showDeviceResult)}
             myTypeDevice = {(e) => setTypeDevice(e.target.value)}
             myModelDevice = {(e) => setModelDevice(e.target.value)}
+            myUsernameDevice = {(e) => setUsernameDevice(e.target.value)}
+            myPasswordDevice = {(e) => setPasswordDevice(e.target.value)}
         />}
 
         </div>
-        REFRESH AFTER EACH ACTION
             <div>
                 {theAddBook()}
                 {theAddAudioBook()}

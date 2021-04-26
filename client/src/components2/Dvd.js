@@ -1,5 +1,5 @@
 
-const Dvd = ({onDvdResult, myTitleDvd, myDateDvd, myDirectorDvd, myStudioDvd}) => {
+const Dvd = ({onDvdResult, myTitleDvd, myDateDvd, myDirectorDvd, myStudioDvd, myUsernameDvd, myPasswordDvd}) => {
 
     const submitDvdAdd = (event) => {
         onDvdResult();
@@ -32,6 +32,18 @@ const Dvd = ({onDvdResult, myTitleDvd, myDateDvd, myDirectorDvd, myStudioDvd}) =
                     type='text'
                     placeholder='enter the Studio'
                     onChange = {myStudioDvd}
+                />
+                <label>Username</label>
+                <input
+                    type='text'
+                    placeholder='enter username'
+                    onChange = {myUsernameDvd}
+                />
+                <label>Password</label>
+                <input
+                    type='password'
+                    placeholder='enter password'
+                    onChange = {myPasswordDvd}
                 />
             </div>
             

@@ -1,5 +1,5 @@
 
-const Device = ({onDeviceResult, myTypeDevice, myModelDevice}) => {
+const Device = ({onDeviceResult, myTypeDevice, myModelDevice, myUsernameDevice, myPasswordDevice}) => {
 
     const submitDeviceAdd = (event) => {
         onDeviceResult();
@@ -20,6 +20,18 @@ const Device = ({onDeviceResult, myTypeDevice, myModelDevice}) => {
                     type='text'
                     placeholder='enter the Model'
                     onChange = {myModelDevice}
+                />
+                <label>Username</label>
+                <input
+                    type='text'
+                    placeholder='enter username'
+                    onChange = {myUsernameDevice}
+                />
+                <label>Password</label>
+                <input
+                    type='password'
+                    placeholder='enter password'
+                    onChange = {myPasswordDevice}
                 />
             </div>
             
