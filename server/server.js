@@ -53,7 +53,7 @@ let customerAuth = (customer) => {
                         ========================================
 */
 // ITEM statements
-// create a new item (id will be used for a specific type of item after it is created
+// Create a new item (id will be used for a specific type of item after it is created
 let getNewItemId = (id) => {
     pool.query(`INSERT INTO item (active) VALUE (true)`, (err, row) => {
         if (err) throw err.message
@@ -75,8 +75,8 @@ app.get('/api/item', (req, res) => {
         }
     })
 })
-// Change item's active status
 
+// Change item's active status
 app.put('/api/item/modify', (req, res) => {
     const emp = {id: req.body.employee_id, pwd: req.body.employee_pwd}
     employeeAuth(emp);
@@ -227,7 +227,8 @@ VALUES (
                     }
                 })
             }
-        })}
+        })
+    }
 })
 
 // Display all books
@@ -296,7 +297,8 @@ VALUES (
                 })
             }
         })
-}})
+    }
+})
 // Display all devices
 app.get('/api/device', (req, res) => {
     pool.query(`SELECT * FROM device`, (err, rows) => {
@@ -356,7 +358,8 @@ VALUES (
                     }
                 })
             }
-    })}
+        })
+    }
 })
 // Display all dvds
 app.get('/api/dvd', (req, res) => {
@@ -401,21 +404,23 @@ app.post('/api/magazine', (req, res) => {
                     waitlist_capacity: req.body.waitlist_capacity,
                     location_name: req.body.location_name
                 }
-        pool.query(`INSERT INTO magazine 
+                pool.query(`INSERT INTO magazine 
 (id, title, issue, issue_date, topic, waitlist_capacity, location) 
 VALUES (
 (SELECT id FROM item WHERE id = ?),
 ?, ?, ?, ?, ?,
 (SELECT id FROM location WHERE location_name = ?)
 )`, [magazine.id, magazine.title, magazine.issue, magazine.issue_date, magazine.topic,
-            magazine.waitlist_capacity, magazine.location_name], (err, rows) => {
-            if (err) {
-                res.status(500).send({message: "magazine insert failed"})
-            } else {
-                res.send(rows)
+                    magazine.waitlist_capacity, magazine.location_name], (err, rows) => {
+                    if (err) {
+                        res.status(500).send({message: "magazine insert failed"})
+                    } else {
+                        res.send(rows)
+                    }
+                })
             }
         })
-    }})}
+    }
 })
 // Display all magazines
 app.get('/api/magazine', (req, res) => {
