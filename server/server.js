@@ -275,7 +275,7 @@ app.post('/api/device', (req, res) => {
             else {
                 console.log(rows[0].total)
                 let device = {
-                    id: rows[0].total + 1,
+                    id: parseInt(rows[0].total + 1),
                     device_type: req.body.device_type,
                     model: req.body.model,
                     waitlist_capacity: req.body.waitlist_capacity,
