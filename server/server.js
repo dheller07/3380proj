@@ -52,6 +52,8 @@ let customerAuth = (customer) => {
                                       ITEM QUERIES
                         ========================================
 */
+// ITEM statements
+// create a new item (id will be used for a specific type of item after it is created
 let getNewItemId = (id) => {
     pool.query(`INSERT INTO item (active) VALUE (true)`, (err, row) => {
         if (err) throw err.message
@@ -63,31 +65,6 @@ let modifyItemStatus = (id) => {
     })
 }
 
-// ITEM statements
-// Create an item
-/*
-app.post('/api/item', (req, res) => {
-    const existing_employee = {
-        id: req.body.employee_id,
-        pwd: req.body.pwd
-    }
-    pool.query(`SELECT 1 FROM employee WHERE id = ? AND password = ?`,[existing_employee.id, existing_employee.pwd], (err, user) => {
-        if (err) {
-            res.status(500).send({message: "user authentication query failed"})
-        } else if (user.length < 1) {
-            res.status(500).send({message: "incorrect employee id or password"})
-        } else {
-            pool.query(`INSERT INTO item (active) VALUE (true)`, (err, rows) => {
-                if (err) {
-                    res.status(500).send({message: "item insert failed"})
-                } else {
-                    res.send(rows)
-                }
-            })
-        }
-    })
-})
- */
 // Display all items
 app.get('/api/item', (req, res) => {
     pool.query(`SELECT * FROM item`, (err, rows) => {
